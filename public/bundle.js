@@ -19766,15 +19766,42 @@
 	var Main = React.createClass({
 		displayName: 'Main',
 
+		componentDidMount: function componentDidMount() {
+			$(document.body).on('keydown', this.setUserInpu);
+		},
+
+		componentWillUnmount: function componentWillUnmount() {
+			$(document.body).off('keydown', this.setUserInpu);
+		},
 
 		getInitialState: function getInitialState() {
 			return {
-				text: 'c'
+				text: 'ag'
 			};
 		},
 
-		func: function func(event) {
-			alert(event);
+		setUserInpu: function setUserInpu(event) {
+			console.log(event.key);
+			console.log(event.keyCode);
+
+			if (event.keyCode >= 65 && event.keyCode <= 90) {
+				console.log('letter of the alphabet');
+
+				this.state.text += event.key;
+
+				this.setState({ text: this.state.text });
+			}
+			//If backspace
+			else if (event.keyCode === 8) {
+
+					//If there is user input to delete
+					if (this.state.text.length > 0) {
+						//Remove the last letter
+						var newText = this.state.text.slice(0, -1);
+
+						this.setState({ text: newText });
+					}
+				}
 		},
 
 		render: function render() {
@@ -19807,7 +19834,7 @@
 								'Search'
 							)
 						),
-						React.createElement(ElementSelector, { onKeyDown: this.func, userInput: this.state.text })
+						React.createElement(ElementSelector, { userInput: this.state.text })
 					)
 				)
 			);

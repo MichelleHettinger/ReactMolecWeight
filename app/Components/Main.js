@@ -7,22 +7,54 @@ var ElementSelector = require('./ElementSelector.js');
 
 
 var Main = React.createClass({
+    componentDidMount: function() {
+        $(document.body).on('keydown', this.setUserInpu);
+    },
+
+    componentWillUnmount: function() {
+        $(document.body).off('keydown', this.setUserInpu);
+    },
 
 	getInitialState: function() {
 		return {
-			text: 'c',
+			text: 'ag',
 		};
 
 	},
 
-	func: function(event){
-		alert(event)
+	setUserInpu: function(event){
+		console.log(event.key)
+		console.log(event.keyCode);
+
+		if (event.keyCode >= 65 && event.keyCode <= 90){
+			console.log('letter of the alphabet');
+
+			this.state.text += event.key;
+
+			this.setState({text: this.state.text})
+		}
+		//If backspace
+		else if (event.keyCode === 8){
+
+			//If there is user input to delete
+			if (this.state.text.length > 0){
+				//Remove the last letter
+				var newText = this.state.text.slice(0,-1);
+
+				this.setState({text: newText});
+
+			}
+
+		}
+
 	},
 
 	render: function() {
 
 		return (
 			<div className="container">
+
+
 				<div className="row" id="header">
 					<h1>Molecular Weight Calculator</h1>
 				</div>
@@ -39,7 +71,7 @@ var Main = React.createClass({
 							<h2 id="current-letters">Search</h2>
 						</div>
 
-						<ElementSelector onKeyDown={this.func} userInput={this.state.text} />
+						<ElementSelector userInput={this.state.text} />
 					</div>
 
 				</div>
