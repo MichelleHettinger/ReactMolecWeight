@@ -1,0 +1,54 @@
+.box {
+	border: 2px black solid;
+}
+#header{
+	height: 100px;
+}
+
+
+#elements-chosen{
+	
+}
+	.calculatableElement{
+		float:left;
+		width: 65px;
+		margin-right: 10px;
+	}
+		.plusButton{
+			align-content: center;
+			margin-left: 22px;
+		}
+		.calculatableAcronym{
+			text-align: center;
+			margin-top: 10px;
+			margin-bottom: 10px;
+			font-size: 40px;
+		}
+		.minusButton{
+			margin-left: 23px;
+		}
+
+
+#current-letters{
+	text-align:center;
+}
+	#elements-found{
+		height: 428px;
+	}
+		.clickableElement:hover{
+			cursor: pointer;
+		}
+			#atomic-number-p{
+				margin-bottom:0;
+			}
+			#acronym-h2{
+				margin:0;
+				text-align: center;
+			}
+			#name-p{
+				text-align: center;	
+				margin:0;
+			}
+			#mass-p{
+				text-align: center;
+			}
