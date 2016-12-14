@@ -11,7 +11,7 @@ var Main = React.createClass({
 
 	getInitialState: function() {
 		return {
-			text: 'Hello world',
+			text: 'c',
 		};
 
 	},
@@ -20,9 +20,24 @@ var Main = React.createClass({
 
 		return (
 			<div className="container">
+				<div className="row" id="header">
+					<h1>Molecular Weight Calculator</h1>
+				</div>
+
+
 				<div className="row">
 
-					<p>{this.state.text}</p>
+					<div className="col-sm-8">
+					</div>
+
+					<div className="col-sm-4 pull-right box" id="elements-panel">
+
+						<div className="row">
+							<h2 id="current-letters">Search</h2>
+						</div>
+
+						<ElementSelector userInput={this.state.text} />
+					</div>
 
 				</div>
 			</div>

@@ -38,17 +38,17 @@
 		.clickableElement:hover{
 			cursor: pointer;
 		}
-			#atomic-number-p{
+			.atomic-number-p{
 				margin-bottom:0;
 			}
-			#acronym-h2{
+			.acronym-h2{
 				margin:0;
 				text-align: center;
 			}
-			#name-p{
+			.name-p{
 				text-align: center;	
 				margin:0;
 			}
-			#mass-p{
+			.mass-p{
 				text-align: center;
 			}
