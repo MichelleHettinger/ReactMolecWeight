@@ -1,6 +1,5 @@
 // Include React and axios
 var React = require('react');
-var axios = require('axios');
 
 // Here we include all of the sub-components
 var CalcPanel = require('./CalcPanel.js');
@@ -14,6 +13,10 @@ var Main = React.createClass({
 			text: 'c',
 		};
 
+	},
+
+	func: function(event){
+		alert(event)
 	},
 
 	render: function() {
@@ -36,7 +39,7 @@ var Main = React.createClass({
 							<h2 id="current-letters">Search</h2>
 						</div>
 
-						<ElementSelector userInput={this.state.text} />
+						<ElementSelector onKeyDown={this.func} userInput={this.state.text} />
 					</div>
 
 				</div>
