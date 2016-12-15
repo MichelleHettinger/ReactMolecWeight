@@ -7,6 +7,10 @@
 #MWTitle{
 	text-align: center;
 }
+#loginHeader{
+	padding: 0;
+	margin-top: 15px;
+}
 #molecular-weight {
 	text-align: center;
 }

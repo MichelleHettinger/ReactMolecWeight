@@ -23,8 +23,34 @@ export default class LoginHeader extends Component {
 	}
 
 	logIn () {
+
 		console.log(this.state.email);
 		console.log(this.state.password);
+
+		firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+			// Handle Errors here.
+			const errorCode = error.code;
+			const errorMessage = error.message;
+
+			alert("Error " + errorCode + ". " + errorMessage)
+
+		}).then( userData => {
+
+			if (userData){
+				console.log(userData);
+				console.log('logged in');
+
+				//document.getElementByID('#loginModal').modal.close();
+
+			}
+			else {
+				console.log("Failed to login")
+			}
+		})
+	}
+
+	signUp (){
+		console.log("good")
 	}
 
 	render () {
@@ -35,56 +61,39 @@ export default class LoginHeader extends Component {
 
 		if (!user){
 			return (
-				<div className="col-sm-4">
+				<div className="col-sm-4" id="loginHeader">
 
-					<button className="btn" data-toggle="modal" data-target="#loginModal">Sign Up / Log In</button>
+                    	<div className="form-group">
+                    		<div className="col-sm-9">
+								<input type="text" className="form-control input-md" id="email" placeholder="Email Address"
+									onChange={ text => this.setState({email: text.target.value}) }
+								/>
+							</div>
+							<div className="col-sm-3">
+					        	<input type="button" value="Log In" className="btn btn-success btn-sm"
+					        		onClick={this.logIn.bind(this)}
+					        	/>
+					        </div>
+                    	</div>
+
+                    	<div className="form-group">
+                    		<div className="col-sm-9">
+								<input type="password" className="form-control input-md" id="password" placeholder="Password"
+									onChange={ text => this.setState({password: text.target.value}) }
+								/>
+							</div>
+							<div className="col-sm-3">
+					        	<input type="button" value="Register" className="btn btn-primary btn-sm"
+					        		onClick={this.signUp.bind(this)}
+					        	/>
+					        </div>
+                    	</div>
 
 
-				    <div id="loginModal" className="modal fade" role="dialog">
-				        <div className="modal-dialog">
-				            <div className="modal-content">
-				                <div className="modal-header">
-				                    <button type="button" className="close" data-dismiss="modal">&times;</button>
-				                    <h4 className="modal-title">Login or Sign Up</h4>
-				                </div>
-				                <div className="modal-body">
-				                    <form className="form-horizontal">
 
-				                    	<div className="form-group">
-				                    		<div className="col-sm-2 col-sm-offset-2">
-				                    			<label>Email</label>
-				                    		</div>
-				                    		<div className="col-sm-6">
-           										 <input type="text" className="form-control input-md" id="email" placeholder="Email Address"
-           										 	onChange={ text => this.setState({email: text.target.value}) }
-           										/>
-				                    		</div>
-				                    	</div>
 
-				                    	<div className="form-group">
-				                    		<div className="col-sm-2 col-sm-offset-2">
-				                    			<label>Password</label>
-				                    		</div>
-				                    		<div className="col-sm-6">
-           										 <input type="password" className="form-control input-md" id="password" placeholder="Password"
-           											onChange={ text => this.setState({email: text.target.value}) }
-           										 />
-				                    		</div>
-				                    	</div>
 
-									    <div className="form-group">
-									    	<div className="col-sm-4 col-sm-offset-9">
-									        	<input type="button" value="Log In" className="btn btn-info btn-sm" onClick={this.logIn.bind(this)}/>
-									        	<button className="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
-									        </div>
-									    </div>
-
-				                    </form> 
-				                </div>
-				            </div>
-				        </div>
-				    </div>
-
+	
 
 				</div>
 			)
