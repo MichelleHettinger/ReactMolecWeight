@@ -19805,25 +19805,26 @@
 			var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
 
 			_this.state = {
-				text: '',
+				text: 'Search',
 				elements: [], multipliers: [],
 				total: 0
 			};
 
 			_this.getElement = _this.getElement.bind(_this);
-			_this.setUserInput = _this.setUserInput.bind(_this);
+			_this.getEdit = _this.getEdit.bind(_this);
+			_this.getUserInput = _this.getUserInput.bind(_this);
 			return _this;
 		}
 
 		_createClass(Main, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				$(document.body).on('keydown', this.setUserInput);
+				$(document.body).on('keydown', this.getUserInput);
 			}
 		}, {
 			key: 'componentWillUnmount',
 			value: function componentWillUnmount() {
-				$(document.body).off('keydown', this.setUserInput);
+				$(document.body).off('keydown', this.getUserInput);
 			}
 		}, {
 			key: 'getElement',
@@ -19845,28 +19846,76 @@
 				//console.log(this.state)
 			}
 		}, {
-			key: 'setUserInput',
-			value: function setUserInput(event) {
+			key: 'getEdit',
+			value: function getEdit(input, element, i) {
+				console.log("------------------------------------------");
+				console.log(input + " one " + element.elementName + " at position: " + i);
+
+				console.log(i);
+
+				if (input == '+') {
+					this.state.multipliers[i] += 1;
+					this.state.total += element.mass;
+				} else if (input == '-') {
+					this.state.multipliers[i] -= 1;
+					this.state.total -= element.mass;
+				}
+
+				for (var j = 0; j < this.state.multipliers.length; j++) {
+					if (this.state.multipliers[j] == 0) {
+						this.state.multipliers.splice(j, 1);
+						this.state.elements.splice(j, 1);
+					}
+				}
+
+				this.setState({
+					total: this.state.total,
+					elements: this.state.elements,
+					multipliers: this.state.multipliers
+				});
+
+				console.log(this.state);
+			}
+		}, {
+			key: 'getUserInput',
+			value: function getUserInput(event) {
 				console.log(event.key);
 				console.log(event.keyCode);
 
-				if (event.keyCode >= 65 && event.keyCode <= 90) {
-					console.log('letter of the alphabet');
+				var newText = void 0;
 
-					var newText = this.state.text;
-					newText += event.key;
+				//Capturing letter
+				if (event.keyCode >= 65 && event.keyCode <= 90) {
+
+					//Capturing the very first input
+					if (this.state.text == "Search") {
+						this.state.text = '';
+
+						newText = event.key;
+					}
+					//2nd and 3rd inputs
+					else {
+							newText = this.state.text;
+							newText += event.key;
+						}
 
 					this.setState({ text: newText });
 				}
-				//If backspace
+				//Capturing backspace
 				else if (event.keyCode === 8) {
 
-						//If there is user input to delete
-						if (this.state.text.length > 0) {
+						//If there is user input to delete and it is not 'search'
+						if (this.state.text.length > 0 && this.state.text != "Search") {
+
 							//Remove the last letter
 							var _newText = this.state.text.slice(0, -1);
 
-							this.setState({ text: _newText });
+							//If this yields an empty string, make this.state.text display 'Search'
+							if (_newText == '') {
+								this.setState({ text: 'Search' });
+							} else {
+								this.setState({ text: _newText });
+							}
 						}
 					}
 			}
@@ -19881,15 +19930,20 @@
 						'div',
 						{ className: 'row', id: 'header' },
 						_react2.default.createElement(
-							'h1',
-							null,
-							'Molecular Weight Calculator'
-						)
+							'div',
+							{ className: 'col-sm-8' },
+							_react2.default.createElement(
+								'h1',
+								{ id: 'MWTitle' },
+								'Molecular Weight Calculator'
+							)
+						),
+						_react2.default.createElement('div', { className: 'col-sm-4' })
 					),
 					_react2.default.createElement(
 						'div',
 						{ className: 'row' },
-						_react2.default.createElement(_CalcPanel2.default, { mainState: this.state }),
+						_react2.default.createElement(_CalcPanel2.default, { mainState: this.state, newEdit: this.getEdit }),
 						_react2.default.createElement(
 							'div',
 							{ className: 'col-sm-4 pull-right box', id: 'elements-panel' },
@@ -19899,7 +19953,7 @@
 								_react2.default.createElement(
 									'h2',
 									{ id: 'current-letters' },
-									'Search'
+									this.state.text
 								)
 							),
 							_react2.default.createElement(_ElementSelector2.default, { userInput: this.state.text, newElement: this.getElement })
@@ -19950,15 +20004,12 @@
 		_createClass(CalcPanel, [{
 			key: "_handleClick",
 			value: function _handleClick(input, element, i) {
-				console.log(this.props);
-				//this.props.newEdit(input, element, i);
+				this.props.newEdit(input, element, i);
 			}
 		}, {
 			key: "render",
 			value: function render() {
 				var _this2 = this;
-
-				console.log(this.props);
 
 				// Upon tapping a selected atom, loop all atoms
 				var elementsToDisplay = this.props.mainState.elements.map(function (element, i) {

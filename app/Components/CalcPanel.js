@@ -6,13 +6,10 @@ export default class CalcPanel extends Component {
 	}
 
 	_handleClick (input, element, i) {
-		console.log(this.props)
-		//this.props.newEdit(input, element, i);
+		this.props.newEdit(input, element, i);
 	}
 
 	render (){
-		console.log(this.props)
-
 		// Upon tapping a selected atom, loop all atoms
 		const elementsToDisplay = this.props.mainState.elements.map( (element, i) => {
 			return (

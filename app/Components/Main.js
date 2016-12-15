@@ -11,20 +11,21 @@ export default class Main extends Component {
 		super(props);
 
 		this.state = {
-			text: '',
+			text: 'Search',
 			elements: [], multipliers:[],
 			total: 0,
 		};
 
 		this.getElement = this.getElement.bind(this);
-		this.setUserInput = this.setUserInput.bind(this);
+		this.getEdit = this.getEdit.bind(this);
+		this.getUserInput = this.getUserInput.bind(this);
 	}
 
     componentDidMount() {
-        $(document.body).on('keydown', this.setUserInput);
+        $(document.body).on('keydown', this.getUserInput);
     }
     componentWillUnmount() {
-        $(document.body).off('keydown', this.setUserInput);
+        $(document.body).off('keydown', this.getUserInput);
     }
 
 	getElement(newElement){
@@ -44,28 +45,74 @@ export default class Main extends Component {
 
 		//console.log(this.state)
 	}
+	getEdit(input, element, i){
+		console.log("------------------------------------------");
+		console.log(input + " one " + element.elementName + " at position: " + i);
 
-	setUserInput(event){
+		console.log(i)
+
+		if (input == '+'){
+			this.state.multipliers[i] += 1;
+			this.state.total += element.mass;
+		}
+		else if (input == '-'){
+			this.state.multipliers[i] -= 1;
+			this.state.total -= element.mass;
+		}
+
+		for (var j=0; j<this.state.multipliers.length; j++){
+			if (this.state.multipliers[j] == 0){
+				this.state.multipliers.splice(j, 1);
+				this.state.elements.splice(j, 1);
+			}
+		}
+
+		this.setState({
+			total: this.state.total,
+			elements: this.state.elements,
+			multipliers: this.state.multipliers
+		})
+
+		console.log(this.state);
+	}
+	getUserInput(event){
 		console.log(event.key)
 		console.log(event.keyCode);
 
-		if (event.keyCode >= 65 && event.keyCode <= 90){
-			console.log('letter of the alphabet');
+		let newText;
 
-			let newText = this.state.text;
-			newText += event.key;
+		//Capturing letter
+		if (event.keyCode >= 65 && event.keyCode <= 90){
+
+			//Capturing the very first input
+			if (this.state.text == "Search"){
+				this.state.text = '';
+
+				newText = event.key;
+			}
+			//2nd and 3rd inputs
+			else {
+				newText = this.state.text;
+				newText += event.key;
+			}
 
 			this.setState({text: newText})
 		}
-		//If backspace
+		//Capturing backspace
 		else if (event.keyCode === 8){
 
-			//If there is user input to delete
-			if (this.state.text.length > 0){
+			//If there is user input to delete and it is not 'search'
+			if (this.state.text.length > 0 && this.state.text != "Search") {
+
 				//Remove the last letter
 				const newText = this.state.text.slice(0,-1);
 
-				this.setState({text: newText});
+				//If this yields an empty string, make this.state.text display 'Search'
+				if (newText == ''){
+					this.setState({text: 'Search'});
+				} else {
+					this.setState({text: newText});
+				}
 
 			}
 		}
@@ -76,17 +123,24 @@ export default class Main extends Component {
 		return (
 			<div className="container">
 				<div className="row" id="header">
-					<h1>Molecular Weight Calculator</h1>
+					<div className="col-sm-8">
+						<h1 id="MWTitle">Molecular Weight Calculator</h1>
+					</div>
+
+					<div className="col-sm-4">
+
+					</div>
+
 				</div>
 
 				<div className="row">
 
-					<CalcPanel mainState={this.state} />
+					<CalcPanel mainState={this.state} newEdit={this.getEdit} />
 
 					<div className="col-sm-4 pull-right box" id="elements-panel">
 
 						<div className="row">
-							<h2 id="current-letters">Search</h2>
+							<h2 id="current-letters">{this.state.text}</h2>
 						</div>
 
 						<ElementSelector userInput={this.state.text} newElement={this.getElement} />
