@@ -19776,15 +19776,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _LoginHeader = __webpack_require__(169);
+	var _LoginHeader = __webpack_require__(160);
 
 	var _LoginHeader2 = _interopRequireDefault(_LoginHeader);
 
-	var _CalcPanel = __webpack_require__(160);
+	var _CalcPanel = __webpack_require__(161);
 
 	var _CalcPanel2 = _interopRequireDefault(_CalcPanel);
 
-	var _ElementSelector = __webpack_require__(161);
+	var _ElementSelector = __webpack_require__(162);
 
 	var _ElementSelector2 = _interopRequireDefault(_ElementSelector);
 
@@ -19991,6 +19991,199 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _firebase = __webpack_require__(164);
+
+	var firebase = _interopRequireWildcard(_firebase);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var config = {
+		apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
+		authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
+		databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
+		storageBucket: "mobile-molecular-weight-85984.appspot.com",
+		messagingSenderId: "837319764944"
+	};
+
+	//Only one instance of firebase can run at a time
+	firebase.initializeApp(config);
+
+	var LoginHeader = function (_Component) {
+		_inherits(LoginHeader, _Component);
+
+		function LoginHeader(props) {
+			_classCallCheck(this, LoginHeader);
+
+			var _this = _possibleConstructorReturn(this, (LoginHeader.__proto__ || Object.getPrototypeOf(LoginHeader)).call(this, props));
+
+			_this.state = {
+				email: '',
+				password: ''
+			};
+			return _this;
+		}
+
+		_createClass(LoginHeader, [{
+			key: "logIn",
+			value: function logIn() {
+				console.log(this.state.email);
+				console.log(this.state.password);
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var _this2 = this;
+
+				//Listener for firebase user login
+				var user = firebase.auth().currentUser;
+
+				//if (!user){ console.log("Welcome to Mobile Molecular Weight") }
+
+				if (!user) {
+					return _react2.default.createElement(
+						"div",
+						{ className: "col-sm-4" },
+						_react2.default.createElement(
+							"button",
+							{ className: "btn", "data-toggle": "modal", "data-target": "#loginModal" },
+							"Sign Up / Log In"
+						),
+						_react2.default.createElement(
+							"div",
+							{ id: "loginModal", className: "modal fade", role: "dialog" },
+							_react2.default.createElement(
+								"div",
+								{ className: "modal-dialog" },
+								_react2.default.createElement(
+									"div",
+									{ className: "modal-content" },
+									_react2.default.createElement(
+										"div",
+										{ className: "modal-header" },
+										_react2.default.createElement(
+											"button",
+											{ type: "button", className: "close", "data-dismiss": "modal" },
+											"\xD7"
+										),
+										_react2.default.createElement(
+											"h4",
+											{ className: "modal-title" },
+											"Login or Sign Up"
+										)
+									),
+									_react2.default.createElement(
+										"div",
+										{ className: "modal-body" },
+										_react2.default.createElement(
+											"form",
+											{ className: "form-horizontal" },
+											_react2.default.createElement(
+												"div",
+												{ className: "form-group" },
+												_react2.default.createElement(
+													"div",
+													{ className: "col-sm-2 col-sm-offset-2" },
+													_react2.default.createElement(
+														"label",
+														null,
+														"Email"
+													)
+												),
+												_react2.default.createElement(
+													"div",
+													{ className: "col-sm-6" },
+													_react2.default.createElement("input", { type: "text", className: "form-control input-md", id: "email", placeholder: "Email Address",
+														onChange: function onChange(text) {
+															return _this2.setState({ email: text.target.value });
+														}
+													})
+												)
+											),
+											_react2.default.createElement(
+												"div",
+												{ className: "form-group" },
+												_react2.default.createElement(
+													"div",
+													{ className: "col-sm-2 col-sm-offset-2" },
+													_react2.default.createElement(
+														"label",
+														null,
+														"Password"
+													)
+												),
+												_react2.default.createElement(
+													"div",
+													{ className: "col-sm-6" },
+													_react2.default.createElement("input", { type: "password", className: "form-control input-md", id: "password", placeholder: "Password",
+														onChange: function onChange(text) {
+															return _this2.setState({ email: text.target.value });
+														}
+													})
+												)
+											),
+											_react2.default.createElement(
+												"div",
+												{ className: "form-group" },
+												_react2.default.createElement(
+													"div",
+													{ className: "col-sm-4 col-sm-offset-9" },
+													_react2.default.createElement("input", { type: "button", value: "Log In", className: "btn btn-info btn-sm", onClick: this.logIn.bind(this) }),
+													_react2.default.createElement(
+														"button",
+														{ className: "btn btn-default btn-sm", "data-dismiss": "modal" },
+														"Cancel"
+													)
+												)
+											)
+										)
+									)
+								)
+							)
+						)
+					);
+				} else {
+					return _react2.default.createElement(
+						"div",
+						{ className: "col-sm-4" },
+						_react2.default.createElement(
+							"p",
+							null,
+							user.displayName
+						)
+					);
+				}
+			}
+		}]);
+
+		return LoginHeader;
+	}(_react.Component);
+
+	exports.default = LoginHeader;
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20081,7 +20274,7 @@
 	exports.default = CalcPanel;
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20096,7 +20289,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ElementsArray = __webpack_require__(162);
+	var _ElementsArray = __webpack_require__(163);
 
 	var _ElementsArray2 = _interopRequireDefault(_ElementsArray);
 
@@ -20226,7 +20419,7 @@
 	exports.default = ElementSelector;
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20736,7 +20929,7 @@
 	module.exports = elements;
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20746,16 +20939,16 @@
 	 *
 	 *   firebase = require('firebase');
 	 */
-	var firebase = __webpack_require__(164);
-	__webpack_require__(165);
+	var firebase = __webpack_require__(165);
 	__webpack_require__(166);
 	__webpack_require__(167);
 	__webpack_require__(168);
+	__webpack_require__(169);
 	module.exports = firebase;
 
 
 /***/ },
-/* 164 */
+/* 165 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {var firebase = (function(){
@@ -20795,10 +20988,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 165 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(164);
+	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(165);
 	(function(){
 	/*! @license Firebase v3.6.4
 	    Build: 3.6.4-rc.2
@@ -21041,10 +21234,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 166 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(164);
+	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(165);
 	(function(){
 	/*! @license Firebase v3.6.4
 	    Build: 3.6.4-rc.2
@@ -21312,10 +21505,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(164);
+	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(165);
 	(function(){
 	/*! @license Firebase v3.6.4
 	    Build: 3.6.4-rc.2
@@ -21370,10 +21563,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(164);
+	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(165);
 	(function(){
 	/*! @license Firebase v3.6.4
 	    Build: 3.6.4-rc.2
@@ -21414,95 +21607,6 @@
 	module.exports = firebase.messaging;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _firebase = __webpack_require__(163);
-
-	var firebase = _interopRequireWildcard(_firebase);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var config = {
-		apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
-		authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
-		databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
-		storageBucket: "mobile-molecular-weight-85984.appspot.com",
-		messagingSenderId: "837319764944"
-	};
-
-	//Only one instance of firebase can run at a time
-	firebase.initializeApp(config);
-
-	var LoginHeader = function (_Component) {
-		_inherits(LoginHeader, _Component);
-
-		function LoginHeader(props) {
-			_classCallCheck(this, LoginHeader);
-
-			return _possibleConstructorReturn(this, (LoginHeader.__proto__ || Object.getPrototypeOf(LoginHeader)).call(this, props));
-		}
-
-		_createClass(LoginHeader, [{
-			key: "render",
-			value: function render() {
-				//Listener for firebase user login
-				var user = firebase.auth().currentUser;
-
-				if (!user) {
-					console.log("Welcome to Mobile Molecular Weight");
-				}
-
-				if (!user) {
-					return _react2.default.createElement(
-						"div",
-						{ className: "col-sm-4" },
-						_react2.default.createElement(
-							"p",
-							null,
-							"Login!"
-						)
-					);
-				} else {
-					return _react2.default.createElement(
-						"div",
-						{ className: "col-sm-4" },
-						_react2.default.createElement(
-							"p",
-							null,
-							user.displayName
-						)
-					);
-				}
-			}
-		}]);
-
-		return LoginHeader;
-	}(_react.Component);
-
-	exports.default = LoginHeader;
 
 /***/ }
 /******/ ]);
