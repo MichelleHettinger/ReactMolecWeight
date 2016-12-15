@@ -2,10 +2,10 @@
 import React, {Component} from 'react';
 
 // Here we include all of the sub-components
+import LoginHeader from './LoginHeader.js';
 import CalcPanel from './CalcPanel.js';
 import ElementSelector from './ElementSelector.js';
 
- 
 export default class Main extends Component {
 	constructor(props) {
 		super(props);
@@ -76,13 +76,14 @@ export default class Main extends Component {
 		console.log(this.state);
 	}
 	getUserInput(event){
-		console.log(event.key)
-		console.log(event.keyCode);
 
 		let newText;
 
 		//Capturing letter
 		if (event.keyCode >= 65 && event.keyCode <= 90){
+
+			//console.log(event.key)
+			//console.log(event.keyCode);
 
 			//Capturing the very first input
 			if (this.state.text == "Search"){
@@ -100,6 +101,8 @@ export default class Main extends Component {
 		}
 		//Capturing backspace
 		else if (event.keyCode === 8){
+			//console.log(event.key)
+			//console.log(event.keyCode);
 
 			//If there is user input to delete and it is not 'search'
 			if (this.state.text.length > 0 && this.state.text != "Search") {
@@ -127,10 +130,7 @@ export default class Main extends Component {
 						<h1 id="MWTitle">Molecular Weight Calculator</h1>
 					</div>
 
-					<div className="col-sm-4">
-
-					</div>
-
+					<LoginHeader />
 				</div>
 
 				<div className="row">
