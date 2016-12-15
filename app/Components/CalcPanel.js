@@ -1,43 +1,47 @@
-var React = require('react');
+import React, {Component} from 'react';
 
+export default class CalcPanel extends Component {
+	constructor(props) {
+		super(props);
+	}
 
-var CalcPanel = React.createClass({
+	_handleClick (input, element, i) {
+		console.log(this.props)
+		//this.props.newEdit(input, element, i);
+	}
 
-	_handlePress: function(input, element, i) {
-		this.props.newEdit(input, element, i);
-	},
-	render: function(){
+	render (){
+		console.log(this.props)
+
 		// Upon tapping a selected atom, loop all atoms
-		var elementsToDisplay = this.props.selectedElements.map(function(element, i){
-
+		const elementsToDisplay = this.props.mainState.elements.map( (element, i) => {
 			return (
-				<div key={i}>
-					<button key={i} onClick={() => this._handlePress('+', element, i)}> + </button>
+				<div key={i} className="calculatableElement">
+					<button key={i} className="plusButton btn btn-xs" onClick={() => this._handleClick('+', element, i)}> + </button>
 
-					<p>
-						{element.elementAcronym}
+						<p className="calculatableAcronym">
+							{element.elementAcronym} 
+							<sub> {this.props.mainState.multipliers[i]} </sub>
+						</p>
 
-						<p> {this.props.elementMultipliers[i]} </p>
-					</p>
 
-					<button onClick={() => this._handlePress("-", element, i)}> - </button>
+					<button className="minusButton btn btn-xs" onClick={() => this._handleClick("-", element, i)}> - </button>
 				</div>
 			)
-		}.bind(this))
+		})
 
 		return (
-			<div>
-				<div>
-					<p>Molecular Weight: {this.props.total.toFixed(3)} g/mol</p>
+			<div className="col-sm-8">
+
+				<div className="row">
+					<p id="molecular-weight">Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol</p>
 				</div>
 
-				<div>
+				<div className="elements-chosen">
 					{elementsToDisplay}
 				</div>
+
 			</div>
 		)
 	}
-})
-
-// Export the componen back for use in other files
-module.exports = CalcPanel;
+}

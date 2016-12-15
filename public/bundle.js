@@ -19806,7 +19806,7 @@
 
 			_this.state = {
 				text: '',
-				elements: [], multiplier: [],
+				elements: [], multipliers: [],
 				total: 0
 			};
 
@@ -19832,17 +19832,17 @@
 
 				// Push the element and multiplier into their respective arrays
 				this.state.elements.push(newElement);
-				this.state.multiplier.push(1);
+				this.state.multipliers.push(1);
 
 				this.state.total += newElement.mass;
 
 				this.setState({
 					total: this.state.total,
 					elements: this.state.elements,
-					multiplier: this.state.multiplier
+					multipliers: this.state.multipliers
 				});
 
-				console.log(this.state);
+				//console.log(this.state)
 			}
 		}, {
 			key: 'setUserInput',
@@ -19889,7 +19889,7 @@
 					_react2.default.createElement(
 						'div',
 						{ className: 'row' },
-						_react2.default.createElement('div', { className: 'col-sm-8' }),
+						_react2.default.createElement(_CalcPanel2.default, { mainState: this.state }),
 						_react2.default.createElement(
 							'div',
 							{ className: 'col-sm-4 pull-right box', id: 'elements-panel' },
@@ -19902,7 +19902,7 @@
 									'Search'
 								)
 							),
-							_react2.default.createElement(_ElementSelector2.default, { userInput: this.state.text, newElement: this.getElement.bind(this) })
+							_react2.default.createElement(_ElementSelector2.default, { userInput: this.state.text, newElement: this.getElement })
 						)
 					)
 				);
@@ -19918,79 +19918,109 @@
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
-	var React = __webpack_require__(1);
-
-	var CalcPanel = React.createClass({
-		displayName: 'CalcPanel',
-
-
-		_handlePress: function _handlePress(input, element, i) {
-			this.props.newEdit(input, element, i);
-		},
-		render: function render() {
-			// Upon tapping a selected atom, loop all atoms
-			var elementsToDisplay = this.props.selectedElements.map(function (element, i) {
-				var _this = this;
-
-				return React.createElement(
-					'div',
-					{ key: i },
-					React.createElement(
-						'button',
-						{ key: i, onClick: function onClick() {
-								return _this._handlePress('+', element, i);
-							} },
-						' + '
-					),
-					React.createElement(
-						'p',
-						null,
-						element.elementAcronym,
-						React.createElement(
-							'p',
-							null,
-							' ',
-							this.props.elementMultipliers[i],
-							' '
-						)
-					),
-					React.createElement(
-						'button',
-						{ onClick: function onClick() {
-								return _this._handlePress("-", element, i);
-							} },
-						' - '
-					)
-				);
-			}.bind(this));
-
-			return React.createElement(
-				'div',
-				null,
-				React.createElement(
-					'div',
-					null,
-					React.createElement(
-						'p',
-						null,
-						'Molecular Weight: ',
-						this.props.total.toFixed(3),
-						' g/mol'
-					)
-				),
-				React.createElement(
-					'div',
-					null,
-					elementsToDisplay
-				)
-			);
-		}
+	Object.defineProperty(exports, "__esModule", {
+		value: true
 	});
 
-	// Export the componen back for use in other files
-	module.exports = CalcPanel;
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CalcPanel = function (_Component) {
+		_inherits(CalcPanel, _Component);
+
+		function CalcPanel(props) {
+			_classCallCheck(this, CalcPanel);
+
+			return _possibleConstructorReturn(this, (CalcPanel.__proto__ || Object.getPrototypeOf(CalcPanel)).call(this, props));
+		}
+
+		_createClass(CalcPanel, [{
+			key: "_handleClick",
+			value: function _handleClick(input, element, i) {
+				console.log(this.props);
+				//this.props.newEdit(input, element, i);
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var _this2 = this;
+
+				console.log(this.props);
+
+				// Upon tapping a selected atom, loop all atoms
+				var elementsToDisplay = this.props.mainState.elements.map(function (element, i) {
+					return _react2.default.createElement(
+						"div",
+						{ key: i, className: "calculatableElement" },
+						_react2.default.createElement(
+							"button",
+							{ key: i, className: "plusButton btn btn-xs", onClick: function onClick() {
+									return _this2._handleClick('+', element, i);
+								} },
+							" + "
+						),
+						_react2.default.createElement(
+							"p",
+							{ className: "calculatableAcronym" },
+							element.elementAcronym,
+							_react2.default.createElement(
+								"sub",
+								null,
+								" ",
+								_this2.props.mainState.multipliers[i],
+								" "
+							)
+						),
+						_react2.default.createElement(
+							"button",
+							{ className: "minusButton btn btn-xs", onClick: function onClick() {
+									return _this2._handleClick("-", element, i);
+								} },
+							" - "
+						)
+					);
+				});
+
+				return _react2.default.createElement(
+					"div",
+					{ className: "col-sm-8" },
+					_react2.default.createElement(
+						"div",
+						{ className: "row" },
+						_react2.default.createElement(
+							"p",
+							{ id: "molecular-weight" },
+							"Molecular Weight: ",
+							this.props.mainState.total.toFixed(3),
+							" g/mol"
+						)
+					),
+					_react2.default.createElement(
+						"div",
+						{ className: "elements-chosen" },
+						elementsToDisplay
+					)
+				);
+			}
+		}]);
+
+		return CalcPanel;
+	}(_react.Component);
+
+	exports.default = CalcPanel;
 
 /***/ },
 /* 161 */
@@ -20032,9 +20062,6 @@
 		_createClass(ElementSelector, [{
 			key: '_handleClick',
 			value: function _handleClick(input) {
-
-				console.log(this.props);
-
 				this.props.newElement(input);
 				//console.log(input);
 			}

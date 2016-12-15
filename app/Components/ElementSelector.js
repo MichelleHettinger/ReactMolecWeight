@@ -7,9 +7,6 @@ export default class ElementSelector extends Component{
 	}
 
 	_handleClick(input) {
-
-		console.log(this.props)
-
 		this.props.newElement(input);
 		//console.log(input);
 	}

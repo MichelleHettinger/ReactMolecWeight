@@ -12,7 +12,7 @@ export default class Main extends Component {
 
 		this.state = {
 			text: '',
-			elements: [], multiplier:[],
+			elements: [], multipliers:[],
 			total: 0,
 		};
 
@@ -32,18 +32,17 @@ export default class Main extends Component {
 
 		// Push the element and multiplier into their respective arrays
 		this.state.elements.push(newElement);
-		this.state.multiplier.push(1);
+		this.state.multipliers.push(1);
 
 		this.state.total += newElement.mass;
 
 		this.setState({
 			total: this.state.total,
 			elements: this.state.elements,
-			multiplier: this.state.multiplier
+			multipliers: this.state.multipliers
 		});
 
-		console.log(this.state)
-
+		//console.log(this.state)
 	}
 
 	setUserInput(event){
@@ -81,8 +80,8 @@ export default class Main extends Component {
 				</div>
 
 				<div className="row">
-					<div className="col-sm-8">
-					</div>
+
+					<CalcPanel mainState={this.state} />
 
 					<div className="col-sm-4 pull-right box" id="elements-panel">
 
@@ -90,7 +89,7 @@ export default class Main extends Component {
 							<h2 id="current-letters">Search</h2>
 						</div>
 
-						<ElementSelector userInput={this.state.text} newElement={this.getElement.bind(this)} />
+						<ElementSelector userInput={this.state.text} newElement={this.getElement} />
 					</div>
 				</div>
 			</div>
