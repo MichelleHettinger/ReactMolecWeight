@@ -46,15 +46,25 @@
 
 	'use strict';
 
-	// Include the Main React Dependencies
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(158);
+	var _react = __webpack_require__(1);
 
-	// Include the Main Component
-	var Main = __webpack_require__(159);
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(158);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _Main = __webpack_require__(159);
+
+	var _Main2 = _interopRequireDefault(_Main);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// This code here allows us to render our main component (in this case "Main")
-	ReactDOM.render(React.createElement(Main, null), document.getElementById('app'));
+	_reactDom2.default.render(_react2.default.createElement(_Main2.default, null), document.getElementById('app'));
+
+	// Include the Main Component
+	// Include the Main React Dependencies
 
 /***/ },
 /* 1 */
@@ -19756,93 +19766,153 @@
 
 	'use strict';
 
-	// Include React and axios
-	var React = __webpack_require__(1);
-
-	// Here we include all of the sub-components
-	var CalcPanel = __webpack_require__(160);
-	var ElementSelector = __webpack_require__(161);
-
-	var Main = React.createClass({
-		displayName: 'Main',
-
-		componentDidMount: function componentDidMount() {
-			$(document.body).on('keydown', this.setUserInpu);
-		},
-
-		componentWillUnmount: function componentWillUnmount() {
-			$(document.body).off('keydown', this.setUserInpu);
-		},
-
-		getInitialState: function getInitialState() {
-			return {
-				text: 'ag'
-			};
-		},
-
-		setUserInpu: function setUserInpu(event) {
-			console.log(event.key);
-			console.log(event.keyCode);
-
-			if (event.keyCode >= 65 && event.keyCode <= 90) {
-				console.log('letter of the alphabet');
-
-				this.state.text += event.key;
-
-				this.setState({ text: this.state.text });
-			}
-			//If backspace
-			else if (event.keyCode === 8) {
-
-					//If there is user input to delete
-					if (this.state.text.length > 0) {
-						//Remove the last letter
-						var newText = this.state.text.slice(0, -1);
-
-						this.setState({ text: newText });
-					}
-				}
-		},
-
-		render: function render() {
-
-			return React.createElement(
-				'div',
-				{ className: 'container' },
-				React.createElement(
-					'div',
-					{ className: 'row', id: 'header' },
-					React.createElement(
-						'h1',
-						null,
-						'Molecular Weight Calculator'
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'row' },
-					React.createElement('div', { className: 'col-sm-8' }),
-					React.createElement(
-						'div',
-						{ className: 'col-sm-4 pull-right box', id: 'elements-panel' },
-						React.createElement(
-							'div',
-							{ className: 'row' },
-							React.createElement(
-								'h2',
-								{ id: 'current-letters' },
-								'Search'
-							)
-						),
-						React.createElement(ElementSelector, { userInput: this.state.text })
-					)
-				)
-			);
-		}
+	Object.defineProperty(exports, "__esModule", {
+		value: true
 	});
 
-	// Export the component back for use in other files
-	module.exports = Main;
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _CalcPanel = __webpack_require__(160);
+
+	var _CalcPanel2 = _interopRequireDefault(_CalcPanel);
+
+	var _ElementSelector = __webpack_require__(161);
+
+	var _ElementSelector2 = _interopRequireDefault(_ElementSelector);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // Include React
+
+
+	// Here we include all of the sub-components
+
+
+	var Main = function (_Component) {
+		_inherits(Main, _Component);
+
+		function Main(props) {
+			_classCallCheck(this, Main);
+
+			var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
+
+			_this.state = {
+				text: '',
+				elements: [], multiplier: [],
+				total: 0
+			};
+
+			_this.getElement = _this.getElement.bind(_this);
+			_this.setUserInput = _this.setUserInput.bind(_this);
+			return _this;
+		}
+
+		_createClass(Main, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				$(document.body).on('keydown', this.setUserInput);
+			}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				$(document.body).off('keydown', this.setUserInput);
+			}
+		}, {
+			key: 'getElement',
+			value: function getElement(newElement) {
+				console.log(newElement);
+
+				// Push the element and multiplier into their respective arrays
+				this.state.elements.push(newElement);
+				this.state.multiplier.push(1);
+
+				this.state.total += newElement.mass;
+
+				this.setState({
+					total: this.state.total,
+					elements: this.state.elements,
+					multiplier: this.state.multiplier
+				});
+
+				console.log(this.state);
+			}
+		}, {
+			key: 'setUserInput',
+			value: function setUserInput(event) {
+				console.log(event.key);
+				console.log(event.keyCode);
+
+				if (event.keyCode >= 65 && event.keyCode <= 90) {
+					console.log('letter of the alphabet');
+
+					var newText = this.state.text;
+					newText += event.key;
+
+					this.setState({ text: newText });
+				}
+				//If backspace
+				else if (event.keyCode === 8) {
+
+						//If there is user input to delete
+						if (this.state.text.length > 0) {
+							//Remove the last letter
+							var _newText = this.state.text.slice(0, -1);
+
+							this.setState({ text: _newText });
+						}
+					}
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+
+				return _react2.default.createElement(
+					'div',
+					{ className: 'container' },
+					_react2.default.createElement(
+						'div',
+						{ className: 'row', id: 'header' },
+						_react2.default.createElement(
+							'h1',
+							null,
+							'Molecular Weight Calculator'
+						)
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: 'row' },
+						_react2.default.createElement('div', { className: 'col-sm-8' }),
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-sm-4 pull-right box', id: 'elements-panel' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'row' },
+								_react2.default.createElement(
+									'h2',
+									{ id: 'current-letters' },
+									'Search'
+								)
+							),
+							_react2.default.createElement(_ElementSelector2.default, { userInput: this.state.text, newElement: this.getElement.bind(this) })
+						)
+					)
+				);
+			}
+		}]);
+
+		return Main;
+	}(_react.Component);
+
+	exports.default = Main;
 
 /***/ },
 /* 160 */
@@ -19928,108 +19998,147 @@
 
 	'use strict';
 
-	var React = __webpack_require__(1);
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
 
-	var ElementsArray = __webpack_require__(162);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var ElementSelector = React.createClass({
-		displayName: 'ElementSelector',
+	var _react = __webpack_require__(1);
 
-		_handlePress: function _handlePress(input) {
-			//this.props.newElement(input)
-		},
-		render: function render() {
-			function findElements(userInput) {
+	var _react2 = _interopRequireDefault(_react);
 
-				var listElements = [];
-				var listElements2 = [];
-				var listElements3 = [];
+	var _ElementsArray = __webpack_require__(162);
 
-				// Loop through every typed letter
-				for (var i = 0; i < userInput.length; i++) {
+	var _ElementsArray2 = _interopRequireDefault(_ElementsArray);
 
-					if (i == 0) {
-						//Loop through all elements
-						for (var j = 0; j < ElementsArray.length; j++) {
-							//If the letters at position i match, push that element to the array
-							if (userInput.charAt(i) == ElementsArray[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == ElementsArray[j].elementAcronym.charAt(i).toLowerCase()) {
-								listElements.push(ElementsArray[j]);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ElementSelector = function (_Component) {
+		_inherits(ElementSelector, _Component);
+
+		function ElementSelector(props) {
+			_classCallCheck(this, ElementSelector);
+
+			return _possibleConstructorReturn(this, (ElementSelector.__proto__ || Object.getPrototypeOf(ElementSelector)).call(this, props));
+		}
+
+		_createClass(ElementSelector, [{
+			key: '_handleClick',
+			value: function _handleClick(input) {
+
+				console.log(this.props);
+
+				this.props.newElement(input);
+				//console.log(input);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+
+				var findElements = function elemFinder(userInput) {
+
+					var listElements = [];
+					var listElements2 = [];
+					var listElements3 = [];
+
+					// Loop through every typed letter
+					for (var i = 0; i < userInput.length; i++) {
+
+						if (i == 0) {
+							//Loop through all elements
+							for (var j = 0; j < _ElementsArray2.default.length; j++) {
+								//If the letters at position i match, push that element to the array
+								if (userInput.charAt(i) == _ElementsArray2.default[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == _ElementsArray2.default[j].elementAcronym.charAt(i).toLowerCase()) {
+									listElements.push(_ElementsArray2.default[j]);
+								}
 							}
-						}
-					} else if (i == 1) {
-						//Loop through the first list of elements
-						for (var j = 0; j < listElements.length; j++) {
-							//If the letters at position i match, push that element to a new array
-							if (userInput.charAt(i) == listElements[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements[j].elementAcronym.charAt(i).toLowerCase()) {
-								listElements2.push(listElements[j]);
+						} else if (i == 1) {
+							//Loop through the first list of elements
+							for (var _j = 0; _j < listElements.length; _j++) {
+								//If the letters at position i match, push that element to a new array
+								if (userInput.charAt(i) == listElements[_j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements[_j].elementAcronym.charAt(i).toLowerCase()) {
+									listElements2.push(listElements[_j]);
+								}
 							}
-						}
-					} else if (i == 2) {
-						//Loop through the second list of elements
-						for (var j = 0; j < listElements2.length; j++) {
-							//If the letters at position i match, push that element to a new array
-							if (userInput.charAt(i) == listElements2[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements2[j].elementAcronym.charAt(i).toLowerCase()) {
-								listElements3.push(listElements2[j]);
+						} else if (i == 2) {
+							//Loop through the second list of elements
+							for (var _j2 = 0; _j2 < listElements2.length; _j2++) {
+								//If the letters at position i match, push that element to a new array
+								if (userInput.charAt(i) == listElements2[_j2].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements2[_j2].elementAcronym.charAt(i).toLowerCase()) {
+									listElements3.push(listElements2[_j2]);
+								}
 							}
 						}
 					}
-				}
 
-				//Depending on how many letters were typed in, display the appropriate array
-				if (userInput.length == 0) {
-					return listElements;
-				} else if (userInput.length == 1) {
-					//console.log(listElements);
-					return listElements;
-				} else if (userInput.length == 2) {
-					//console.log(listElements2);
-					return listElements2;
-				} else if (userInput.length == 3) {
-					//console.log(listElements3);
-					return listElements3;
-				} else if (userInput.length >= 4) {
-					return listElements3;
-				}
-			}
+					//Depending on how many letters were typed in, display the appropriate array
+					if (userInput.length == 0) {
+						return listElements;
+					} else if (userInput.length == 1) {
+						//console.log(listElements);
+						return listElements;
+					} else if (userInput.length == 2) {
+						//console.log(listElements2);
+						return listElements2;
+					} else if (userInput.length == 3) {
+						//console.log(listElements3);
+						return listElements3;
+					} else if (userInput.length >= 4) {
+						return listElements3;
+					}
+				};
 
-			//Map through the array of elements found and display them
-			var elementsFound = findElements(this.props.userInput).map(function (element, i) {
-				return React.createElement(
+				//Map through the array of elements found and display them
+				var elementsFound = findElements(this.props.userInput).map(function (element, i) {
+					return _react2.default.createElement(
+						'div',
+						{ key: i, className: 'col-sm-4 clickableElement box', onClick: function onClick() {
+								return _this2._handleClick(element);
+							} },
+						_react2.default.createElement(
+							'p',
+							{ key: i, className: 'atomic-number-p' },
+							element.atomicNumber
+						),
+						_react2.default.createElement(
+							'h2',
+							{ className: 'acronym-h2' },
+							element.elementAcronym
+						),
+						_react2.default.createElement(
+							'p',
+							{ className: 'name-p' },
+							element.elementName
+						),
+						_react2.default.createElement(
+							'p',
+							{ className: 'mass-p' },
+							element.mass.toFixed(3)
+						)
+					);
+				});
+
+				//Render the elementsFound 'div'
+				return _react2.default.createElement(
 					'div',
-					{ key: i, className: 'col-sm-4 clickableElement box' },
-					React.createElement(
-						'p',
-						{ key: i, className: 'atomic-number-p' },
-						element.atomicNumber
-					),
-					React.createElement(
-						'h2',
-						{ className: 'acronym-h2' },
-						element.elementAcronym
-					),
-					React.createElement(
-						'p',
-						{ className: 'name-p' },
-						element.elementName
-					),
-					React.createElement(
-						'p',
-						{ className: 'mass-p' },
-						element.mass.toFixed(3)
-					)
+					{ className: 'row', id: 'elements-found' },
+					elementsFound
 				);
-			}.bind(this));
+			}
+		}]);
 
-			//Render the elementsFound 'div'
-			return React.createElement(
-				'div',
-				{ className: 'row', id: 'elements-found' },
-				elementsFound
-			);
-		}
-	});
+		return ElementSelector;
+	}(_react.Component);
 
-	module.exports = ElementSelector;
+	exports.default = ElementSelector;
 
 /***/ },
 /* 162 */

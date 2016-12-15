@@ -1,25 +1,31 @@
-var React = require('react');
+import React, {Component} from 'react';
+import ElementsArray from './ElementsArray.js';
 
-var ElementsArray = require('./ElementsArray.js');
+export default class ElementSelector extends Component{
+	constructor(props) {
+		super(props);
+	}
 
+	_handleClick(input) {
 
-var ElementSelector = React.createClass({
-	_handlePress: function(input) {
-		//this.props.newElement(input)
-	},
-	render: function(){
-		function findElements (userInput){
+		console.log(this.props)
 
-			var listElements = [];
-			var listElements2 = [];
-			var listElements3 = [];
+		this.props.newElement(input);
+		//console.log(input);
+	}
+	render(){
+		const findElements = function elemFinder (userInput){
+
+			let listElements = [];
+			let listElements2 = [];
+			let listElements3 = [];
 
 			// Loop through every typed letter
-			for (var i=0; i<userInput.length; i++){
+			for (let i=0; i<userInput.length; i++){
 
 				if (i==0){
 					//Loop through all elements
-					for (var j=0; j<ElementsArray.length;j++){
+					for (let j=0; j<ElementsArray.length;j++){
 						//If the letters at position i match, push that element to the array
 						if (userInput.charAt(i) == ElementsArray[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == ElementsArray[j].elementAcronym.charAt(i).toLowerCase()){
 							listElements.push(ElementsArray[j]);
@@ -29,7 +35,7 @@ var ElementSelector = React.createClass({
 
 				else if (i==1){
 					//Loop through the first list of elements
-					for (var j=0; j<listElements.length;j++){
+					for (let j=0; j<listElements.length;j++){
 						//If the letters at position i match, push that element to a new array
 						if (userInput.charAt(i) == listElements[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements[j].elementAcronym.charAt(i).toLowerCase()){
 							listElements2.push(listElements[j]);
@@ -39,14 +45,13 @@ var ElementSelector = React.createClass({
 
 				else if (i==2){
 					//Loop through the second list of elements
-					for (var j=0; j<listElements2.length;j++){
+					for (let j=0; j<listElements2.length;j++){
 						//If the letters at position i match, push that element to a new array
 						if (userInput.charAt(i) == listElements2[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements2[j].elementAcronym.charAt(i).toLowerCase()){
 							listElements3.push(listElements2[j]);
 						}	
 					}
-				}
-			
+				}		
 			}
 
 			//Depending on how many letters were typed in, display the appropriate array
@@ -71,10 +76,10 @@ var ElementSelector = React.createClass({
 		}
 
 		//Map through the array of elements found and display them
-		var elementsFound = findElements(this.props.userInput).map(function(element, i){
+		const elementsFound = findElements(this.props.userInput).map( (element, i) => {
 			return (
 
-				<div key={i} className="col-sm-4 clickableElement box">
+				<div key={i} className="col-sm-4 clickableElement box" onClick={() => this._handleClick(element)}>
 					<p key={i} className="atomic-number-p">{element.atomicNumber}</p>
 					<h2 className="acronym-h2">{element.elementAcronym}</h2>
 					<p className="name-p">{element.elementName}</p>
@@ -82,7 +87,7 @@ var ElementSelector = React.createClass({
 				</div>
 
 			)
-		}.bind(this))
+		})
 
 		//Render the elementsFound 'div'
 		return (
@@ -93,6 +98,4 @@ var ElementSelector = React.createClass({
 		)
 	
 	}
-})
-
-module.exports = ElementSelector;
+}

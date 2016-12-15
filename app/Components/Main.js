@@ -1,37 +1,62 @@
-// Include React and axios
-var React = require('react');
+// Include React
+import React, {Component} from 'react';
 
 // Here we include all of the sub-components
-var CalcPanel = require('./CalcPanel.js');
-var ElementSelector = require('./ElementSelector.js');
+import CalcPanel from './CalcPanel.js';
+import ElementSelector from './ElementSelector.js';
 
+ 
+export default class Main extends Component {
+	constructor(props) {
+		super(props);
 
-var Main = React.createClass({
-    componentDidMount: function() {
-        $(document.body).on('keydown', this.setUserInpu);
-    },
-
-    componentWillUnmount: function() {
-        $(document.body).off('keydown', this.setUserInpu);
-    },
-
-	getInitialState: function() {
-		return {
-			text: 'ag',
+		this.state = {
+			text: '',
+			elements: [], multiplier:[],
+			total: 0,
 		};
 
-	},
+		this.getElement = this.getElement.bind(this);
+		this.setUserInput = this.setUserInput.bind(this);
+	}
 
-	setUserInpu: function(event){
+    componentDidMount() {
+        $(document.body).on('keydown', this.setUserInput);
+    }
+    componentWillUnmount() {
+        $(document.body).off('keydown', this.setUserInput);
+    }
+
+	getElement(newElement){
+		console.log(newElement);
+
+		// Push the element and multiplier into their respective arrays
+		this.state.elements.push(newElement);
+		this.state.multiplier.push(1);
+
+		this.state.total += newElement.mass;
+
+		this.setState({
+			total: this.state.total,
+			elements: this.state.elements,
+			multiplier: this.state.multiplier
+		});
+
+		console.log(this.state)
+
+	}
+
+	setUserInput(event){
 		console.log(event.key)
 		console.log(event.keyCode);
 
 		if (event.keyCode >= 65 && event.keyCode <= 90){
 			console.log('letter of the alphabet');
 
-			this.state.text += event.key;
+			let newText = this.state.text;
+			newText += event.key;
 
-			this.setState({text: this.state.text})
+			this.setState({text: newText})
 		}
 		//If backspace
 		else if (event.keyCode === 8){
@@ -39,29 +64,23 @@ var Main = React.createClass({
 			//If there is user input to delete
 			if (this.state.text.length > 0){
 				//Remove the last letter
-				var newText = this.state.text.slice(0,-1);
+				const newText = this.state.text.slice(0,-1);
 
 				this.setState({text: newText});
 
 			}
-
 		}
+	}
 
-	},
-
-	render: function() {
+	render() {
 
 		return (
 			<div className="container">
-
-
 				<div className="row" id="header">
 					<h1>Molecular Weight Calculator</h1>
 				</div>
 
-
 				<div className="row">
-
 					<div className="col-sm-8">
 					</div>
 
@@ -71,14 +90,10 @@ var Main = React.createClass({
 							<h2 id="current-letters">Search</h2>
 						</div>
 
-						<ElementSelector userInput={this.state.text} />
+						<ElementSelector userInput={this.state.text} newElement={this.getElement.bind(this)} />
 					</div>
-
 				</div>
 			</div>
 		)
 	}
-})
-
-// Export the component back for use in other files
-module.exports = Main;
+}

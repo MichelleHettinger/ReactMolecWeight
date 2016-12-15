@@ -1,4 +1,4 @@
-var elements = 
+const elements = 
 	[	
 		{
 			mass: 1.0079,
