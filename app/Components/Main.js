@@ -41,10 +41,10 @@ export default class Main extends Component {
 		//console.log(this.state)
 	}
 	getEdit (input, element, i) {
-		console.log("------------------------------------------");
-		console.log(input + " one " + element.elementName + " at position: " + i);
+		//console.log("------------------------------------------");
+		//console.log(input + " one " + element.elementName + " at position: " + i);
 
-		console.log(i)
+		//console.log(i)
 
 		if (input == '+'){
 			this.state.multipliers[i] += 1;
@@ -72,24 +72,40 @@ export default class Main extends Component {
 	}
 
 
+	calculateTotal () {
+
+		//Loop for every set of parenthesis
+		for (let i=0; i<this.state.parenMultiplier.length; i++){
+			console.log(this.state);
+
+			for (let j=this.state.parenMultiplier[i].startPosition; j<=this.state.parenMultiplier[i].endPosition; j++){
+				
+				this.state.multipliers[j] *= this.state.parenMultiplier[i].multiplier;
+
+				console.log(this.state);
+
+			}
+
+		}
+	}
+
 	getParen (parenData) {
 		//console.log(parenData);
 
 		const startPosition = parenData.firstElementPosition;
 		const endPosition = parenData.secondElementPosition;
 
-	 	var newParenMultiplier = this.state.parenMultiplier;
+	 	let newParenMultiplier = this.state.parenMultiplier;
 
 	 	newParenMultiplier.push({
 			endPosition,
 			startPosition,
+			multiplier: 2,
 		});
 
 		this.setState({
 			parenMultiplier: newParenMultiplier,
-		}, () => { console.log(this.state) } );
-
-
+		}, this.calculateTotal );
 	}
 
 

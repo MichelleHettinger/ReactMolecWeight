@@ -19780,7 +19780,7 @@
 
 	var _LoginHeader2 = _interopRequireDefault(_LoginHeader);
 
-	var _CalcPanel = __webpack_require__(167);
+	var _CalcPanel = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./CalcPanel.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _CalcPanel2 = _interopRequireDefault(_CalcPanel);
 
@@ -19843,10 +19843,10 @@
 		}, {
 			key: 'getEdit',
 			value: function getEdit(input, element, i) {
-				console.log("------------------------------------------");
-				console.log(input + " one " + element.elementName + " at position: " + i);
+				//console.log("------------------------------------------");
+				//console.log(input + " one " + element.elementName + " at position: " + i);
 
-				console.log(i);
+				//console.log(i)
 
 				if (input == '+') {
 					this.state.multipliers[i] += 1;
@@ -19872,10 +19872,24 @@
 				console.log(this.state);
 			}
 		}, {
+			key: 'calculateTotal',
+			value: function calculateTotal() {
+
+				//Loop for every set of parenthesis
+				for (var i = 0; i < this.state.parenMultiplier.length; i++) {
+					console.log(this.state);
+
+					for (var j = this.state.parenMultiplier[i].startPosition; j <= this.state.parenMultiplier[i].endPosition; j++) {
+
+						this.state.multipliers[j] *= this.state.parenMultiplier[i].multiplier;
+
+						console.log(this.state);
+					}
+				}
+			}
+		}, {
 			key: 'getParen',
 			value: function getParen(parenData) {
-				var _this2 = this;
-
 				//console.log(parenData);
 
 				var startPosition = parenData.firstElementPosition;
@@ -19885,19 +19899,18 @@
 
 				newParenMultiplier.push({
 					endPosition: endPosition,
-					startPosition: startPosition
+					startPosition: startPosition,
+					multiplier: 2
 				});
 
 				this.setState({
 					parenMultiplier: newParenMultiplier
-				}, function () {
-					console.log(_this2.state);
-				});
+				}, this.calculateTotal);
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this3 = this;
+				var _this2 = this;
 
 				return _react2.default.createElement(
 					'div',
@@ -19928,7 +19941,7 @@
 								{ className: 'row' },
 								_react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'search', placeholder: 'Search for an element. Ex. \'car\' for carbon.',
 									onChange: function onChange(text) {
-										return _this3.setState({ text: text.target.value });
+										return _this2.setState({ text: text.target.value });
 									}
 								})
 							),
@@ -20799,190 +20812,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 167 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var CalcPanel = function (_Component) {
-		_inherits(CalcPanel, _Component);
-
-		function CalcPanel(props) {
-			_classCallCheck(this, CalcPanel);
-
-			var _this = _possibleConstructorReturn(this, (CalcPanel.__proto__ || Object.getPrototypeOf(CalcPanel)).call(this, props));
-
-			_this.state = {
-				parenCount: 0,
-
-				firstElement: {},
-				firstElementPosition: null,
-
-				secondElement: {},
-				secondElementPosition: null
-			};
-			return _this;
-		}
-
-		_createClass(CalcPanel, [{
-			key: '_handleClick',
-			value: function _handleClick(input, element, i) {
-				this.props.newEdit(input, element, i);
-			}
-		}, {
-			key: 'passParenToParent',
-			value: function passParenToParent(parenData) {
-				this.props.newParen(parenData);
-			}
-		}, {
-			key: 'getParen',
-			value: function getParen(element, i) {
-				var _this2 = this;
-
-				//console.log(element)
-				//console.log(i)
-
-				this.state.parenCount++;
-
-				switch (this.state.parenCount) {
-					case 1:
-
-						this.setState({
-							firstElement: element,
-							firstElementPosition: i
-						});
-
-						break;
-
-					case 2:
-
-						this.setState({
-							parenCount: 0,
-							secondElement: element,
-							secondElementPosition: i
-
-						}, function () {
-							_this2.passParenToParent(_this2.state);
-						});
-
-						break;
-
-					default:
-						console.log('Check parentCount');
-				}
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var _this3 = this;
-
-				// Upon tapping a selected atom, loop all atoms
-				var elementsToDisplay = this.props.mainState.elements.map(function (element, i) {
-					return _react2.default.createElement(
-						'div',
-						{ key: i, className: 'calculatableElement' },
-						_react2.default.createElement(
-							'button',
-							{ key: i, className: 'plusButton btn btn-xs', onClick: function onClick() {
-									return _this3._handleClick('+', element, i);
-								} },
-							' + '
-						),
-						_react2.default.createElement(
-							'div',
-							{ onClick: function onClick() {
-									return _this3.getParen(element, i);
-								} },
-							_react2.default.createElement(
-								'p',
-								{ className: 'calculatableAcronym' },
-								element.elementAcronym,
-								_react2.default.createElement(
-									'sub',
-									null,
-									' ',
-									_this3.props.mainState.multipliers[i],
-									' '
-								)
-							)
-						),
-						_react2.default.createElement(
-							'button',
-							{ className: 'minusButton btn btn-xs', onClick: function onClick() {
-									return _this3._handleClick("-", element, i);
-								} },
-							' - '
-						)
-					);
-				});
-
-				if (elementsToDisplay.length != 0) {
-
-					//console.log(elementsToDisplay);
-
-					return _react2.default.createElement(
-						'div',
-						{ className: 'col-sm-8', id: 'calcPanelWith' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'row' },
-							_react2.default.createElement(
-								'h3',
-								{ id: 'molecular-weight' },
-								'Molecular Weight: ',
-								this.props.mainState.total.toFixed(3),
-								' g/mol'
-							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'elements-chosen' },
-							elementsToDisplay
-						)
-					);
-				} else {
-
-					return _react2.default.createElement(
-						'div',
-						{ className: 'col-sm-8', id: 'calcPanelWithOut' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'row' },
-							_react2.default.createElement(
-								'h3',
-								{ id: 'molecular-weight' },
-								'Start calculating!'
-							)
-						)
-					);
-				}
-			}
-		}]);
-
-		return CalcPanel;
-	}(_react.Component);
-
-	exports.default = CalcPanel;
-
-/***/ },
+/* 167 */,
 /* 168 */
 /***/ function(module, exports, __webpack_require__) {
 

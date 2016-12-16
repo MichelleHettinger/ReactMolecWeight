@@ -46,7 +46,10 @@ export default class CalcPanel extends Component {
 					secondElement: element,
 					secondElementPosition: i,
 
-				}, () => { this.passParenToParent(this.state) } );
+				}
+
+				//Uncomment to bring parentheses functionality back
+				//,() => { this.passParenToParent(this.state) } );
 
 				
 				break;
