@@ -55,7 +55,7 @@ export default class Main extends Component {
 			this.state.total -= element.mass;
 		}
 
-		for (var j=0; j<this.state.multipliers.length; j++){
+		for (let j=0; j<this.state.multipliers.length; j++){
 			if (this.state.multipliers[j] == 0){
 				this.state.multipliers.splice(j, 1);
 				this.state.elements.splice(j, 1);

@@ -48,7 +48,7 @@ export default class CalcPanel extends Component {
 
 				}
 
-				//Uncomment to bring parentheses functionality back
+				) //Uncomment to bring parentheses functionality back
 				//,() => { this.passParenToParent(this.state) } );
 
 				

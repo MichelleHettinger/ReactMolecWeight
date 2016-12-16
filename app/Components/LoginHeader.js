@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import * as firebase from "firebase";
-var config = {
+const config = {
 	apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
 	authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
 	databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
@@ -11,8 +11,7 @@ var config = {
 
 //Only one instance of firebase can run at a time
 firebase.initializeApp(config);
-		//Listener for firebase user login
-		const user = firebase.auth().currentUser;
+
 export default class LoginHeader extends Component {
 	constructor(props) {
 		super(props);
@@ -20,6 +19,7 @@ export default class LoginHeader extends Component {
 		this.state = {
 			email: '',
 			password: '',
+			logged: false,
 		};
 	}
 
@@ -41,7 +41,7 @@ export default class LoginHeader extends Component {
 				console.log(userData);
 				console.log('logged in');
 
-				//document.getElementByID('#loginModal').modal.close();
+				this.setState({logged: true})
 
 			}
 			else {
@@ -54,15 +54,15 @@ export default class LoginHeader extends Component {
 		console.log("good")
 	}
 	logOut(){
-		firebase.auth().signOut().catch(function(error){
+		firebase.auth().signOut().catch( error => {
 
 			alert("Error " + error);
 
-		}).then(function() {
+		}).then( () => {
 
-			alert("You have signed out");
+			this.setState({logged: false})
 
-		}.bind(this))
+		})
 	}
 	render () {
 		//Listener for firebase user login
