@@ -13,22 +13,17 @@ export default class Main extends Component {
 		this.state = {
 			text: '',
 			elements: [], multipliers:[],
+			parenMultiplier: [],
 			total: 0,
 		};
 
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
-		//this.getUserInput = this.getUserInput.bind(this);
+		this.getParen = this.getParen.bind(this);
 	}
 
-    // componentDidMount() {
-    //     $(document.body).on('keydown', this.getUserInput);
-    // }
-    // componentWillUnmount() {
-    //     $(document.body).off('keydown', this.getUserInput);
-    // }
 
-	getElement(newElement){
+	getElement (newElement) {
 		console.log(newElement);
 
 		// Push the element and multiplier into their respective arrays
@@ -45,7 +40,7 @@ export default class Main extends Component {
 
 		//console.log(this.state)
 	}
-	getEdit(input, element, i){
+	getEdit (input, element, i) {
 		console.log("------------------------------------------");
 		console.log(input + " one " + element.elementName + " at position: " + i);
 
@@ -75,53 +70,30 @@ export default class Main extends Component {
 
 		console.log(this.state);
 	}
-	// getUserInput(event){
 
-	// 	let newText;
 
-	// 	//Capturing letter
-	// 	if (event.keyCode >= 65 && event.keyCode <= 90){
+	getParen (parenData) {
+		//console.log(parenData);
 
-	// 		//console.log(event.key)
-	// 		//console.log(event.keyCode);
+		const startPosition = parenData.firstElementPosition;
+		const endPosition = parenData.secondElementPosition;
 
-	// 		//Capturing the very first input
-	// 		if (this.state.text == "Search"){
-	// 			this.state.text = '';
+	 	var newParenMultiplier = this.state.parenMultiplier;
 
-	// 			newText = event.key;
-	// 		}
-	// 		//2nd and 3rd inputs
-	// 		else {
-	// 			newText = this.state.text;
-	// 			newText += event.key;
-	// 		}
+	 	newParenMultiplier.push({
+			endPosition,
+			startPosition,
+		});
 
-	// 		this.setState({text: newText})
-	// 	}
-	// 	//Capturing backspace
-	// 	else if (event.keyCode === 8){
-	// 		//console.log(event.key)
-	// 		//console.log(event.keyCode);
+		this.setState({
+			parenMultiplier: newParenMultiplier,
+		}, () => { console.log(this.state) } );
 
-	// 		//If there is user input to delete and it is not 'search'
-	// 		if (this.state.text.length > 0 && this.state.text != "Search") {
 
-	// 			//Remove the last letter
-	// 			const newText = this.state.text.slice(0,-1);
+	}
 
-	// 			//If this yields an empty string, make this.state.text display 'Search'
-	// 			if (newText == ''){
-	// 				this.setState({text: 'Search'});
-	// 			} else {
-	// 				this.setState({text: newText});
-	// 			}
 
-	// 		}
-	// 	}
-	// }
-
-	render() {
+	render () {
 
 		return (
 			<div className="container">
@@ -135,7 +107,7 @@ export default class Main extends Component {
 
 				<div className="row">
 
-					<CalcPanel mainState={this.state} newEdit={this.getEdit} />
+					<CalcPanel mainState={this.state} newEdit={this.getEdit} newParen={this.getParen} />
 
 					<div className="col-sm-4 pull-right" id="elements-panel">
 

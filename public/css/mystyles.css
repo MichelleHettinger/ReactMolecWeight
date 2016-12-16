@@ -35,6 +35,16 @@ img{
 	margin-left: 5px;
 }
 
+#loggedInButtons{
+	margin-top: 10px;
+}
+	#accountButton {
+		margin-right: 5px;
+	}
+	#logoutButton{
+		margin-left: 5px;
+	}
+
 #calcPanelWith{
     background-color: rgba(29, 26, 26, 0.56);
     width: 60%;

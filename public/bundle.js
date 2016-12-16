@@ -19811,21 +19811,15 @@
 			_this.state = {
 				text: '',
 				elements: [], multipliers: [],
+				parenMultiplier: [],
 				total: 0
 			};
 
 			_this.getElement = _this.getElement.bind(_this);
 			_this.getEdit = _this.getEdit.bind(_this);
-			//this.getUserInput = this.getUserInput.bind(this);
+			_this.getParen = _this.getParen.bind(_this);
 			return _this;
 		}
-
-		// componentDidMount() {
-		//     $(document.body).on('keydown', this.getUserInput);
-		// }
-		// componentWillUnmount() {
-		//     $(document.body).off('keydown', this.getUserInput);
-		// }
 
 		_createClass(Main, [{
 			key: 'getElement',
@@ -19877,56 +19871,33 @@
 
 				console.log(this.state);
 			}
-			// getUserInput(event){
+		}, {
+			key: 'getParen',
+			value: function getParen(parenData) {
+				var _this2 = this;
 
-			// 	let newText;
+				//console.log(parenData);
 
-			// 	//Capturing letter
-			// 	if (event.keyCode >= 65 && event.keyCode <= 90){
+				var startPosition = parenData.firstElementPosition;
+				var endPosition = parenData.secondElementPosition;
 
-			// 		//console.log(event.key)
-			// 		//console.log(event.keyCode);
+				var newParenMultiplier = this.state.parenMultiplier;
 
-			// 		//Capturing the very first input
-			// 		if (this.state.text == "Search"){
-			// 			this.state.text = '';
+				newParenMultiplier.push({
+					endPosition: endPosition,
+					startPosition: startPosition
+				});
 
-			// 			newText = event.key;
-			// 		}
-			// 		//2nd and 3rd inputs
-			// 		else {
-			// 			newText = this.state.text;
-			// 			newText += event.key;
-			// 		}
-
-			// 		this.setState({text: newText})
-			// 	}
-			// 	//Capturing backspace
-			// 	else if (event.keyCode === 8){
-			// 		//console.log(event.key)
-			// 		//console.log(event.keyCode);
-
-			// 		//If there is user input to delete and it is not 'search'
-			// 		if (this.state.text.length > 0 && this.state.text != "Search") {
-
-			// 			//Remove the last letter
-			// 			const newText = this.state.text.slice(0,-1);
-
-			// 			//If this yields an empty string, make this.state.text display 'Search'
-			// 			if (newText == ''){
-			// 				this.setState({text: 'Search'});
-			// 			} else {
-			// 				this.setState({text: newText});
-			// 			}
-
-			// 		}
-			// 	}
-			// }
-
+				this.setState({
+					parenMultiplier: newParenMultiplier
+				}, function () {
+					console.log(_this2.state);
+				});
+			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this2 = this;
+				var _this3 = this;
 
 				return _react2.default.createElement(
 					'div',
@@ -19948,7 +19919,7 @@
 					_react2.default.createElement(
 						'div',
 						{ className: 'row' },
-						_react2.default.createElement(_CalcPanel2.default, { mainState: this.state, newEdit: this.getEdit }),
+						_react2.default.createElement(_CalcPanel2.default, { mainState: this.state, newEdit: this.getEdit, newParen: this.getParen }),
 						_react2.default.createElement(
 							'div',
 							{ className: 'col-sm-4 pull-right', id: 'elements-panel' },
@@ -19957,7 +19928,7 @@
 								{ className: 'row' },
 								_react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'search', placeholder: 'Search for an element. Ex. \'car\' for carbon.',
 									onChange: function onChange(text) {
-										return _this2.setState({ text: text.target.value });
+										return _this3.setState({ text: text.target.value });
 									}
 								})
 							),
@@ -20013,6 +19984,8 @@
 
 	//Only one instance of firebase can run at a time
 	firebase.initializeApp(config);
+	//Listener for firebase user login
+	var user = firebase.auth().currentUser;
 
 	var LoginHeader = function (_Component) {
 		_inherits(LoginHeader, _Component);
@@ -20128,14 +20101,12 @@
 				} else {
 					return _react2.default.createElement(
 						"div",
-						{ className: "col-sm-4" },
-						_react2.default.createElement(
-							"p",
-							null,
-							user.displayName
-						),
-						_react2.default.createElement("input", { type: "button", value: "Log Out", className: "btn btn-warning btn-sm",
+						{ className: "col-sm-4", id: "loggedInButtons" },
+						_react2.default.createElement("input", { type: "button", value: "Log Out", id: "logoutButton", className: "btn btn-warning btn-sm pull-right",
 							onClick: this.logOut.bind(this)
+						}),
+						_react2.default.createElement("input", { type: "button", value: "My Account", id: "accountButton", className: "btn btn-primary btn-sm pull-right",
+							onClick: console.log('account')
 						})
 					);
 				}
@@ -20831,7 +20802,7 @@
 /* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -20857,89 +20828,148 @@
 		function CalcPanel(props) {
 			_classCallCheck(this, CalcPanel);
 
-			return _possibleConstructorReturn(this, (CalcPanel.__proto__ || Object.getPrototypeOf(CalcPanel)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (CalcPanel.__proto__ || Object.getPrototypeOf(CalcPanel)).call(this, props));
+
+			_this.state = {
+				parenCount: 0,
+
+				firstElement: {},
+				firstElementPosition: null,
+
+				secondElement: {},
+				secondElementPosition: null
+			};
+			return _this;
 		}
 
 		_createClass(CalcPanel, [{
-			key: "_handleClick",
+			key: '_handleClick',
 			value: function _handleClick(input, element, i) {
 				this.props.newEdit(input, element, i);
 			}
 		}, {
-			key: "render",
-			value: function render() {
+			key: 'passParenToParent',
+			value: function passParenToParent(parenData) {
+				this.props.newParen(parenData);
+			}
+		}, {
+			key: 'getParen',
+			value: function getParen(element, i) {
 				var _this2 = this;
+
+				//console.log(element)
+				//console.log(i)
+
+				this.state.parenCount++;
+
+				switch (this.state.parenCount) {
+					case 1:
+
+						this.setState({
+							firstElement: element,
+							firstElementPosition: i
+						});
+
+						break;
+
+					case 2:
+
+						this.setState({
+							parenCount: 0,
+							secondElement: element,
+							secondElementPosition: i
+
+						}, function () {
+							_this2.passParenToParent(_this2.state);
+						});
+
+						break;
+
+					default:
+						console.log('Check parentCount');
+				}
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this3 = this;
 
 				// Upon tapping a selected atom, loop all atoms
 				var elementsToDisplay = this.props.mainState.elements.map(function (element, i) {
 					return _react2.default.createElement(
-						"div",
-						{ key: i, className: "calculatableElement" },
+						'div',
+						{ key: i, className: 'calculatableElement' },
 						_react2.default.createElement(
-							"button",
-							{ key: i, className: "plusButton btn btn-xs", onClick: function onClick() {
-									return _this2._handleClick('+', element, i);
+							'button',
+							{ key: i, className: 'plusButton btn btn-xs', onClick: function onClick() {
+									return _this3._handleClick('+', element, i);
 								} },
-							" + "
+							' + '
 						),
 						_react2.default.createElement(
-							"p",
-							{ className: "calculatableAcronym" },
-							element.elementAcronym,
+							'div',
+							{ onClick: function onClick() {
+									return _this3.getParen(element, i);
+								} },
 							_react2.default.createElement(
-								"sub",
-								null,
-								" ",
-								_this2.props.mainState.multipliers[i],
-								" "
+								'p',
+								{ className: 'calculatableAcronym' },
+								element.elementAcronym,
+								_react2.default.createElement(
+									'sub',
+									null,
+									' ',
+									_this3.props.mainState.multipliers[i],
+									' '
+								)
 							)
 						),
 						_react2.default.createElement(
-							"button",
-							{ className: "minusButton btn btn-xs", onClick: function onClick() {
-									return _this2._handleClick("-", element, i);
+							'button',
+							{ className: 'minusButton btn btn-xs', onClick: function onClick() {
+									return _this3._handleClick("-", element, i);
 								} },
-							" - "
+							' - '
 						)
 					);
 				});
 
 				if (elementsToDisplay.length != 0) {
 
-					console.log(elementsToDisplay);
+					//console.log(elementsToDisplay);
 
 					return _react2.default.createElement(
-						"div",
-						{ className: "col-sm-8", id: "calcPanelWith" },
+						'div',
+						{ className: 'col-sm-8', id: 'calcPanelWith' },
 						_react2.default.createElement(
-							"div",
-							{ className: "row" },
+							'div',
+							{ className: 'row' },
 							_react2.default.createElement(
-								"h3",
-								{ id: "molecular-weight" },
-								"Molecular Weight: ",
+								'h3',
+								{ id: 'molecular-weight' },
+								'Molecular Weight: ',
 								this.props.mainState.total.toFixed(3),
-								" g/mol"
+								' g/mol'
 							)
 						),
 						_react2.default.createElement(
-							"div",
-							{ className: "elements-chosen" },
+							'div',
+							{ className: 'elements-chosen' },
 							elementsToDisplay
 						)
 					);
 				} else {
 
 					return _react2.default.createElement(
-						"div",
-						{ className: "col-sm-8", id: "calcPanelWithOut" },
+						'div',
+						{ className: 'col-sm-8', id: 'calcPanelWithOut' },
 						_react2.default.createElement(
-							"div",
-							{ className: "row" },
+							'div',
+							{ className: 'row' },
 							_react2.default.createElement(
-								"h3",
-								{ id: "molecular-weight" },
-								"Start calculating!"
+								'h3',
+								{ id: 'molecular-weight' },
+								'Start calculating!'
 							)
 						)
 					);

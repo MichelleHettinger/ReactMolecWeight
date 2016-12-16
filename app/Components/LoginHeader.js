@@ -11,7 +11,8 @@ var config = {
 
 //Only one instance of firebase can run at a time
 firebase.initializeApp(config);
-
+		//Listener for firebase user login
+		const user = firebase.auth().currentUser;
 export default class LoginHeader extends Component {
 	constructor(props) {
 		super(props);
@@ -72,50 +73,44 @@ export default class LoginHeader extends Component {
 		if (!user){
 			return (
 				<div className="col-sm-4" id="loginHeader">
+                	<div className="form-group">
+                		<div className="col-sm-9">
+							<input type="text" className="form-control input-md" id="email" placeholder="Email Address"
+								onChange={ text => this.setState({email: text.target.value}) }
+							/>
+						</div>
+						<div className="col-sm-3">
+				        	<input type="button" value="Log In" id="loginButton" className="btn btn-success btn-sm"
+				        		onClick={this.logIn.bind(this)}
+				        	/>
+				        </div>
+                	</div>
 
-                    	<div className="form-group">
-                    		<div className="col-sm-9">
-								<input type="text" className="form-control input-md" id="email" placeholder="Email Address"
-									onChange={ text => this.setState({email: text.target.value}) }
-								/>
-							</div>
-							<div className="col-sm-3">
-					        	<input type="button" value="Log In" id="loginButton" className="btn btn-success btn-sm"
-					        		onClick={this.logIn.bind(this)}
-					        	/>
-					        </div>
-                    	</div>
-
-                    	<div className="form-group">
-                    		<div className="col-sm-9">
-								<input type="password" className="form-control input-md" id="password" placeholder="Password"
-									onChange={ text => this.setState({password: text.target.value}) }
-								/>
-							</div>
-							<div className="col-sm-3">
-					        	<input type="button" value="Register" className="btn btn-primary btn-sm"
-					        		onClick={this.signUp.bind(this)}
-					        	/>
-					        </div>
-                    	</div>
-
-
-
-
-
-	
-
+                	<div className="form-group">
+                		<div className="col-sm-9">
+							<input type="password" className="form-control input-md" id="password" placeholder="Password"
+								onChange={ text => this.setState({password: text.target.value}) }
+							/>
+						</div>
+						<div className="col-sm-3">
+				        	<input type="button" value="Register" className="btn btn-primary btn-sm"
+				        		onClick={this.signUp.bind(this)}
+				        	/>
+				        </div>
+                	</div>
 				</div>
 			)
 		} else {
 			return (
-				<div className="col-sm-4">
-					<p>{user.displayName}</p>
-
-
-		        	<input type="button" value="Log Out" className="btn btn-warning btn-sm"
+				<div className="col-sm-4" id="loggedInButtons">
+		        	<input type="button" value="Log Out" id="logoutButton" className="btn btn-warning btn-sm pull-right"
 		        		onClick={this.logOut.bind(this)}
 		        	/>
+		        	<input type="button" value="My Account" id="accountButton" className="btn btn-primary btn-sm pull-right"
+		        		onClick={console.log('account')}
+		        	/>
+
+
 
 				</div>
 			)
