@@ -19809,28 +19809,25 @@
 			var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
 
 			_this.state = {
-				text: 'Search',
+				text: '',
 				elements: [], multipliers: [],
 				total: 0
 			};
 
 			_this.getElement = _this.getElement.bind(_this);
 			_this.getEdit = _this.getEdit.bind(_this);
-			_this.getUserInput = _this.getUserInput.bind(_this);
+			//this.getUserInput = this.getUserInput.bind(this);
 			return _this;
 		}
 
+		// componentDidMount() {
+		//     $(document.body).on('keydown', this.getUserInput);
+		// }
+		// componentWillUnmount() {
+		//     $(document.body).off('keydown', this.getUserInput);
+		// }
+
 		_createClass(Main, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				$(document.body).on('keydown', this.getUserInput);
-			}
-		}, {
-			key: 'componentWillUnmount',
-			value: function componentWillUnmount() {
-				$(document.body).off('keydown', this.getUserInput);
-			}
-		}, {
 			key: 'getElement',
 			value: function getElement(newElement) {
 				console.log(newElement);
@@ -19880,55 +19877,56 @@
 
 				console.log(this.state);
 			}
-		}, {
-			key: 'getUserInput',
-			value: function getUserInput(event) {
+			// getUserInput(event){
 
-				var newText = void 0;
+			// 	let newText;
 
-				//Capturing letter
-				if (event.keyCode >= 65 && event.keyCode <= 90) {
+			// 	//Capturing letter
+			// 	if (event.keyCode >= 65 && event.keyCode <= 90){
 
-					//console.log(event.key)
-					//console.log(event.keyCode);
+			// 		//console.log(event.key)
+			// 		//console.log(event.keyCode);
 
-					//Capturing the very first input
-					if (this.state.text == "Search") {
-						this.state.text = '';
+			// 		//Capturing the very first input
+			// 		if (this.state.text == "Search"){
+			// 			this.state.text = '';
 
-						newText = event.key;
-					}
-					//2nd and 3rd inputs
-					else {
-							newText = this.state.text;
-							newText += event.key;
-						}
+			// 			newText = event.key;
+			// 		}
+			// 		//2nd and 3rd inputs
+			// 		else {
+			// 			newText = this.state.text;
+			// 			newText += event.key;
+			// 		}
 
-					this.setState({ text: newText });
-				}
-				//Capturing backspace
-				else if (event.keyCode === 8) {
-						//console.log(event.key)
-						//console.log(event.keyCode);
+			// 		this.setState({text: newText})
+			// 	}
+			// 	//Capturing backspace
+			// 	else if (event.keyCode === 8){
+			// 		//console.log(event.key)
+			// 		//console.log(event.keyCode);
 
-						//If there is user input to delete and it is not 'search'
-						if (this.state.text.length > 0 && this.state.text != "Search") {
+			// 		//If there is user input to delete and it is not 'search'
+			// 		if (this.state.text.length > 0 && this.state.text != "Search") {
 
-							//Remove the last letter
-							var _newText = this.state.text.slice(0, -1);
+			// 			//Remove the last letter
+			// 			const newText = this.state.text.slice(0,-1);
 
-							//If this yields an empty string, make this.state.text display 'Search'
-							if (_newText == '') {
-								this.setState({ text: 'Search' });
-							} else {
-								this.setState({ text: _newText });
-							}
-						}
-					}
-			}
+			// 			//If this yields an empty string, make this.state.text display 'Search'
+			// 			if (newText == ''){
+			// 				this.setState({text: 'Search'});
+			// 			} else {
+			// 				this.setState({text: newText});
+			// 			}
+
+			// 		}
+			// 	}
+			// }
+
 		}, {
 			key: 'render',
 			value: function render() {
+				var _this2 = this;
 
 				return _react2.default.createElement(
 					'div',
@@ -19953,15 +19951,15 @@
 						_react2.default.createElement(_CalcPanel2.default, { mainState: this.state, newEdit: this.getEdit }),
 						_react2.default.createElement(
 							'div',
-							{ className: 'col-sm-4 pull-right box', id: 'elements-panel' },
+							{ className: 'col-sm-4 pull-right', id: 'elements-panel' },
 							_react2.default.createElement(
 								'div',
 								{ className: 'row' },
-								_react2.default.createElement(
-									'h2',
-									{ id: 'current-letters' },
-									this.state.text
-								)
+								_react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'search', placeholder: 'Search for an element. Ex. \'car\' for carbon.',
+									onChange: function onChange(text) {
+										return _this2.setState({ text: text.target.value });
+									}
+								})
 							),
 							_react2.default.createElement(_ElementSelector2.default, { userInput: this.state.text, newElement: this.getElement })
 						)
@@ -20062,6 +20060,17 @@
 				console.log("good");
 			}
 		}, {
+			key: "logOut",
+			value: function logOut() {
+				firebase.auth().signOut().catch(function (error) {
+
+					alert("Error " + error);
+				}).then(function () {
+
+					alert("You have signed out");
+				}.bind(this));
+			}
+		}, {
 			key: "render",
 			value: function render() {
 				var _this2 = this;
@@ -20090,7 +20099,7 @@
 							_react2.default.createElement(
 								"div",
 								{ className: "col-sm-3" },
-								_react2.default.createElement("input", { type: "button", value: "Log In", className: "btn btn-success btn-sm",
+								_react2.default.createElement("input", { type: "button", value: "Log In", id: "loginButton", className: "btn btn-success btn-sm",
 									onClick: this.logIn.bind(this)
 								})
 							)
@@ -20124,7 +20133,10 @@
 							"p",
 							null,
 							user.displayName
-						)
+						),
+						_react2.default.createElement("input", { type: "button", value: "Log Out", className: "btn btn-warning btn-sm",
+							onClick: this.logOut.bind(this)
+						})
 					);
 				}
 			}
@@ -20892,26 +20904,46 @@
 					);
 				});
 
-				return _react2.default.createElement(
-					"div",
-					{ className: "col-sm-8" },
-					_react2.default.createElement(
+				if (elementsToDisplay.length != 0) {
+
+					console.log(elementsToDisplay);
+
+					return _react2.default.createElement(
 						"div",
-						{ className: "row" },
+						{ className: "col-sm-8", id: "calcPanelWith" },
 						_react2.default.createElement(
-							"p",
-							{ id: "molecular-weight" },
-							"Molecular Weight: ",
-							this.props.mainState.total.toFixed(3),
-							" g/mol"
+							"div",
+							{ className: "row" },
+							_react2.default.createElement(
+								"h3",
+								{ id: "molecular-weight" },
+								"Molecular Weight: ",
+								this.props.mainState.total.toFixed(3),
+								" g/mol"
+							)
+						),
+						_react2.default.createElement(
+							"div",
+							{ className: "elements-chosen" },
+							elementsToDisplay
 						)
-					),
-					_react2.default.createElement(
+					);
+				} else {
+
+					return _react2.default.createElement(
 						"div",
-						{ className: "elements-chosen" },
-						elementsToDisplay
-					)
-				);
+						{ className: "col-sm-8", id: "calcPanelWithOut" },
+						_react2.default.createElement(
+							"div",
+							{ className: "row" },
+							_react2.default.createElement(
+								"h3",
+								{ id: "molecular-weight" },
+								"Start calculating!"
+							)
+						)
+					);
+				}
 			}
 		}]);
 

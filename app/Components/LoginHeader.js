@@ -52,7 +52,17 @@ export default class LoginHeader extends Component {
 	signUp (){
 		console.log("good")
 	}
+	logOut(){
+		firebase.auth().signOut().catch(function(error){
 
+			alert("Error " + error);
+
+		}).then(function() {
+
+			alert("You have signed out");
+
+		}.bind(this))
+	}
 	render () {
 		//Listener for firebase user login
 		const user = firebase.auth().currentUser;
@@ -70,7 +80,7 @@ export default class LoginHeader extends Component {
 								/>
 							</div>
 							<div className="col-sm-3">
-					        	<input type="button" value="Log In" className="btn btn-success btn-sm"
+					        	<input type="button" value="Log In" id="loginButton" className="btn btn-success btn-sm"
 					        		onClick={this.logIn.bind(this)}
 					        	/>
 					        </div>
@@ -101,6 +111,12 @@ export default class LoginHeader extends Component {
 			return (
 				<div className="col-sm-4">
 					<p>{user.displayName}</p>
+
+
+		        	<input type="button" value="Log Out" className="btn btn-warning btn-sm"
+		        		onClick={this.logOut.bind(this)}
+		        	/>
+
 				</div>
 			)
 		}

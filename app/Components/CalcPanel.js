@@ -27,18 +27,37 @@ export default class CalcPanel extends Component {
 			)
 		})
 
-		return (
-			<div className="col-sm-8">
+		if (elementsToDisplay.length != 0){
 
-				<div className="row">
-					<p id="molecular-weight">Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol</p>
+			console.log(elementsToDisplay);
+
+			return (
+				<div className="col-sm-8" id="calcPanelWith">
+
+					<div className="row">
+						<h3 id="molecular-weight">Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol</h3>
+					</div>
+
+					<div className="elements-chosen">
+						{elementsToDisplay}
+					</div>
+
 				</div>
+			)
 
-				<div className="elements-chosen">
-					{elementsToDisplay}
+		} else {
+
+			return (
+				<div className="col-sm-8" id="calcPanelWithOut">
+
+					<div className="row">
+						<h3 id="molecular-weight">Start calculating!</h3>
+					</div>
+
 				</div>
+			)
+		}
 
-			</div>
-		)
+
 	}
 }

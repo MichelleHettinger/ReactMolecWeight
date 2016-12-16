@@ -1,5 +1,18 @@
 .box {
-	border: 2px black solid;
+	border: 1px black solid;
+}
+
+body{
+	position: relative;
+	overflow: hidden;
+}
+
+img{
+	position: absolute;
+	top: 125px;
+    left: 180px;
+    opacity: 0.1;
+    width: 70%;
 }
 #header{
 	height: 100px;
@@ -14,10 +27,33 @@
 #molecular-weight {
 	text-align: center;
 }
-
-#elements-chosen{
-	
+#search {
+	text-align: center;
+	margin-bottom: 10px;
 }
+#loginButton {
+	margin-left: 5px;
+}
+
+#calcPanelWith{
+    background-color: rgba(29, 26, 26, 0.56);
+    width: 60%;
+}
+	#calcPanelWith h3 {
+		color: white;
+		margin-top: 10px;
+		margin-bottom: 20px;
+	}
+
+#calPanelWithOut{
+	width: 60%;
+}
+	#calcPanelWithOut h3{
+		margin-top: 0px;
+		margin-bottom: 20px;
+	}
+
+
 	.calculatableElement{
 		float:left;
 		width: 85px;
@@ -27,6 +63,7 @@
 		.plusButton{
 			align-content: center;
 			margin-left: 22px;
+			width: 20px;
 		}
 		.calculatableAcronym{
 			text-align: center;
@@ -36,6 +73,7 @@
 		}
 		.minusButton{
 			margin-left: 23px;
+			width: 20px;
 		}
 
 
@@ -45,9 +83,14 @@
 	#elements-found{
 		height: 428px;
 	}
-		.clickableElement:hover{
-			cursor: pointer;
-		}
+
+		.clickableElement{
+		    background-color: rgb(224, 212, 218);
+		}	
+			.clickableElement:hover{
+				cursor: pointer;
+				background-color: rgb(210, 122, 166);
+			}
 			.atomic-number-p{
 				margin-bottom:0;
 			}

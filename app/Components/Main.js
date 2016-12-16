@@ -11,22 +11,22 @@ export default class Main extends Component {
 		super(props);
 
 		this.state = {
-			text: 'Search',
+			text: '',
 			elements: [], multipliers:[],
 			total: 0,
 		};
 
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
-		this.getUserInput = this.getUserInput.bind(this);
+		//this.getUserInput = this.getUserInput.bind(this);
 	}
 
-    componentDidMount() {
-        $(document.body).on('keydown', this.getUserInput);
-    }
-    componentWillUnmount() {
-        $(document.body).off('keydown', this.getUserInput);
-    }
+    // componentDidMount() {
+    //     $(document.body).on('keydown', this.getUserInput);
+    // }
+    // componentWillUnmount() {
+    //     $(document.body).off('keydown', this.getUserInput);
+    // }
 
 	getElement(newElement){
 		console.log(newElement);
@@ -75,51 +75,51 @@ export default class Main extends Component {
 
 		console.log(this.state);
 	}
-	getUserInput(event){
+	// getUserInput(event){
 
-		let newText;
+	// 	let newText;
 
-		//Capturing letter
-		if (event.keyCode >= 65 && event.keyCode <= 90){
+	// 	//Capturing letter
+	// 	if (event.keyCode >= 65 && event.keyCode <= 90){
 
-			//console.log(event.key)
-			//console.log(event.keyCode);
+	// 		//console.log(event.key)
+	// 		//console.log(event.keyCode);
 
-			//Capturing the very first input
-			if (this.state.text == "Search"){
-				this.state.text = '';
+	// 		//Capturing the very first input
+	// 		if (this.state.text == "Search"){
+	// 			this.state.text = '';
 
-				newText = event.key;
-			}
-			//2nd and 3rd inputs
-			else {
-				newText = this.state.text;
-				newText += event.key;
-			}
+	// 			newText = event.key;
+	// 		}
+	// 		//2nd and 3rd inputs
+	// 		else {
+	// 			newText = this.state.text;
+	// 			newText += event.key;
+	// 		}
 
-			this.setState({text: newText})
-		}
-		//Capturing backspace
-		else if (event.keyCode === 8){
-			//console.log(event.key)
-			//console.log(event.keyCode);
+	// 		this.setState({text: newText})
+	// 	}
+	// 	//Capturing backspace
+	// 	else if (event.keyCode === 8){
+	// 		//console.log(event.key)
+	// 		//console.log(event.keyCode);
 
-			//If there is user input to delete and it is not 'search'
-			if (this.state.text.length > 0 && this.state.text != "Search") {
+	// 		//If there is user input to delete and it is not 'search'
+	// 		if (this.state.text.length > 0 && this.state.text != "Search") {
 
-				//Remove the last letter
-				const newText = this.state.text.slice(0,-1);
+	// 			//Remove the last letter
+	// 			const newText = this.state.text.slice(0,-1);
 
-				//If this yields an empty string, make this.state.text display 'Search'
-				if (newText == ''){
-					this.setState({text: 'Search'});
-				} else {
-					this.setState({text: newText});
-				}
+	// 			//If this yields an empty string, make this.state.text display 'Search'
+	// 			if (newText == ''){
+	// 				this.setState({text: 'Search'});
+	// 			} else {
+	// 				this.setState({text: newText});
+	// 			}
 
-			}
-		}
-	}
+	// 		}
+	// 	}
+	// }
 
 	render() {
 
@@ -137,10 +137,12 @@ export default class Main extends Component {
 
 					<CalcPanel mainState={this.state} newEdit={this.getEdit} />
 
-					<div className="col-sm-4 pull-right box" id="elements-panel">
+					<div className="col-sm-4 pull-right" id="elements-panel">
 
 						<div className="row">
-							<h2 id="current-letters">{this.state.text}</h2>
+							<input type="text" className="form-control input-md" id="search" placeholder="Search for an element. Ex. 'car' for carbon."
+								onChange={ text => this.setState({text: text.target.value}) }
+							/>
 						</div>
 
 						<ElementSelector userInput={this.state.text} newElement={this.getElement} />
