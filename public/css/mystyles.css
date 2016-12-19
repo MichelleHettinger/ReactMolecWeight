@@ -4,7 +4,7 @@
 
 body{
 	position: relative;
-	overflow: hidden;
+	overflow: scroll;
 }
 
 img{
@@ -48,6 +48,7 @@ img{
 #calcPanelWith{
     background-color: rgba(29, 26, 26, 0.56);
     width: 60%;
+    margin-left: 30px;
 }
 	#calcPanelWith h3 {
 		color: white;
