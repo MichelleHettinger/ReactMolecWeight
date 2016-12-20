@@ -16,6 +16,11 @@ app.use(bodyParser.json({type:'application/vnd.api+json'}));
 
 app.use(express.static('./public'));
 
+// Main Route. This route will redirect to our rendered React application
+app.get('/', function(req, res){
+  res.sendFile('./public/index.html');
+})
+
 // Listener
 app.listen(PORT, function() {
   console.log("App listening on PORT: " + PORT);

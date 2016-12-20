@@ -20817,7 +20817,7 @@
 /* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -20829,6 +20829,12 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _firebase = __webpack_require__(161);
+
+	var firebase = _interopRequireWildcard(_firebase);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20836,6 +20842,17 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var config = {
+		apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
+		authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
+		databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
+		storageBucket: "mobile-molecular-weight-85984.appspot.com",
+		messagingSenderId: "837319764944"
+	};
+
+	// Get a reference to the database service
+	var database = firebase.database();
 
 	var CalcPanel = function (_Component) {
 		_inherits(CalcPanel, _Component);
@@ -20854,28 +20871,51 @@
 				firstElementPosition: null,
 
 				secondElement: {},
-				secondElementPosition: null
+				secondElementPosition: null,
+
+				chemicalName: ''
 			};
 			return _this;
 		}
 
 		_createClass(CalcPanel, [{
-			key: 'saveFormula',
+			key: "saveFormula",
 			value: function saveFormula() {
-				console.log(this.props.mainState);
+
+				//Before actually writing, display a modal with an input field to set a name
+				//Till next time
+
+
+				var user = firebase.auth().currentUser;
+
+				if (user != null) {
+					console.log(user);
+
+					firebase.database().ref('users/' + user.uid).set({
+						chemicalName: this.state.chemicalName,
+						elements: this.props.mainState.elements,
+						multipliers: this.props.mainState.multipliers,
+						total: this.props.mainState.total,
+						parenMultiplier: this.props.mainState.parenMultiplier
+					}, function () {
+						console.log('Wrote to database');
+					});
+				} else {
+					alert('Login First');
+				}
 			}
 		}, {
-			key: '_handleClick',
+			key: "_handleClick",
 			value: function _handleClick(input, element, i) {
 				this.props.newEdit(input, element, i);
 			}
 		}, {
-			key: 'passParenToParent',
+			key: "passParenToParent",
 			value: function passParenToParent(parenData) {
 				this.props.newParen(parenData);
 			}
 		}, {
-			key: 'makeParenthesis',
+			key: "makeParenthesis",
 			value: function makeParenthesis(element, i) {
 				var _this2 = this;
 
@@ -20910,10 +20950,8 @@
 				}
 			}
 		}, {
-			key: 'checkParen',
+			key: "checkParen",
 			value: function checkParen(element, positionOfClickedElement) {
-				var _this3 = this;
-
 				//This function is executed immidately after clicking an element in the calc panel
 				//It comes here to determine if the user is clicking on an element already in parenthesis.
 				//If so, reset parenCount incase they had already clicked a viable element
@@ -20924,7 +20962,9 @@
 				//If there are no parentheses present
 				if (parenMultiplier.length == 0) {
 					console.log('good to go');
-					this.makeParenthesis(element, positionOfClickedElement);
+
+					//Uncomment these two lines to bring functionality back
+					//this.makeParenthesis(element, positionOfClickedElement);
 				} else {
 					console.log('-----');
 
@@ -20936,58 +20976,62 @@
 						//Reset the parenthesis process
 						if (positionOfClickedElement >= pm.startPosition && positionOfClickedElement <= pm.endPosition) {
 							console.log('you cannot do that');
-							_this3.setState({ parenCount: 0 });
+
+							//Uncomment these two lines to bring functionality back
+							//this.setState({parenCount: 0});
 						}
 						//Otherwise allow the parenthesis process to continue
 						//by invoking the makeParenthesis function
 						else {
 								console.log('good to go');
-								_this3.makeParenthesis(element, positionOfClickedElement);
+
+								//Uncomment these two lines to bring functionality back
+								//this.makeParenthesis(element, positionOfClickedElement);
 							}
 					});
 				}
 			}
 		}, {
-			key: 'render',
+			key: "render",
 			value: function render() {
-				var _this4 = this;
+				var _this3 = this;
 
 				// Upon tapping a selected atom, loop all atoms
 				var elementsToDisplay = this.props.mainState.elements.map(function (element, i) {
 					return _react2.default.createElement(
-						'div',
-						{ key: i, className: 'calculatableElement' },
+						"div",
+						{ key: i, className: "calculatableElement" },
 						_react2.default.createElement(
-							'button',
-							{ key: i, className: 'plusButton btn btn-xs', onClick: function onClick() {
-									return _this4._handleClick('+', element, i);
+							"button",
+							{ key: i, className: "plusButton btn btn-xs", onClick: function onClick() {
+									return _this3._handleClick('+', element, i);
 								} },
-							' + '
+							" + "
 						),
 						_react2.default.createElement(
-							'div',
-							{ className: 'calculatableAcronym', onClick: function onClick() {
-									return _this4.checkParen(element, i);
+							"div",
+							{ className: "calculatableAcronym", onClick: function onClick() {
+									return _this3.checkParen(element, i);
 								} },
 							_react2.default.createElement(
-								'p',
+								"p",
 								null,
 								element.elementAcronym,
 								_react2.default.createElement(
-									'sub',
+									"sub",
 									null,
-									' ',
-									_this4.props.mainState.multipliers[i],
-									' '
+									" ",
+									_this3.props.mainState.multipliers[i],
+									" "
 								)
 							)
 						),
 						_react2.default.createElement(
-							'button',
-							{ className: 'minusButton btn btn-xs', onClick: function onClick() {
-									return _this4._handleClick("-", element, i);
+							"button",
+							{ className: "minusButton btn btn-xs", onClick: function onClick() {
+									return _this3._handleClick("-", element, i);
 								} },
-							' - '
+							" - "
 						)
 					);
 				});
@@ -20995,36 +21039,36 @@
 				if (elementsToDisplay.length != 0) {
 					//console.log(elementsToDisplay);
 					return _react2.default.createElement(
-						'div',
-						{ className: 'col-sm-8', id: 'calcPanelWith' },
+						"div",
+						{ className: "col-sm-8", id: "calcPanelWith" },
 						_react2.default.createElement(
-							'div',
-							{ className: 'row' },
+							"div",
+							{ className: "row" },
 							_react2.default.createElement(
-								'div',
-								{ className: 'col-sm-9' },
+								"div",
+								{ className: "col-sm-9" },
 								_react2.default.createElement(
-									'h3',
-									{ id: 'molecular-weight' },
-									'Molecular Weight: ',
+									"h3",
+									{ id: "molecular-weight" },
+									"Molecular Weight: ",
 									this.props.mainState.total.toFixed(3),
-									' g/mol'
+									" g/mol"
 								)
 							),
 							_react2.default.createElement(
-								'div',
+								"div",
 								null,
-								_react2.default.createElement('input', { type: 'button', value: 'Save', className: 'btn btn-success btn-sm saveButton pull-right',
+								_react2.default.createElement("input", { type: "button", value: "Save", className: "btn btn-success btn-sm saveButton pull-right",
 									onClick: this.saveFormula.bind(this)
 								})
 							)
 						),
 						_react2.default.createElement(
-							'div',
-							{ className: 'row' },
+							"div",
+							{ className: "row" },
 							_react2.default.createElement(
-								'div',
-								{ className: 'elements-chosen' },
+								"div",
+								{ className: "elements-chosen" },
 								elementsToDisplay
 							)
 						)
@@ -21032,18 +21076,18 @@
 				} else {
 
 					return _react2.default.createElement(
-						'div',
-						{ className: 'col-sm-8', id: 'calcPanelWithOut' },
+						"div",
+						{ className: "col-sm-8", id: "calcPanelWithOut" },
 						_react2.default.createElement(
-							'div',
-							{ className: 'row' },
+							"div",
+							{ className: "row" },
 							_react2.default.createElement(
-								'div',
+								"div",
 								null,
 								_react2.default.createElement(
-									'h3',
+									"h3",
 									null,
-									'Start calculating!'
+									"Start calculating!"
 								)
 							)
 						)

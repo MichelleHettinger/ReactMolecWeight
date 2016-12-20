@@ -1,5 +1,17 @@
 import React, {Component} from 'react';
 
+import * as firebase from "firebase";
+const config = {
+	apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
+	authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
+	databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
+	storageBucket: "mobile-molecular-weight-85984.appspot.com",
+	messagingSenderId: "837319764944"
+};
+
+// Get a reference to the database service
+const database = firebase.database();
+
 export default class CalcPanel extends Component {
 	constructor(props) {
 		super(props);
@@ -14,10 +26,37 @@ export default class CalcPanel extends Component {
 
 			secondElement: {},
 			secondElementPosition: null,
+
+
+			chemicalName: '',
 		};
 	}
 	saveFormula () {
-		console.log(this.props.mainState);
+
+
+		//Before actually writing, display a modal with an input field to set a name
+		//Till next time
+
+
+		const user = firebase.auth().currentUser;
+
+		if (user!=null){
+			console.log(user);
+
+			firebase.database().ref('users/' + user.uid).set({
+				chemicalName: this.state.chemicalName,
+				elements: this.props.mainState.elements,
+				multipliers: this.props.mainState.multipliers,
+				total: this.props.mainState.total,
+				parenMultiplier: this.props.mainState.parenMultiplier,
+			}, () => {
+				(console.log('Wrote to database'))
+			});
+		}
+		else {
+			alert('Login First')
+		}
+
 	}
 
 	_handleClick (input, element, i) {
@@ -72,7 +111,9 @@ export default class CalcPanel extends Component {
 		//If there are no parentheses present
 		if (parenMultiplier.length == 0){
 			console.log('good to go');
-			this.makeParenthesis(element, positionOfClickedElement);
+
+			//Uncomment these two lines to bring functionality back
+			//this.makeParenthesis(element, positionOfClickedElement);
 		}
 		else {
 			console.log('-----');
@@ -85,13 +126,17 @@ export default class CalcPanel extends Component {
 				//Reset the parenthesis process
 				if (positionOfClickedElement >= pm.startPosition && positionOfClickedElement <= pm.endPosition){
 					console.log('you cannot do that');
-					this.setState({parenCount: 0});
+
+					//Uncomment these two lines to bring functionality back
+					//this.setState({parenCount: 0});
 				}
 				//Otherwise allow the parenthesis process to continue
 				//by invoking the makeParenthesis function
 				else {
 					console.log('good to go');
-					this.makeParenthesis(element, positionOfClickedElement);
+
+					//Uncomment these two lines to bring functionality back
+					//this.makeParenthesis(element, positionOfClickedElement);
 				}
 			});
 		}
