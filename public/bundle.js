@@ -20886,23 +20886,24 @@
 				//Till next time
 
 
-				var user = firebase.auth().currentUser;
+				// const user = firebase.auth().currentUser;
 
-				if (user != null) {
-					console.log(user);
+				// if (user!=null){
+				// 	console.log(user);
 
-					firebase.database().ref('users/' + user.uid).set({
-						chemicalName: this.state.chemicalName,
-						elements: this.props.mainState.elements,
-						multipliers: this.props.mainState.multipliers,
-						total: this.props.mainState.total,
-						parenMultiplier: this.props.mainState.parenMultiplier
-					}, function () {
-						console.log('Wrote to database');
-					});
-				} else {
-					alert('Login First');
-				}
+				// 	firebase.database().ref('users/' + user.uid).set({
+				// 		chemicalName: this.state.chemicalName,
+				// 		elements: this.props.mainState.elements,
+				// 		multipliers: this.props.mainState.multipliers,
+				// 		total: this.props.mainState.total,
+				// 		parenMultiplier: this.props.mainState.parenMultiplier,
+				// 	}, () => {
+				// 		(console.log('Wrote to database'))
+				// 	});
+				// }
+				// else {
+				// 	alert('Login First')
+				// }
 			}
 		}, {
 			key: "_handleClick",

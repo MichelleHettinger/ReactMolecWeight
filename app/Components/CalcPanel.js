@@ -56,7 +56,6 @@ export default class CalcPanel extends Component {
 		// else {
 		// 	alert('Login First')
 		// }
-
 	}
 
 	_handleClick (input, element, i) {
