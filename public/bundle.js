@@ -19890,7 +19890,7 @@
 		}, {
 			key: 'getParen',
 			value: function getParen(parenData) {
-				//console.log(parenData);
+				console.log(parenData);
 
 				var startPosition = parenData.firstElementPosition;
 				var endPosition = parenData.secondElementPosition;
@@ -19905,7 +19905,7 @@
 
 				this.setState({
 					parenMultiplier: newParenMultiplier
-				}, this.calculateTotal);
+				}, this.checkParen);
 			}
 		}, {
 			key: 'render',
@@ -20848,6 +20848,8 @@
 			_this.state = {
 				parenCount: 0,
 
+				parenAllowed: true,
+
 				firstElement: {},
 				firstElementPosition: null,
 
@@ -20868,8 +20870,10 @@
 				this.props.newParen(parenData);
 			}
 		}, {
-			key: 'getParen',
-			value: function getParen(element, i) {
+			key: 'makeParenthesis',
+			value: function makeParenthesis(element, i) {
+				var _this2 = this;
+
 				//console.log(element)
 				//console.log(i)
 
@@ -20877,35 +20881,73 @@
 
 				switch (this.state.parenCount) {
 					case 1:
-
 						this.setState({
 							firstElement: element,
 							firstElementPosition: i
+						}, function () {
+							console.log('hold on');
 						});
 
 						break;
 
 					case 2:
-
 						this.setState({
 							parenCount: 0,
 							secondElement: element,
 							secondElementPosition: i
-
-						}); //Uncomment to bring parentheses functionality back
-						//,() => { this.passParenToParent(this.state) } );
-
+						}
+						//Uncomment to bring parentheses functionality back
+						, function () {
+							_this2.passParenToParent(_this2.state);
+						});
 
 						break;
-
 					default:
 						console.log('Check parentCount');
 				}
 			}
 		}, {
+			key: 'checkParen',
+			value: function checkParen(element, positionOfClickedElement) {
+				var _this3 = this;
+
+				//This function is executed immidately after clicking an element in the calc panel
+				//It comes here to determine if the user is clicking on an element already in parenthesis.
+				//If so, reset parenCount incase they had already clicked a viable element
+				//Otherwise the parenthesis can be 'placed' with the 
+
+				var parenMultiplier = this.props.mainState.parenMultiplier;
+
+				//If there are no parentheses present
+				if (parenMultiplier.length == 0) {
+					console.log('good to go');
+					this.makeParenthesis(element, positionOfClickedElement);
+				} else {
+					console.log('-----');
+
+					//Iterate over every set of parentheses
+					parenMultiplier.forEach(function (pm) {
+						console.log(pm);
+
+						//If the element selected is within the range of a parentheses already in place
+						//Reset the parenthesis process
+						if (positionOfClickedElement >= pm.startPosition && positionOfClickedElement <= pm.endPosition) {
+							console.log('you cannot do that');
+							_this3.setState({ parenCount: 0 });
+						}
+						//Otherwise allow the parenthesis process to continue
+						//by invoking the makeParenthesis function
+						else {
+								console.log('good to go');
+								_this3.makeParenthesis(element, positionOfClickedElement);
+							}
+					});
+				}
+			}
+		}, {
 			key: 'render',
 			value: function render() {
-				var _this2 = this;
+				var _this4 = this;
 
 				// Upon tapping a selected atom, loop all atoms
 				var elementsToDisplay = this.props.mainState.elements.map(function (element, i) {
@@ -20915,14 +20957,14 @@
 						_react2.default.createElement(
 							'button',
 							{ key: i, className: 'plusButton btn btn-xs', onClick: function onClick() {
-									return _this2._handleClick('+', element, i);
+									return _this4._handleClick('+', element, i);
 								} },
 							' + '
 						),
 						_react2.default.createElement(
 							'div',
 							{ onClick: function onClick() {
-									return _this2.getParen(element, i);
+									return _this4.checkParen(element, i);
 								} },
 							_react2.default.createElement(
 								'p',
@@ -20932,7 +20974,7 @@
 									'sub',
 									null,
 									' ',
-									_this2.props.mainState.multipliers[i],
+									_this4.props.mainState.multipliers[i],
 									' '
 								)
 							)
@@ -20940,7 +20982,7 @@
 						_react2.default.createElement(
 							'button',
 							{ className: 'minusButton btn btn-xs', onClick: function onClick() {
-									return _this2._handleClick("-", element, i);
+									return _this4._handleClick("-", element, i);
 								} },
 							' - '
 						)

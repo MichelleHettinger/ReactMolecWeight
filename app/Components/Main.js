@@ -22,7 +22,6 @@ export default class Main extends Component {
 		this.getParen = this.getParen.bind(this);
 	}
 
-
 	getElement (newElement) {
 		console.log(newElement);
 
@@ -71,7 +70,6 @@ export default class Main extends Component {
 		console.log(this.state);
 	}
 
-
 	calculateTotal () {
 
 		//Loop for every set of parenthesis
@@ -90,7 +88,7 @@ export default class Main extends Component {
 	}
 
 	getParen (parenData) {
-		//console.log(parenData);
+		console.log(parenData);
 
 		const startPosition = parenData.firstElementPosition;
 		const endPosition = parenData.secondElementPosition;
@@ -105,7 +103,7 @@ export default class Main extends Component {
 
 		this.setState({
 			parenMultiplier: newParenMultiplier,
-		}, this.calculateTotal );
+		}, this.checkParen );
 	}
 
 
