@@ -20860,6 +20860,11 @@
 		}
 
 		_createClass(CalcPanel, [{
+			key: 'saveFormula',
+			value: function saveFormula() {
+				console.log(this.props.mainState);
+			}
+		}, {
 			key: '_handleClick',
 			value: function _handleClick(input, element, i) {
 				this.props.newEdit(input, element, i);
@@ -20884,9 +20889,7 @@
 						this.setState({
 							firstElement: element,
 							firstElementPosition: i
-						}, function () {
-							console.log('hold on');
-						});
+						}, function () {});
 
 						break;
 
@@ -20963,12 +20966,12 @@
 						),
 						_react2.default.createElement(
 							'div',
-							{ onClick: function onClick() {
+							{ className: 'calculatableAcronym', onClick: function onClick() {
 									return _this4.checkParen(element, i);
 								} },
 							_react2.default.createElement(
 								'p',
-								{ className: 'calculatableAcronym' },
+								null,
 								element.elementAcronym,
 								_react2.default.createElement(
 									'sub',
@@ -20990,9 +20993,7 @@
 				});
 
 				if (elementsToDisplay.length != 0) {
-
 					//console.log(elementsToDisplay);
-
 					return _react2.default.createElement(
 						'div',
 						{ className: 'col-sm-8', id: 'calcPanelWith' },
@@ -21000,17 +21001,32 @@
 							'div',
 							{ className: 'row' },
 							_react2.default.createElement(
-								'h3',
-								{ id: 'molecular-weight' },
-								'Molecular Weight: ',
-								this.props.mainState.total.toFixed(3),
-								' g/mol'
+								'div',
+								{ className: 'col-sm-9' },
+								_react2.default.createElement(
+									'h3',
+									{ id: 'molecular-weight' },
+									'Molecular Weight: ',
+									this.props.mainState.total.toFixed(3),
+									' g/mol'
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								null,
+								_react2.default.createElement('input', { type: 'button', value: 'Save', className: 'btn btn-success btn-sm saveButton pull-right',
+									onClick: this.saveFormula.bind(this)
+								})
 							)
 						),
 						_react2.default.createElement(
 							'div',
-							{ className: 'elements-chosen' },
-							elementsToDisplay
+							{ className: 'row' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'elements-chosen' },
+								elementsToDisplay
+							)
 						)
 					);
 				} else {
@@ -21022,9 +21038,13 @@
 							'div',
 							{ className: 'row' },
 							_react2.default.createElement(
-								'h3',
-								{ id: 'molecular-weight' },
-								'Start calculating!'
+								'div',
+								null,
+								_react2.default.createElement(
+									'h3',
+									null,
+									'Start calculating!'
+								)
 							)
 						)
 					);

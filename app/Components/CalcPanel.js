@@ -16,6 +16,9 @@ export default class CalcPanel extends Component {
 			secondElementPosition: null,
 		};
 	}
+	saveFormula () {
+		console.log(this.props.mainState);
+	}
 
 	_handleClick (input, element, i) {
 		this.props.newEdit(input, element, i);
@@ -37,7 +40,9 @@ export default class CalcPanel extends Component {
 					firstElement: element,
 					firstElementPosition: i,
 				}, () => {
-					console.log('hold on')
+
+
+
 				});
 
 				break;
@@ -94,14 +99,15 @@ export default class CalcPanel extends Component {
 
 
 	render (){
+
 		// Upon tapping a selected atom, loop all atoms
 		const elementsToDisplay = this.props.mainState.elements.map( (element, i) => {
 			return (
 				<div key={i} className="calculatableElement">
 					<button key={i} className="plusButton btn btn-xs" onClick={() => this._handleClick('+', element, i)}> + </button>
 
-					<div onClick={()=> this.checkParen(element, i)}>
-						<p className="calculatableAcronym">
+					<div className="calculatableAcronym" onClick={()=> this.checkParen(element, i)} >
+						<p>
 							{element.elementAcronym} 
 							<sub> {this.props.mainState.multipliers[i]} </sub>
 						</p>
@@ -113,20 +119,26 @@ export default class CalcPanel extends Component {
 		})
 
 		if (elementsToDisplay.length != 0){
-
 			//console.log(elementsToDisplay);
-
 			return (
 				<div className="col-sm-8" id="calcPanelWith">
 
 					<div className="row">
-						<h3 id="molecular-weight">Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol</h3>
+						<div className="col-sm-9">
+							<h3 id="molecular-weight">Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol</h3>
+						</div>
+						<div>
+				        	<input type="button" value="Save" className="btn btn-success btn-sm saveButton pull-right"
+				        		onClick={this.saveFormula.bind(this)}
+				        	/>
+				        </div>
 					</div>
 
-					<div className="elements-chosen">
-						{elementsToDisplay}
+					<div className="row">
+						<div className="elements-chosen">
+							{elementsToDisplay}
+						</div>
 					</div>
-
 				</div>
 			)
 
@@ -136,13 +148,13 @@ export default class CalcPanel extends Component {
 				<div className="col-sm-8" id="calcPanelWithOut">
 
 					<div className="row">
-						<h3 id="molecular-weight">Start calculating!</h3>
+						<div>
+							<h3>Start calculating!</h3>
+						</div>
 					</div>
 
 				</div>
 			)
 		}
-
-
 	}
 }
