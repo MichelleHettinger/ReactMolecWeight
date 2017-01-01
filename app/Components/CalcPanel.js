@@ -28,44 +28,69 @@ export default class CalcPanel extends Component {
 			secondElementPosition: null,
 
 
-			chemicalName: '',
+			chemicalName: 'rand',
 		};
 	}
-	saveFormula () {
+
+	nextStep(c){
+
+		console.log(c)
 
 
-		//Before actually writing, display a modal with an input field to set a name
-		//Till next time
-
-
-		// const user = firebase.auth().currentUser;
-
-		// if (user!=null){
-		// 	console.log(user);
-
-		// 	firebase.database().ref('users/' + user.uid).set({
-		// 		chemicalName: this.state.chemicalName,
-		// 		elements: this.props.mainState.elements,
-		// 		multipliers: this.props.mainState.multipliers,
-		// 		total: this.props.mainState.total,
-		// 		parenMultiplier: this.props.mainState.parenMultiplier,
-		// 	}, () => {
-		// 		(console.log('Wrote to database'))
-		// 	});
-		// }
-		// else {
-		// 	alert('Login First')
-		// }
 	}
 
+	//Saving a new compound
+	saveNewCompound () {
+
+	//Before actually writing, display a modal with an input field to set a name
+
+	//Get user.
+	const user = firebase.auth().currentUser;
+
+		if (user!=null){
+
+			//Grab the users saved compounds.
+			const usersCompounds = firebase.database().ref('users/' + user.uid + '/compounds');
+			usersCompounds.once('value').then( snapshot => {
+
+				//Grab 'snapshot' of the users saved compounds.
+				const allCompounds = snapshot.val();
+
+				//Turn the snapshot into an array containing each of their saved compounds
+				const compArray = Object.keys(allCompounds);
+				
+				//Create a new data entry named compound#, where # is 1 plus their number of saved compounds
+				firebase.database().ref('users/' + user.uid + '/compounds/compound' + (compArray.length+1)).set({
+
+						chemicalName: this.state.chemicalName,
+						elements: this.props.mainState.elements,
+						multipliers: this.props.mainState.multipliers,
+						total: this.props.mainState.total.toFixed(3),
+						parenMultiplier: this.props.mainState.parenMultiplier,
+
+				}, () => {
+					(console.log('Wrote to database'))
+				});
+			})
+		}
+		else {
+			alert('Login First')
+		}
+	}
+
+	//Clicking plus or minus
 	_handleClick (input, element, i) {
 		this.props.newEdit(input, element, i);
 	}
 
+
+
+
+
+
 	passParenToParent (parenData) {
 		this.props.newParen(parenData);
 	}
-
 	makeParenthesis (element, i) {
 		//console.log(element)
 		//console.log(i)
@@ -140,6 +165,7 @@ export default class CalcPanel extends Component {
 			});
 		}
 	}
+
 
 
 	render (){

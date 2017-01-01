@@ -64,6 +64,19 @@ export default class LoginHeader extends Component {
 
 		})
 	}
+
+
+	getSave(){
+
+		var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+
+		starCountRef.on('value', function(snapshot) {
+		  updateStarCount(postElement, snapshot.val());
+		});
+		
+	}
+
+
 	render () {
 		//Listener for firebase user login
 		const user = firebase.auth().currentUser;
@@ -107,7 +120,7 @@ export default class LoginHeader extends Component {
 		        		onClick={this.logOut.bind(this)}
 		        	/>
 		        	<input type="button" value="My Account" id="accountButton" className="btn btn-primary btn-sm pull-right"
-		        		onClick={console.log('account')}
+		        		onClick={this.getSave.bind(this)}
 		        	/>
 
 

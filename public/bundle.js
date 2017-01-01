@@ -20059,6 +20059,16 @@
 				});
 			}
 		}, {
+			key: "getSave",
+			value: function getSave() {
+
+				var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+
+				starCountRef.on('value', function (snapshot) {
+					updateStarCount(postElement, snapshot.val());
+				});
+			}
+		}, {
 			key: "render",
 			value: function render() {
 				var _this4 = this;
@@ -20121,7 +20131,7 @@
 							onClick: this.logOut.bind(this)
 						}),
 						_react2.default.createElement("input", { type: "button", value: "My Account", id: "accountButton", className: "btn btn-primary btn-sm pull-right",
-							onClick: console.log('account')
+							onClick: this.getSave.bind(this)
 						})
 					);
 				}
@@ -20873,38 +20883,62 @@
 				secondElement: {},
 				secondElementPosition: null,
 
-				chemicalName: ''
+				chemicalName: 'rand'
 			};
 			return _this;
 		}
 
 		_createClass(CalcPanel, [{
-			key: "saveFormula",
-			value: function saveFormula() {
+			key: "nextStep",
+			value: function nextStep(c) {
+
+				console.log(c);
+			}
+
+			//Saving a new compound
+
+		}, {
+			key: "saveNewCompound",
+			value: function saveNewCompound() {
+				var _this2 = this;
 
 				//Before actually writing, display a modal with an input field to set a name
-				//Till next time
 
+				//Get user.
+				var user = firebase.auth().currentUser;
 
-				// const user = firebase.auth().currentUser;
+				if (user != null) {
 
-				// if (user!=null){
-				// 	console.log(user);
+					//Grab the users saved compounds.
+					var usersCompounds = firebase.database().ref('users/' + user.uid + '/compounds');
+					usersCompounds.once('value').then(function (snapshot) {
 
-				// 	firebase.database().ref('users/' + user.uid).set({
-				// 		chemicalName: this.state.chemicalName,
-				// 		elements: this.props.mainState.elements,
-				// 		multipliers: this.props.mainState.multipliers,
-				// 		total: this.props.mainState.total,
-				// 		parenMultiplier: this.props.mainState.parenMultiplier,
-				// 	}, () => {
-				// 		(console.log('Wrote to database'))
-				// 	});
-				// }
-				// else {
-				// 	alert('Login First')
-				// }
+						//Grab 'snapshot' of the users saved compounds.
+						var allCompounds = snapshot.val();
+
+						//Turn the snapshot into an array containing each of their saved compounds
+						var compArray = Object.keys(allCompounds);
+
+						//Create a new data entry named compound#, where # is 1 plus their number of saved compounds
+						firebase.database().ref('users/' + user.uid + '/compounds/compound' + (compArray.length + 1)).set({
+
+							chemicalName: _this2.state.chemicalName,
+							elements: _this2.props.mainState.elements,
+							multipliers: _this2.props.mainState.multipliers,
+							total: _this2.props.mainState.total.toFixed(3),
+							parenMultiplier: _this2.props.mainState.parenMultiplier
+
+						}, function () {
+							console.log('Wrote to database');
+						});
+					});
+				} else {
+					alert('Login First');
+				}
 			}
+
+			//Clicking plus or minus
+
 		}, {
 			key: "_handleClick",
 			value: function _handleClick(input, element, i) {
@@ -20918,7 +20952,7 @@
 		}, {
 			key: "makeParenthesis",
 			value: function makeParenthesis(element, i) {
-				var _this2 = this;
+				var _this3 = this;
 
 				//console.log(element)
 				//console.log(i)
@@ -20942,7 +20976,7 @@
 						}
 						//Uncomment to bring parentheses functionality back
 						, function () {
-							_this2.passParenToParent(_this2.state);
+							_this3.passParenToParent(_this3.state);
 						});
 
 						break;
@@ -20995,7 +21029,7 @@
 		}, {
 			key: "render",
 			value: function render() {
-				var _this3 = this;
+				var _this4 = this;
 
 				// Upon tapping a selected atom, loop all atoms
 				var elementsToDisplay = this.props.mainState.elements.map(function (element, i) {
@@ -21005,14 +21039,14 @@
 						_react2.default.createElement(
 							"button",
 							{ key: i, className: "plusButton btn btn-xs", onClick: function onClick() {
-									return _this3._handleClick('+', element, i);
+									return _this4._handleClick('+', element, i);
 								} },
 							" + "
 						),
 						_react2.default.createElement(
 							"div",
 							{ className: "calculatableAcronym", onClick: function onClick() {
-									return _this3.checkParen(element, i);
+									return _this4.checkParen(element, i);
 								} },
 							_react2.default.createElement(
 								"p",
@@ -21022,7 +21056,7 @@
 									"sub",
 									null,
 									" ",
-									_this3.props.mainState.multipliers[i],
+									_this4.props.mainState.multipliers[i],
 									" "
 								)
 							)
@@ -21030,7 +21064,7 @@
 						_react2.default.createElement(
 							"button",
 							{ className: "minusButton btn btn-xs", onClick: function onClick() {
-									return _this3._handleClick("-", element, i);
+									return _this4._handleClick("-", element, i);
 								} },
 							" - "
 						)
