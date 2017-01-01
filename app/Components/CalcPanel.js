@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Modal from 'react-bootstrap-modal';
 
 import * as firebase from "firebase";
 const config = {
@@ -17,6 +18,9 @@ export default class CalcPanel extends Component {
 		super(props);
 
 		this.state = {
+
+			allCompounds: {},
+
 			parenCount: 0,
 
 			parenAllowed: true,
@@ -32,60 +36,10 @@ export default class CalcPanel extends Component {
 		};
 	}
 
-	nextStep(c){
-
-		console.log(c)
-
-
-	}
-
-	//Saving a new compound
-	saveNewCompound () {
-
-	//Before actually writing, display a modal with an input field to set a name
-
-	//Get user.
-	const user = firebase.auth().currentUser;
-
-		if (user!=null){
-
-			//Grab the users saved compounds.
-			const usersCompounds = firebase.database().ref('users/' + user.uid + '/compounds');
-			usersCompounds.once('value').then( snapshot => {
-
-				//Grab 'snapshot' of the users saved compounds.
-				const allCompounds = snapshot.val();
-
-				//Turn the snapshot into an array containing each of their saved compounds
-				const compArray = Object.keys(allCompounds);
-				
-				//Create a new data entry named compound#, where # is 1 plus their number of saved compounds
-				firebase.database().ref('users/' + user.uid + '/compounds/compound' + (compArray.length+1)).set({
-
-						chemicalName: this.state.chemicalName,
-						elements: this.props.mainState.elements,
-						multipliers: this.props.mainState.multipliers,
-						total: this.props.mainState.total.toFixed(3),
-						parenMultiplier: this.props.mainState.parenMultiplier,
-
-				}, () => {
-					(console.log('Wrote to database'))
-				});
-			})
-		}
-		else {
-			alert('Login First')
-		}
-	}
-
 	//Clicking plus or minus
 	_handleClick (input, element, i) {
 		this.props.newEdit(input, element, i);
 	}
-
-
-
-
 
 
 	passParenToParent (parenData) {
@@ -166,8 +120,6 @@ export default class CalcPanel extends Component {
 		}
 	}
 
-
-
 	render (){
 
 		// Upon tapping a selected atom, loop all atoms
@@ -188,28 +140,101 @@ export default class CalcPanel extends Component {
 			)
 		})
 
+		const user = firebase.auth().currentUser;
+
+		if (user!=null){
+			//Turn the snapshot into an array containing each of their saved compounds
+			firebase.database().ref('users/' + user.uid + '/compounds').once('value').then( snapshot => {
+
+				//Grab 'snapshot' of the users saved compounds.
+				const allCompounds = snapshot.val();
+
+				this.setState({allCompounds: allCompounds});
+				//console.log(this.state)
+			});
+		}
+
+		//Grab list of compounds stored. ex [compound1, compound2, compound3]
+		const usersCompounds = Object.keys(this.state.allCompounds).map( (compound) => {
+
+			//console.log('---------------')
+
+			return Object.keys(this.state.allCompounds[compound].elements).map( (properties, i) => {
+
+				const compoundName = this.state.allCompounds[compound].chemicalName
+
+
+				const elementAcronym = this.state.allCompounds[compound].elements[properties].elementAcronym;
+				const elementMultiplier = this.state.allCompounds[compound].multipliers[properties];
+
+				//console.log(elementAcronym + " " + elementMultiplier);
+
+
+				return (
+					<div key={i}>
+						<h3 key={i}>{compoundName}</h3>
+						<p>{elementAcronym} {elementMultiplier}</p>
+					</div>
+				)
+
+			})
+
+		});
+
+
 		if (elementsToDisplay.length != 0){
-			//console.log(elementsToDisplay);
+
 			return (
-				<div className="col-sm-8" id="calcPanelWith">
+				<div>
 
-					<div className="row">
-						<div className="col-sm-9">
-							<h3 id="molecular-weight">Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol</h3>
+					<div className="col-sm-8" id="calcPanelWith">
+
+						<div className="row">
+							<div className="col-sm-9">
+								<h3 id="molecular-weight">Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol</h3>
+							</div>
+							<div>
+								<button type="button" data-toggle="modal" data-target="#saveModal" className="btn btn-success btn-sm saveButton pull-right">Save</button>
+					        </div>
 						</div>
-						<div>
-				        	<input type="button" value="Save" className="btn btn-success btn-sm saveButton pull-right"
-				        		onClick={this.saveFormula.bind(this)}
-				        	/>
-				        </div>
+
+						<div className="row">
+							<div className="elements-chosen">
+								{elementsToDisplay}
+							</div>
+						</div>
 					</div>
 
-					<div className="row">
-						<div className="elements-chosen">
-							{elementsToDisplay}
+
+
+
+					<div className="modal fade" id="saveModal">
+						<div className="modal-dialog" role="document">
+							<div className="modal-content">
+
+								<div className="modal-header">
+									<button type="button" className="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<h4 className="modal-title">Your Compounds</h4>
+								</div>
+
+								<div className="modal-body">
+									{usersCompounds}
+								</div>
+
+								<div className="modal-footer">
+									<button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+								</div>
+
+							</div>
 						</div>
 					</div>
+
+
+
 				</div>
+
 			)
 
 		} else {
