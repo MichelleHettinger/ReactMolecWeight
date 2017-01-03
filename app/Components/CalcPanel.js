@@ -154,7 +154,7 @@ export default class CalcPanel extends Component {
 			});
 		}
 
-		//Grab list of compounds stored. ex [compound1, compound2, compound3]
+		//Grab list of compounds stored to be displayed
 		const usersCompounds = Object.keys(this.state.allCompounds).map( (compound) => {
 
 			//console.log('---------------')
@@ -162,8 +162,6 @@ export default class CalcPanel extends Component {
 			return Object.keys(this.state.allCompounds[compound].elements).map( (properties, i) => {
 
 				const compoundName = this.state.allCompounds[compound].chemicalName
-
-
 				const elementAcronym = this.state.allCompounds[compound].elements[properties].elementAcronym;
 				const elementMultiplier = this.state.allCompounds[compound].multipliers[properties];
 
@@ -237,19 +235,18 @@ export default class CalcPanel extends Component {
 
 			)
 
-		} else {
-
-			return (
-				<div className="col-sm-8" id="calcPanelWithOut">
-
-					<div className="row">
-						<div>
-							<h3>Start calculating!</h3>
-						</div>
-					</div>
-
-				</div>
-			)
 		}
+
+		return (
+			<div className="col-sm-8" id="calcPanelWithOut">
+
+				<div className="row">
+					<div>
+						<h3>Start calculating!</h3>
+					</div>
+				</div>
+
+			</div>
+		)
 	}
 }

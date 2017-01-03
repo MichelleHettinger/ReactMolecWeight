@@ -17,10 +17,20 @@ export default class Main extends Component {
 			total: 0,
 		};
 
+		this.getUserInput = this.getUserInput.bind(this);
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
+
+
 		this.getParen = this.getParen.bind(this);
 	}
+
+	getUserInput (userInput) {
+		this.setState({
+			text: userInput,
+		})
+	}
+
 
 	getElement (newElement) {
 		console.log(newElement);
@@ -127,7 +137,7 @@ export default class Main extends Component {
 
 						<div className="row">
 							<input type="text" className="form-control input-md" id="search" placeholder="Search for an element. Ex. 'car' for carbon."
-								onChange={ text => this.setState({text: text.target.value}) }
+								onChange={ text => this.getUserInput(text.target.value) }
 							/>
 						</div>
 

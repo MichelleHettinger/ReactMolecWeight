@@ -21,6 +21,14 @@ export default class LoginHeader extends Component {
 			password: '',
 			logged: false,
 		};
+
+		this.logIn = this.logIn.bind(this);
+		this.signUp = this.signUp.bind(this);
+		this.logOut = this.logOut.bind(this);
+		this.getSave = this.getSave.bind(this);
+
+		this.grabUserEmail = this.grabUserEmail.bind(this);
+		this.grabUserPassword = this.grabUserPassword.bind(this);
 	}
 
 	logIn () {
@@ -73,9 +81,24 @@ export default class LoginHeader extends Component {
 		starCountRef.on('value', function(snapshot) {
 		  updateStarCount(postElement, snapshot.val());
 		});
-		
 	}
 
+
+	grabUserEmail(userEmail){
+		console.log(userEmail)
+
+		this.setState({
+			email: userEmail,
+		})
+
+		console.log(this.state)
+	}
+
+	grabUserPassword(userPassword){
+		this.setState({
+			password: userPassword,
+		})
+	}
 
 	render () {
 		//Listener for firebase user login
@@ -89,12 +112,12 @@ export default class LoginHeader extends Component {
                 	<div className="form-group">
                 		<div className="col-sm-9">
 							<input type="text" className="form-control input-md" id="email" placeholder="Email Address"
-								onChange={ text => this.setState({email: text.target.value}) }
+								onChange={ text => this.grabUserEmail(text.target.value) }
 							/>
 						</div>
 						<div className="col-sm-3">
 				        	<input type="button" value="Log In" id="loginButton" className="btn btn-success btn-sm"
-				        		onClick={this.logIn.bind(this)}
+				        		onClick={this.logIn}
 				        	/>
 				        </div>
                 	</div>
@@ -102,32 +125,29 @@ export default class LoginHeader extends Component {
                 	<div className="form-group">
                 		<div className="col-sm-9">
 							<input type="password" className="form-control input-md" id="password" placeholder="Password"
-								onChange={ text => this.setState({password: text.target.value}) }
+								onChange={ text => this.grabUserPassword(text.target.value) }
 							/>
 						</div>
 						<div className="col-sm-3">
 				        	<input type="button" value="Register" className="btn btn-primary btn-sm"
-				        		onClick={this.signUp.bind(this)}
+				        		onClick={this.signUp}
 				        	/>
 				        </div>
                 	</div>
 				</div>
 			)
-		} else {
-			return (
-				<div className="col-sm-4" id="loggedInButtons">
-		        	<input type="button" value="Log Out" id="logoutButton" className="btn btn-warning btn-sm pull-right"
-		        		onClick={this.logOut.bind(this)}
-		        	/>
-		        	<input type="button" value="My Account" id="accountButton" className="btn btn-primary btn-sm pull-right"
-		        		onClick={this.getSave.bind(this)}
-		        	/>
-
-
-
-				</div>
-			)
 		}
+
+		return (
+			<div className="col-sm-4" id="loggedInButtons">
+	        	<input type="button" value="Log Out" id="logoutButton" className="btn btn-warning btn-sm pull-right"
+	        		onClick={this.logOut}
+	        	/>
+	        	<input type="button" value="My Account" id="accountButton" className="btn btn-primary btn-sm pull-right"
+	        		onClick={this.getSave}
+	        	/>
+			</div>
+		)
 
 	}
 
