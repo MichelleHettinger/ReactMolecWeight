@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Main from './Main.js';
 
 import * as firebase from "firebase";
 const config = {
@@ -11,12 +12,18 @@ const config = {
 
 //Only one instance of firebase can run at a time
 firebase.initializeApp(config);
+// Get a reference to the database service
+const database = firebase.database();
 
 export default class LoginHeader extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
+
+      user: {},
+      userSavedCompounds: {},
+
 			email: '',
 			password: '',
 			logged: false,
@@ -25,36 +32,34 @@ export default class LoginHeader extends Component {
 		this.logIn = this.logIn.bind(this);
 		this.signUp = this.signUp.bind(this);
 		this.logOut = this.logOut.bind(this);
-		this.getSave = this.getSave.bind(this);
+		
+		//this.getSave = this.getSave.bind(this);
 
 		this.grabUserEmail = this.grabUserEmail.bind(this);
 		this.grabUserPassword = this.grabUserPassword.bind(this);
 	}
 
 	logIn () {
-
-		console.log(this.state.email);
-		console.log(this.state.password);
+		//Login and then get the users saved data.
 
 		firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
 			// Handle Errors here.
 			const errorCode = error.code;
 			const errorMessage = error.message;
-
 			alert("Error " + errorCode + ". " + errorMessage)
 
-		}).then( userData => {
+		}).then( user => {
 
-			if (userData){
-				console.log(userData);
-				console.log('logged in');
+			//console.log(user);
 
-				this.setState({logged: true})
+      firebase.database().ref('users/' + user.uid + '/compounds').once('value').then( snapshot => {
 
-			}
-			else {
-				console.log("Failed to login")
-			}
+        //Grab 'snapshot' of the users saved compounds.
+        const allCompounds = snapshot.val();
+
+        this.setState({user:user, userSavedCompounds: allCompounds, logged:true});
+      });
+			
 		})
 	}
 
@@ -68,24 +73,29 @@ export default class LoginHeader extends Component {
 
 		}).then( () => {
 
-			this.setState({logged: false})
-
-		})
-	}
-
-
-	getSave(){
-
-		var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
-
-		starCountRef.on('value', function(snapshot) {
-		  updateStarCount(postElement, snapshot.val());
+			this.setState({
+				user: {},
+				userSavedCompounds: {},
+				email: '',
+				password: '',
+				logged: false,
+			});
 		});
 	}
 
 
+	// getSave(){
+
+	// 	var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+
+	// 	starCountRef.on('value', function(snapshot) {
+	// 	  updateStarCount(postElement, snapshot.val());
+	// 	});
+	// }
+
+
 	grabUserEmail(userEmail){
-		console.log(userEmail)
+		//console.log(userEmail)
 
 		this.setState({
 			email: userEmail,
@@ -95,57 +105,76 @@ export default class LoginHeader extends Component {
 	}
 
 	grabUserPassword(userPassword){
+		//console.log(userPassword)
+
 		this.setState({
 			password: userPassword,
 		})
 	}
 
 	render () {
-		//Listener for firebase user login
-		const user = firebase.auth().currentUser;
 
-		//if (!user){ console.log("Welcome to Mobile Molecular Weight") }
+		//console.log(this.state)
 
-		if (!user){
+		if (this.state.logged == false){
 			return (
-				<div className="col-sm-4" id="loginHeader">
-                	<div className="form-group">
-                		<div className="col-sm-9">
-							<input type="text" className="form-control input-md" id="email" placeholder="Email Address"
-								onChange={ text => this.grabUserEmail(text.target.value) }
-							/>
+				<div className="container">
+					<div className="row" id="header">
+						<div className="col-sm-8">
+							<h1 id="MWTitle">Molecular Weight Calculator</h1>
 						</div>
-						<div className="col-sm-3">
+						<div className="col-sm-4" id="loginHeader">
+		        	<div className="form-group">
+		        		<div className="col-sm-9">
+									<input type="text" className="form-control input-md" id="email" placeholder="Email Address"
+										onChange={ text => this.grabUserEmail(text.target.value) }
+									/>
+								</div>
+								<div className="col-sm-3">
 				        	<input type="button" value="Log In" id="loginButton" className="btn btn-success btn-sm"
 				        		onClick={this.logIn}
 				        	/>
 				        </div>
-                	</div>
-
-                	<div className="form-group">
-                		<div className="col-sm-9">
-							<input type="password" className="form-control input-md" id="password" placeholder="Password"
-								onChange={ text => this.grabUserPassword(text.target.value) }
-							/>
-						</div>
-						<div className="col-sm-3">
-				        	<input type="button" value="Register" className="btn btn-primary btn-sm"
-				        		onClick={this.signUp}
-				        	/>
+		        	</div>
+		        	<div className="form-group">
+		        		<div className="col-sm-9">
+									<input type="password" className="form-control input-md" id="password" placeholder="Password"
+										onChange={ text => this.grabUserPassword(text.target.value) }
+									/>
+								</div>
+								<div className="col-sm-3">
+						        	<input type="button" value="Register" className="btn btn-primary btn-sm"
+						        		onClick={this.signUp}
+						        	/>
 				        </div>
-                	</div>
+							</div>
+						</div>
+					</div>
+
+					<Main/>
+
 				</div>
 			)
 		}
 
 		return (
-			<div className="col-sm-4" id="loggedInButtons">
-	        	<input type="button" value="Log Out" id="logoutButton" className="btn btn-warning btn-sm pull-right"
-	        		onClick={this.logOut}
-	        	/>
-	        	<input type="button" value="My Account" id="accountButton" className="btn btn-primary btn-sm pull-right"
-	        		onClick={this.getSave}
-	        	/>
+			<div className="container">
+				<div className="row" id="header">
+					<div className="col-sm-8">
+						<h1 id="MWTitle">Molecular Weight Calculator</h1>
+					</div>
+					<div className="col-sm-4" id="loggedInButtons">
+			    	<input type="button" value="Log Out" id="logoutButton" className="btn btn-warning btn-sm pull-right"
+			    		onClick={this.logOut}
+			    	/>
+			    	<input type="button" value="My Account" id="accountButton" className="btn btn-primary btn-sm pull-right"
+			    		onClick={this.getSave}
+			    	/>
+					</div>
+				</div>
+
+				<Main userCompounds={this.state.userSavedCompounds} />
+
 			</div>
 		)
 

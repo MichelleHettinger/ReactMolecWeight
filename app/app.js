@@ -3,11 +3,11 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 // Include the Main Component
-import Main from'./Components/Main.js';
+import LoginHeader from'./Components/LoginHeader.js';
 
 // This code here allows us to render our main component (in this case "Main")
 ReactDOM.render(
 
-	<Main />,
+	<LoginHeader />,
 	document.getElementById('app')
 )

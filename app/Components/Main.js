@@ -2,53 +2,137 @@
 import React, {Component} from 'react';
 
 // Here we include all of the sub-components
-import LoginHeader from './LoginHeader.js';
 import CalcPanel from './CalcPanel.js';
 import ElementSelector from './ElementSelector.js';
+import ElementsArray from './ElementsArray.js';
+
 
 export default class Main extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
+
 			text: '',
+      elementsFound: [],
+
 			elements: [], multipliers:[],
-			parenMultiplier: [],
-			total: 0,
+      total: 0,
+
+			//parenMultiplier: [],
+
 		};
 
+
 		this.getUserInput = this.getUserInput.bind(this);
+    this.findElements = this.findElements.bind(this);
 		this.getElement = this.getElement.bind(this);
+
 		this.getEdit = this.getEdit.bind(this);
 
 
-		this.getParen = this.getParen.bind(this);
-	}
-
-	getUserInput (userInput) {
-		this.setState({
-			text: userInput,
-		})
+		//this.getParen = this.getParen.bind(this);
 	}
 
 
-	getElement (newElement) {
-		console.log(newElement);
+  getUserInput (userInput) {
+    //Set user input, then find elements.
+    this.setState({
+      text: userInput,
+    }, () => {this.findElements(userInput)} )
+  }
+	findElements (userInput) {
+    //Find the right elements, then setState for found elements.
 
-		// Push the element and multiplier into their respective arrays
-		this.state.elements.push(newElement);
-		this.state.multipliers.push(1);
+		let listElements = [];
+		let listElements2 = [];
+		let listElements3 = [];
 
-		this.state.total += newElement.mass;
+		// Loop through every typed letter
+		for (let i=0; i<userInput.length; i++){
 
-		this.setState({
-			total: this.state.total,
-			elements: this.state.elements,
-			multipliers: this.state.multipliers
-		});
+			if (i==0){
+				//Loop through all elements
+				for (let j=0; j<ElementsArray.length;j++){
+					//If the letters at position i match, push that element to the array
+					if (userInput.charAt(i) == ElementsArray[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == ElementsArray[j].elementAcronym.charAt(i).toLowerCase()){
+						listElements.push(ElementsArray[j]);
+					}	
+				}					
+			}
 
-		//console.log(this.state)
+			else if (i==1){
+				//Loop through the first list of elements
+				for (let j=0; j<listElements.length;j++){
+					//If the letters at position i match, push that element to a new array
+					if (userInput.charAt(i) == listElements[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements[j].elementAcronym.charAt(i).toLowerCase()){
+						listElements2.push(listElements[j]);
+					}	
+				}
+			}
+
+			else if (i==2){
+				//Loop through the second list of elements
+				for (let j=0; j<listElements2.length;j++){
+					//If the letters at position i match, push that element to a new array
+					if (userInput.charAt(i) == listElements2[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements2[j].elementAcronym.charAt(i).toLowerCase()){
+						listElements3.push(listElements2[j]);
+					}	
+				}
+			}		
+		}
+
+		//Depending on how many letters were typed in, display the appropriate array
+		if (userInput.length == 0){
+      this.setState({
+        elementsFound: listElements,
+      })
+		}
+		else if (userInput.length == 1){
+			//console.log(listElements);
+      this.setState({
+        elementsFound: listElements,
+      })
+		}
+		else if (userInput.length == 2){
+			//console.log(listElements2);
+      this.setState({
+        elementsFound: listElements2,
+      })
+		}
+		else if (userInput.length == 3){
+			//console.log(listElements3);
+      this.setState({
+        elementsFound: listElements3,
+      })			}
+		else if (userInput.length >= 4){
+      this.setState({
+        elementsFound: listElements4,
+      })
+		}
 	}
+
+  getElement (newElement) {
+    //Add an element to the calculation panel and increase the total
+
+    let currentElements = this.state.elements;
+    let currentMultipliers = this.state.multipliers;
+    let currentTotal = this.state.total;
+
+    currentElements.push(newElement);
+    currentMultipliers.push(1);
+    currentTotal += newElement.mass;
+
+    this.setState({
+      total: currentTotal,
+      elements: currentElements,
+      multipliers: currentMultipliers,
+    });
+
+    //console.log(this.state)
+    //console.log(newElement); 
+  }
+
 	getEdit (input, element, i) {
 		//console.log("------------------------------------------");
 		//console.log(input + " one " + element.elementName + " at position: " + i);
@@ -80,69 +164,62 @@ export default class Main extends Component {
 		console.log(this.state);
 	}
 
-	calculateTotal () {
+	// calculateTotal () {
 
-		//Loop for every set of parenthesis
-		for (let i=0; i<this.state.parenMultiplier.length; i++){
-			console.log(this.state);
+	// 	//Loop for every set of parenthesis
+	// 	for (let i=0; i<this.state.parenMultiplier.length; i++){
+	// 		console.log(this.state);
 
-			for (let j=this.state.parenMultiplier[i].startPosition; j<=this.state.parenMultiplier[i].endPosition; j++){
+	// 		for (let j=this.state.parenMultiplier[i].startPosition; j<=this.state.parenMultiplier[i].endPosition; j++){
 				
-				this.state.multipliers[j] *= this.state.parenMultiplier[i].multiplier;
+	// 			this.state.multipliers[j] *= this.state.parenMultiplier[i].multiplier;
 
-				console.log(this.state);
+	// 			console.log(this.state);
 
-			}
+	// 		}
 
-		}
-	}
+	// 	}
+	// }
 
-	getParen (parenData) {
-		console.log(parenData);
+	// getParen (parenData) {
+	// 	console.log(parenData);
 
-		const startPosition = parenData.firstElementPosition;
-		const endPosition = parenData.secondElementPosition;
+	// 	const startPosition = parenData.firstElementPosition;
+	// 	const endPosition = parenData.secondElementPosition;
 
-	 	let newParenMultiplier = this.state.parenMultiplier;
+	//  	let newParenMultiplier = this.state.parenMultiplier;
 
-	 	newParenMultiplier.push({
-			endPosition,
-			startPosition,
-			multiplier: 2,
-		});
+	//  	newParenMultiplier.push({
+	// 		endPosition,
+	// 		startPosition,
+	// 		multiplier: 2,
+	// 	});
 
-		this.setState({
-			parenMultiplier: newParenMultiplier,
-		}, this.checkParen );
-	}
+	// 	this.setState({
+	// 		parenMultiplier: newParenMultiplier,
+	// 	}, this.checkParen );
+	// }
 
 
 	render () {
 
+    //console.log(this.state)
+
 		return (
-			<div className="container">
-				<div className="row" id="header">
-					<div className="col-sm-8">
-						<h1 id="MWTitle">Molecular Weight Calculator</h1>
+			<div className="row">
+
+				<CalcPanel userCompounds={this.props.userCompounds} mainState={this.state} newEdit={this.getEdit} newParen={this.getParen} />
+
+				<div className="col-sm-4 pull-right" id="elements-panel">
+
+					<div className="row">
+						<input type="text" className="form-control input-md" id="search" placeholder="Search for an element. Ex. 'car' for carbon."
+							onChange={ text => this.getUserInput(text.target.value) }
+						/>
 					</div>
 
-					<LoginHeader />
-				</div>
+					<ElementSelector elementsFound={this.state.elementsFound} newElement={this.getElement} />
 
-				<div className="row">
-
-					<CalcPanel mainState={this.state} newEdit={this.getEdit} newParen={this.getParen} />
-
-					<div className="col-sm-4 pull-right" id="elements-panel">
-
-						<div className="row">
-							<input type="text" className="form-control input-md" id="search" placeholder="Search for an element. Ex. 'car' for carbon."
-								onChange={ text => this.getUserInput(text.target.value) }
-							/>
-						</div>
-
-						<ElementSelector userInput={this.state.text} newElement={this.getElement} />
-					</div>
 				</div>
 			</div>
 		)

@@ -54,14 +54,14 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _Main = __webpack_require__(159);
+	var _LoginHeader = __webpack_require__(160);
 
-	var _Main2 = _interopRequireDefault(_Main);
+	var _LoginHeader2 = _interopRequireDefault(_LoginHeader);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// This code here allows us to render our main component (in this case "Main")
-	_reactDom2.default.render(_react2.default.createElement(_Main2.default, null), document.getElementById('app'));
+	_reactDom2.default.render(_react2.default.createElement(_LoginHeader2.default, null), document.getElementById('app'));
 
 	// Include the Main Component
 	// Include the Main React Dependencies
@@ -19776,10 +19776,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _LoginHeader = __webpack_require__(160);
-
-	var _LoginHeader2 = _interopRequireDefault(_LoginHeader);
-
 	var _CalcPanel = __webpack_require__(167);
 
 	var _CalcPanel2 = _interopRequireDefault(_CalcPanel);
@@ -19787,6 +19783,10 @@
 	var _ElementSelector = __webpack_require__(211);
 
 	var _ElementSelector2 = _interopRequireDefault(_ElementSelector);
+
+	var _ElementsArray = __webpack_require__(212);
+
+	var _ElementsArray2 = _interopRequireDefault(_ElementsArray);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19809,45 +19809,123 @@
 			var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
 
 			_this.state = {
+
 				text: '',
+				elementsFound: [],
+
 				elements: [], multipliers: [],
-				parenMultiplier: [],
 				total: 0
+
 			};
 
 			_this.getUserInput = _this.getUserInput.bind(_this);
+			_this.findElements = _this.findElements.bind(_this);
 			_this.getElement = _this.getElement.bind(_this);
+
 			_this.getEdit = _this.getEdit.bind(_this);
 
-			_this.getParen = _this.getParen.bind(_this);
+			//this.getParen = this.getParen.bind(this);
 			return _this;
 		}
 
 		_createClass(Main, [{
 			key: 'getUserInput',
 			value: function getUserInput(userInput) {
+				var _this2 = this;
+
+				//Set user input, then find elements.
 				this.setState({
 					text: userInput
+				}, function () {
+					_this2.findElements(userInput);
 				});
+			}
+		}, {
+			key: 'findElements',
+			value: function findElements(userInput) {
+				//Find the right elements, then setState for found elements.
+
+				var listElements = [];
+				var listElements2 = [];
+				var listElements3 = [];
+
+				// Loop through every typed letter
+				for (var i = 0; i < userInput.length; i++) {
+
+					if (i == 0) {
+						//Loop through all elements
+						for (var j = 0; j < _ElementsArray2.default.length; j++) {
+							//If the letters at position i match, push that element to the array
+							if (userInput.charAt(i) == _ElementsArray2.default[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == _ElementsArray2.default[j].elementAcronym.charAt(i).toLowerCase()) {
+								listElements.push(_ElementsArray2.default[j]);
+							}
+						}
+					} else if (i == 1) {
+						//Loop through the first list of elements
+						for (var _j = 0; _j < listElements.length; _j++) {
+							//If the letters at position i match, push that element to a new array
+							if (userInput.charAt(i) == listElements[_j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements[_j].elementAcronym.charAt(i).toLowerCase()) {
+								listElements2.push(listElements[_j]);
+							}
+						}
+					} else if (i == 2) {
+						//Loop through the second list of elements
+						for (var _j2 = 0; _j2 < listElements2.length; _j2++) {
+							//If the letters at position i match, push that element to a new array
+							if (userInput.charAt(i) == listElements2[_j2].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements2[_j2].elementAcronym.charAt(i).toLowerCase()) {
+								listElements3.push(listElements2[_j2]);
+							}
+						}
+					}
+				}
+
+				//Depending on how many letters were typed in, display the appropriate array
+				if (userInput.length == 0) {
+					this.setState({
+						elementsFound: listElements
+					});
+				} else if (userInput.length == 1) {
+					//console.log(listElements);
+					this.setState({
+						elementsFound: listElements
+					});
+				} else if (userInput.length == 2) {
+					//console.log(listElements2);
+					this.setState({
+						elementsFound: listElements2
+					});
+				} else if (userInput.length == 3) {
+					//console.log(listElements3);
+					this.setState({
+						elementsFound: listElements3
+					});
+				} else if (userInput.length >= 4) {
+					this.setState({
+						elementsFound: listElements4
+					});
+				}
 			}
 		}, {
 			key: 'getElement',
 			value: function getElement(newElement) {
-				console.log(newElement);
+				//Add an element to the calculation panel and increase the total
 
-				// Push the element and multiplier into their respective arrays
-				this.state.elements.push(newElement);
-				this.state.multipliers.push(1);
+				var currentElements = this.state.elements;
+				var currentMultipliers = this.state.multipliers;
+				var currentTotal = this.state.total;
 
-				this.state.total += newElement.mass;
+				currentElements.push(newElement);
+				currentMultipliers.push(1);
+				currentTotal += newElement.mass;
 
 				this.setState({
-					total: this.state.total,
-					elements: this.state.elements,
-					multipliers: this.state.multipliers
+					total: currentTotal,
+					elements: currentElements,
+					multipliers: currentMultipliers
 				});
 
 				//console.log(this.state)
+				//console.log(newElement); 
 			}
 		}, {
 			key: 'getEdit',
@@ -19880,82 +19958,68 @@
 
 				console.log(this.state);
 			}
-		}, {
-			key: 'calculateTotal',
-			value: function calculateTotal() {
 
-				//Loop for every set of parenthesis
-				for (var i = 0; i < this.state.parenMultiplier.length; i++) {
-					console.log(this.state);
+			// calculateTotal () {
 
-					for (var j = this.state.parenMultiplier[i].startPosition; j <= this.state.parenMultiplier[i].endPosition; j++) {
+			// 	//Loop for every set of parenthesis
+			// 	for (let i=0; i<this.state.parenMultiplier.length; i++){
+			// 		console.log(this.state);
 
-						this.state.multipliers[j] *= this.state.parenMultiplier[i].multiplier;
+			// 		for (let j=this.state.parenMultiplier[i].startPosition; j<=this.state.parenMultiplier[i].endPosition; j++){
 
-						console.log(this.state);
-					}
-				}
-			}
-		}, {
-			key: 'getParen',
-			value: function getParen(parenData) {
-				console.log(parenData);
+			// 			this.state.multipliers[j] *= this.state.parenMultiplier[i].multiplier;
 
-				var startPosition = parenData.firstElementPosition;
-				var endPosition = parenData.secondElementPosition;
+			// 			console.log(this.state);
 
-				var newParenMultiplier = this.state.parenMultiplier;
+			// 		}
 
-				newParenMultiplier.push({
-					endPosition: endPosition,
-					startPosition: startPosition,
-					multiplier: 2
-				});
+			// 	}
+			// }
 
-				this.setState({
-					parenMultiplier: newParenMultiplier
-				}, this.checkParen);
-			}
+			// getParen (parenData) {
+			// 	console.log(parenData);
+
+			// 	const startPosition = parenData.firstElementPosition;
+			// 	const endPosition = parenData.secondElementPosition;
+
+			//  	let newParenMultiplier = this.state.parenMultiplier;
+
+			//  	newParenMultiplier.push({
+			// 		endPosition,
+			// 		startPosition,
+			// 		multiplier: 2,
+			// 	});
+
+			// 	this.setState({
+			// 		parenMultiplier: newParenMultiplier,
+			// 	}, this.checkParen );
+			// }
+
+
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this2 = this;
+				var _this3 = this;
+
+				//console.log(this.state)
 
 				return _react2.default.createElement(
 					'div',
-					{ className: 'container' },
+					{ className: 'row' },
+					_react2.default.createElement(_CalcPanel2.default, { userCompounds: this.props.userCompounds, mainState: this.state, newEdit: this.getEdit, newParen: this.getParen }),
 					_react2.default.createElement(
 						'div',
-						{ className: 'row', id: 'header' },
+						{ className: 'col-sm-4 pull-right', id: 'elements-panel' },
 						_react2.default.createElement(
 							'div',
-							{ className: 'col-sm-8' },
-							_react2.default.createElement(
-								'h1',
-								{ id: 'MWTitle' },
-								'Molecular Weight Calculator'
-							)
+							{ className: 'row' },
+							_react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'search', placeholder: 'Search for an element. Ex. \'car\' for carbon.',
+								onChange: function onChange(text) {
+									return _this3.getUserInput(text.target.value);
+								}
+							})
 						),
-						_react2.default.createElement(_LoginHeader2.default, null)
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'row' },
-						_react2.default.createElement(_CalcPanel2.default, { mainState: this.state, newEdit: this.getEdit, newParen: this.getParen }),
-						_react2.default.createElement(
-							'div',
-							{ className: 'col-sm-4 pull-right', id: 'elements-panel' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'row' },
-								_react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'search', placeholder: 'Search for an element. Ex. \'car\' for carbon.',
-									onChange: function onChange(text) {
-										return _this2.getUserInput(text.target.value);
-									}
-								})
-							),
-							_react2.default.createElement(_ElementSelector2.default, { userInput: this.state.text, newElement: this.getElement })
-						)
+						_react2.default.createElement(_ElementSelector2.default, { elementsFound: this.state.elementsFound, newElement: this.getElement })
 					)
 				);
 			}
@@ -19970,7 +20034,7 @@
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -19981,6 +20045,10 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _Main = __webpack_require__(159);
+
+	var _Main2 = _interopRequireDefault(_Main);
 
 	var _firebase = __webpack_require__(161);
 
@@ -20006,6 +20074,8 @@
 
 	//Only one instance of firebase can run at a time
 	firebase.initializeApp(config);
+	// Get a reference to the database service
+	var database = firebase.database();
 
 	var LoginHeader = function (_Component) {
 		_inherits(LoginHeader, _Component);
@@ -20016,6 +20086,10 @@
 			var _this = _possibleConstructorReturn(this, (LoginHeader.__proto__ || Object.getPrototypeOf(LoginHeader)).call(this, props));
 
 			_this.state = {
+
+				user: {},
+				userSavedCompounds: {},
+
 				email: '',
 				password: '',
 				logged: false
@@ -20024,7 +20098,8 @@
 			_this.logIn = _this.logIn.bind(_this);
 			_this.signUp = _this.signUp.bind(_this);
 			_this.logOut = _this.logOut.bind(_this);
-			_this.getSave = _this.getSave.bind(_this);
+
+			//this.getSave = this.getSave.bind(this);
 
 			_this.grabUserEmail = _this.grabUserEmail.bind(_this);
 			_this.grabUserPassword = _this.grabUserPassword.bind(_this);
@@ -20032,38 +20107,37 @@
 		}
 
 		_createClass(LoginHeader, [{
-			key: "logIn",
+			key: 'logIn',
 			value: function logIn() {
 				var _this2 = this;
 
-				console.log(this.state.email);
-				console.log(this.state.password);
+				//Login and then get the users saved data.
 
 				firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
 					// Handle Errors here.
 					var errorCode = error.code;
 					var errorMessage = error.message;
-
 					alert("Error " + errorCode + ". " + errorMessage);
-				}).then(function (userData) {
+				}).then(function (user) {
 
-					if (userData) {
-						console.log(userData);
-						console.log('logged in');
+					//console.log(user);
 
-						_this2.setState({ logged: true });
-					} else {
-						console.log("Failed to login");
-					}
+					firebase.database().ref('users/' + user.uid + '/compounds').once('value').then(function (snapshot) {
+
+						//Grab 'snapshot' of the users saved compounds.
+						var allCompounds = snapshot.val();
+
+						_this2.setState({ user: user, userSavedCompounds: allCompounds, logged: true });
+					});
 				});
 			}
 		}, {
-			key: "signUp",
+			key: 'signUp',
 			value: function signUp() {
 				console.log("good");
 			}
 		}, {
-			key: "logOut",
+			key: 'logOut',
 			value: function logOut() {
 				var _this3 = this;
 
@@ -20072,23 +20146,30 @@
 					alert("Error " + error);
 				}).then(function () {
 
-					_this3.setState({ logged: false });
+					_this3.setState({
+						user: {},
+						userSavedCompounds: {},
+						email: '',
+						password: '',
+						logged: false
+					});
 				});
 			}
-		}, {
-			key: "getSave",
-			value: function getSave() {
 
-				var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+			// getSave(){
 
-				starCountRef.on('value', function (snapshot) {
-					updateStarCount(postElement, snapshot.val());
-				});
-			}
+			// 	var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+
+			// 	starCountRef.on('value', function(snapshot) {
+			// 	  updateStarCount(postElement, snapshot.val());
+			// 	});
+			// }
+
+
 		}, {
-			key: "grabUserEmail",
+			key: 'grabUserEmail',
 			value: function grabUserEmail(userEmail) {
-				console.log(userEmail);
+				//console.log(userEmail)
 
 				this.setState({
 					email: userEmail
@@ -20097,78 +20178,113 @@
 				console.log(this.state);
 			}
 		}, {
-			key: "grabUserPassword",
+			key: 'grabUserPassword',
 			value: function grabUserPassword(userPassword) {
+				//console.log(userPassword)
+
 				this.setState({
 					password: userPassword
 				});
 			}
 		}, {
-			key: "render",
+			key: 'render',
 			value: function render() {
 				var _this4 = this;
 
-				//Listener for firebase user login
-				var user = firebase.auth().currentUser;
+				//console.log(this.state)
 
-				//if (!user){ console.log("Welcome to Mobile Molecular Weight") }
-
-				if (!user) {
+				if (this.state.logged == false) {
 					return _react2.default.createElement(
-						"div",
-						{ className: "col-sm-4", id: "loginHeader" },
+						'div',
+						{ className: 'container' },
 						_react2.default.createElement(
-							"div",
-							{ className: "form-group" },
+							'div',
+							{ className: 'row', id: 'header' },
 							_react2.default.createElement(
-								"div",
-								{ className: "col-sm-9" },
-								_react2.default.createElement("input", { type: "text", className: "form-control input-md", id: "email", placeholder: "Email Address",
-									onChange: function onChange(text) {
-										return _this4.grabUserEmail(text.target.value);
-									}
-								})
+								'div',
+								{ className: 'col-sm-8' },
+								_react2.default.createElement(
+									'h1',
+									{ id: 'MWTitle' },
+									'Molecular Weight Calculator'
+								)
 							),
 							_react2.default.createElement(
-								"div",
-								{ className: "col-sm-3" },
-								_react2.default.createElement("input", { type: "button", value: "Log In", id: "loginButton", className: "btn btn-success btn-sm",
-									onClick: this.logIn
-								})
+								'div',
+								{ className: 'col-sm-4', id: 'loginHeader' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'form-group' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-sm-9' },
+										_react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'email', placeholder: 'Email Address',
+											onChange: function onChange(text) {
+												return _this4.grabUserEmail(text.target.value);
+											}
+										})
+									),
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-sm-3' },
+										_react2.default.createElement('input', { type: 'button', value: 'Log In', id: 'loginButton', className: 'btn btn-success btn-sm',
+											onClick: this.logIn
+										})
+									)
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'form-group' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-sm-9' },
+										_react2.default.createElement('input', { type: 'password', className: 'form-control input-md', id: 'password', placeholder: 'Password',
+											onChange: function onChange(text) {
+												return _this4.grabUserPassword(text.target.value);
+											}
+										})
+									),
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-sm-3' },
+										_react2.default.createElement('input', { type: 'button', value: 'Register', className: 'btn btn-primary btn-sm',
+											onClick: this.signUp
+										})
+									)
+								)
 							)
 						),
-						_react2.default.createElement(
-							"div",
-							{ className: "form-group" },
-							_react2.default.createElement(
-								"div",
-								{ className: "col-sm-9" },
-								_react2.default.createElement("input", { type: "password", className: "form-control input-md", id: "password", placeholder: "Password",
-									onChange: function onChange(text) {
-										return _this4.grabUserPassword(text.target.value);
-									}
-								})
-							),
-							_react2.default.createElement(
-								"div",
-								{ className: "col-sm-3" },
-								_react2.default.createElement("input", { type: "button", value: "Register", className: "btn btn-primary btn-sm",
-									onClick: this.signUp
-								})
-							)
-						)
+						_react2.default.createElement(_Main2.default, null)
 					);
 				}
 
 				return _react2.default.createElement(
-					"div",
-					{ className: "col-sm-4", id: "loggedInButtons" },
-					_react2.default.createElement("input", { type: "button", value: "Log Out", id: "logoutButton", className: "btn btn-warning btn-sm pull-right",
-						onClick: this.logOut
-					}),
-					_react2.default.createElement("input", { type: "button", value: "My Account", id: "accountButton", className: "btn btn-primary btn-sm pull-right",
-						onClick: this.getSave
-					})
+					'div',
+					{ className: 'container' },
+					_react2.default.createElement(
+						'div',
+						{ className: 'row', id: 'header' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-sm-8' },
+							_react2.default.createElement(
+								'h1',
+								{ id: 'MWTitle' },
+								'Molecular Weight Calculator'
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-sm-4', id: 'loggedInButtons' },
+							_react2.default.createElement('input', { type: 'button', value: 'Log Out', id: 'logoutButton', className: 'btn btn-warning btn-sm pull-right',
+								onClick: this.logOut
+							}),
+							_react2.default.createElement('input', { type: 'button', value: 'My Account', id: 'accountButton', className: 'btn btn-primary btn-sm pull-right',
+								onClick: this.getSave
+							})
+						)
+					),
+					_react2.default.createElement(_Main2.default, { userCompounds: this.state.userSavedCompounds })
 				);
 			}
 		}]);
@@ -20878,12 +20994,6 @@
 
 	var _reactBootstrapModal2 = _interopRequireDefault(_reactBootstrapModal);
 
-	var _firebase = __webpack_require__(161);
-
-	var firebase = _interopRequireWildcard(_firebase);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20891,17 +21001,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var config = {
-		apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
-		authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
-		databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
-		storageBucket: "mobile-molecular-weight-85984.appspot.com",
-		messagingSenderId: "837319764944"
-	};
-
-	// Get a reference to the database service
-	var database = firebase.database();
 
 	var CalcPanel = function (_Component) {
 		_inherits(CalcPanel, _Component);
@@ -20913,20 +21012,18 @@
 
 			_this.state = {
 
-				allCompounds: {},
+				//parenCount: 0,
+				// parenAllowed: true,
+				// firstElement: {},
+				// firstElementPosition: null,
+				// secondElement: {},
+				// secondElementPosition: null,
 
-				parenCount: 0,
-
-				parenAllowed: true,
-
-				firstElement: {},
-				firstElementPosition: null,
-
-				secondElement: {},
-				secondElementPosition: null,
 
 				chemicalName: 'rand'
 			};
+
+			_this._handleClick = _this._handleClick.bind(_this);
 			return _this;
 		}
 
@@ -20938,92 +21035,90 @@
 			value: function _handleClick(input, element, i) {
 				this.props.newEdit(input, element, i);
 			}
-		}, {
-			key: 'passParenToParent',
-			value: function passParenToParent(parenData) {
-				this.props.newParen(parenData);
-			}
-		}, {
-			key: 'makeParenthesis',
-			value: function makeParenthesis(element, i) {
-				var _this2 = this;
 
-				//console.log(element)
-				//console.log(i)
+			// passParenToParent (parenData) {
+			// 	this.props.newParen(parenData);
+			// }
+			// makeParenthesis (element, i) {
+			// 	//console.log(element)
+			// 	//console.log(i)
 
-				this.state.parenCount++;
+			// 	this.state.parenCount ++;
 
-				switch (this.state.parenCount) {
-					case 1:
-						this.setState({
-							firstElement: element,
-							firstElementPosition: i
-						}, function () {});
+			// 	switch (this.state.parenCount) {
+			// 		case 1:
+			// 			this.setState({
+			// 				firstElement: element,
+			// 				firstElementPosition: i,
+			// 			}, () => {
 
-						break;
 
-					case 2:
-						this.setState({
-							parenCount: 0,
-							secondElement: element,
-							secondElementPosition: i
-						}
-						//Uncomment to bring parentheses functionality back
-						, function () {
-							_this2.passParenToParent(_this2.state);
-						});
+			// 			});
 
-						break;
-					default:
-						console.log('Check parentCount');
-				}
-			}
-		}, {
-			key: 'checkParen',
-			value: function checkParen(element, positionOfClickedElement) {
-				//This function is executed immidately after clicking an element in the calc panel
-				//It comes here to determine if the user is clicking on an element already in parenthesis.
-				//If so, reset parenCount incase they had already clicked a viable element
-				//Otherwise the parenthesis can be 'placed' with the 
+			// 			break;
 
-				var parenMultiplier = this.props.mainState.parenMultiplier;
+			// 		case 2:
+			// 			this.setState({
+			// 				parenCount: 0,
+			// 				secondElement: element,
+			// 				secondElementPosition: i,
+			// 			}
+			// 			//Uncomment to bring parentheses functionality back
+			// 			,() => { this.passParenToParent(this.state) } );
 
-				//If there are no parentheses present
-				if (parenMultiplier.length == 0) {
-					console.log('good to go');
+			// 			break;
+			// 		default:
+			// 			console.log('Check parentCount');
+			// 	}
+			// }
+			// checkParen (element, positionOfClickedElement) {
+			// 	//This function is executed immidately after clicking an element in the calc panel
+			// 	//It comes here to determine if the user is clicking on an element already in parenthesis.
+			// 	//If so, reset parenCount incase they had already clicked a viable element
+			// 	//Otherwise the parenthesis can be 'placed' with the 
 
-					//Uncomment these two lines to bring functionality back
-					//this.makeParenthesis(element, positionOfClickedElement);
-				} else {
-					console.log('-----');
+			// 	const parenMultiplier = this.props.mainState.parenMultiplier;
 
-					//Iterate over every set of parentheses
-					parenMultiplier.forEach(function (pm) {
-						console.log(pm);
+			// 	//If there are no parentheses present
+			// 	if (parenMultiplier.length == 0){
+			// 		console.log('good to go');
 
-						//If the element selected is within the range of a parentheses already in place
-						//Reset the parenthesis process
-						if (positionOfClickedElement >= pm.startPosition && positionOfClickedElement <= pm.endPosition) {
-							console.log('you cannot do that');
+			// 		//Uncomment these two lines to bring functionality back
+			// 		//this.makeParenthesis(element, positionOfClickedElement);
+			// 	}
+			// 	else {
+			// 		console.log('-----');
 
-							//Uncomment these two lines to bring functionality back
-							//this.setState({parenCount: 0});
-						}
-						//Otherwise allow the parenthesis process to continue
-						//by invoking the makeParenthesis function
-						else {
-								console.log('good to go');
+			// 		//Iterate over every set of parentheses
+			// 		parenMultiplier.forEach( pm => {
+			// 			console.log(pm)
 
-								//Uncomment these two lines to bring functionality back
-								//this.makeParenthesis(element, positionOfClickedElement);
-							}
-					});
-				}
-			}
+			// 			//If the element selected is within the range of a parentheses already in place
+			// 			//Reset the parenthesis process
+			// 			if (positionOfClickedElement >= pm.startPosition && positionOfClickedElement <= pm.endPosition){
+			// 				console.log('you cannot do that');
+
+			// 				//Uncomment these two lines to bring functionality back
+			// 				//this.setState({parenCount: 0});
+			// 			}
+			// 			//Otherwise allow the parenthesis process to continue
+			// 			//by invoking the makeParenthesis function
+			// 			else {
+			// 				console.log('good to go');
+
+			// 				//Uncomment these two lines to bring functionality back
+			// 				//this.makeParenthesis(element, positionOfClickedElement);
+			// 			}
+			// 		});
+			// 	}
+			// }
+
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this3 = this;
+				var _this2 = this;
+
+				console.log(this.props);
 
 				// Upon tapping a selected atom, loop all atoms
 				var elementsToDisplay = this.props.mainState.elements.map(function (element, i) {
@@ -21033,15 +21128,13 @@
 						_react2.default.createElement(
 							'button',
 							{ key: i, className: 'plusButton btn btn-xs', onClick: function onClick() {
-									return _this3._handleClick('+', element, i);
+									return _this2._handleClick('+', element, i);
 								} },
 							' + '
 						),
 						_react2.default.createElement(
 							'div',
-							{ className: 'calculatableAcronym', onClick: function onClick() {
-									return _this3.checkParen(element, i);
-								} },
+							{ className: 'calculatableAcronym' },
 							_react2.default.createElement(
 								'p',
 								null,
@@ -21050,7 +21143,7 @@
 									'sub',
 									null,
 									' ',
-									_this3.props.mainState.multipliers[i],
+									_this2.props.mainState.multipliers[i],
 									' '
 								)
 							)
@@ -21058,59 +21151,36 @@
 						_react2.default.createElement(
 							'button',
 							{ className: 'minusButton btn btn-xs', onClick: function onClick() {
-									return _this3._handleClick("-", element, i);
+									return _this2._handleClick("-", element, i);
 								} },
 							' - '
 						)
 					);
 				});
 
-				var user = firebase.auth().currentUser;
+				// //Grab list of compounds stored to be displayed
+				// const usersCompounds = Object.keys(this.props.userCompounds).map( (compound) => {
 
-				if (user != null) {
-					//Turn the snapshot into an array containing each of their saved compounds
-					firebase.database().ref('users/' + user.uid + '/compounds').once('value').then(function (snapshot) {
+				//   //console.log('---------------')
 
-						//Grab 'snapshot' of the users saved compounds.
-						var allCompounds = snapshot.val();
+				//   return Object.keys(this.state.allCompounds[compound].elements).map( (properties, i) => {
 
-						_this3.setState({ allCompounds: allCompounds });
-						//console.log(this.state)
-					});
-				}
+				//     const compoundName = this.state.allCompounds[compound].chemicalName
+				//     const elementAcronym = this.state.allCompounds[compound].elements[properties].elementAcronym;
+				//     const elementMultiplier = this.state.allCompounds[compound].multipliers[properties];
 
-				//Grab list of compounds stored to be displayed
-				var usersCompounds = Object.keys(this.state.allCompounds).map(function (compound) {
+				//     //console.log(elementAcronym + " " + elementMultiplier);
 
-					//console.log('---------------')
+				//     return (
+				//       <div key={i}>
+				//         <h3 key={i}>{compoundName}</h3>
+				//         <p>{elementAcronym} {elementMultiplier}</p>
+				//       </div>
+				//     )
+				//   })
 
-					return Object.keys(_this3.state.allCompounds[compound].elements).map(function (properties, i) {
+				// });
 
-						var compoundName = _this3.state.allCompounds[compound].chemicalName;
-						var elementAcronym = _this3.state.allCompounds[compound].elements[properties].elementAcronym;
-						var elementMultiplier = _this3.state.allCompounds[compound].multipliers[properties];
-
-						//console.log(elementAcronym + " " + elementMultiplier);
-
-
-						return _react2.default.createElement(
-							'div',
-							{ key: i },
-							_react2.default.createElement(
-								'h3',
-								{ key: i },
-								compoundName
-							),
-							_react2.default.createElement(
-								'p',
-								null,
-								elementAcronym,
-								' ',
-								elementMultiplier
-							)
-						);
-					});
-				});
 
 				if (elementsToDisplay.length != 0) {
 
@@ -21184,7 +21254,11 @@
 									_react2.default.createElement(
 										'div',
 										{ className: 'modal-body' },
-										usersCompounds
+										_react2.default.createElement(
+											'p',
+											null,
+											'stf'
+										)
 									),
 									_react2.default.createElement(
 										'div',
@@ -24159,7 +24233,7 @@
 /* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -24170,10 +24244,6 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
-
-	var _ElementsArray = __webpack_require__(212);
-
-	var _ElementsArray2 = _interopRequireDefault(_ElementsArray);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24193,104 +24263,51 @@
 		}
 
 		_createClass(ElementSelector, [{
-			key: '_handleClick',
+			key: "_handleClick",
 			value: function _handleClick(input) {
 				this.props.newElement(input);
 				//console.log(input);
 			}
 		}, {
-			key: 'render',
+			key: "render",
 			value: function render() {
 				var _this2 = this;
 
-				var findElements = function elemFinder(userInput) {
-
-					var listElements = [];
-					var listElements2 = [];
-					var listElements3 = [];
-
-					// Loop through every typed letter
-					for (var i = 0; i < userInput.length; i++) {
-
-						if (i == 0) {
-							//Loop through all elements
-							for (var j = 0; j < _ElementsArray2.default.length; j++) {
-								//If the letters at position i match, push that element to the array
-								if (userInput.charAt(i) == _ElementsArray2.default[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == _ElementsArray2.default[j].elementAcronym.charAt(i).toLowerCase()) {
-									listElements.push(_ElementsArray2.default[j]);
-								}
-							}
-						} else if (i == 1) {
-							//Loop through the first list of elements
-							for (var _j = 0; _j < listElements.length; _j++) {
-								//If the letters at position i match, push that element to a new array
-								if (userInput.charAt(i) == listElements[_j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements[_j].elementAcronym.charAt(i).toLowerCase()) {
-									listElements2.push(listElements[_j]);
-								}
-							}
-						} else if (i == 2) {
-							//Loop through the second list of elements
-							for (var _j2 = 0; _j2 < listElements2.length; _j2++) {
-								//If the letters at position i match, push that element to a new array
-								if (userInput.charAt(i) == listElements2[_j2].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements2[_j2].elementAcronym.charAt(i).toLowerCase()) {
-									listElements3.push(listElements2[_j2]);
-								}
-							}
-						}
-					}
-
-					//Depending on how many letters were typed in, display the appropriate array
-					if (userInput.length == 0) {
-						return listElements;
-					} else if (userInput.length == 1) {
-						//console.log(listElements);
-						return listElements;
-					} else if (userInput.length == 2) {
-						//console.log(listElements2);
-						return listElements2;
-					} else if (userInput.length == 3) {
-						//console.log(listElements3);
-						return listElements3;
-					} else if (userInput.length >= 4) {
-						return listElements3;
-					}
-				};
-
 				//Map through the array of elements found and display them
-				var elementsFound = findElements(this.props.userInput).map(function (element, i) {
+				var elementsRendered = this.props.elementsFound.map(function (element, i) {
 					return _react2.default.createElement(
-						'div',
-						{ key: i, className: 'col-sm-4 clickableElement box', onClick: function onClick() {
+						"div",
+						{ key: i, className: "col-sm-4 clickableElement box", onClick: function onClick() {
 								return _this2._handleClick(element);
 							} },
 						_react2.default.createElement(
-							'p',
-							{ key: i, className: 'atomic-number-p' },
+							"p",
+							{ key: i, className: "atomic-number-p" },
 							element.atomicNumber
 						),
 						_react2.default.createElement(
-							'h2',
-							{ className: 'acronym-h2' },
+							"h2",
+							{ className: "acronym-h2" },
 							element.elementAcronym
 						),
 						_react2.default.createElement(
-							'p',
-							{ className: 'name-p' },
+							"p",
+							{ className: "name-p" },
 							element.elementName
 						),
 						_react2.default.createElement(
-							'p',
-							{ className: 'mass-p' },
+							"p",
+							{ className: "mass-p" },
 							element.mass.toFixed(3)
 						)
 					);
 				});
 
-				//Render the elementsFound 'div'
+				//Render the elements
 				return _react2.default.createElement(
-					'div',
-					{ className: 'row', id: 'elements-found' },
-					elementsFound
+					"div",
+					{ className: "row", id: "elements-found" },
+					elementsRendered
 				);
 			}
 		}]);
