@@ -12,7 +12,6 @@ export default class Main extends Component {
 		super(props);
 
 		this.state = {
-
 			text: '',
       elementsFound: [],
 
@@ -23,13 +22,11 @@ export default class Main extends Component {
 
 		};
 
-
 		this.getUserInput = this.getUserInput.bind(this);
     this.findElements = this.findElements.bind(this);
+
 		this.getElement = this.getElement.bind(this);
-
 		this.getEdit = this.getEdit.bind(this);
-
 
 		//this.getParen = this.getParen.bind(this);
 	}
@@ -107,7 +104,7 @@ export default class Main extends Component {
       })			}
 		else if (userInput.length >= 4){
       this.setState({
-        elementsFound: listElements4,
+        elementsFound: listElements3,
       })
 		}
 	}
@@ -132,7 +129,6 @@ export default class Main extends Component {
     //console.log(this.state)
     //console.log(newElement); 
   }
-
 	getEdit (input, element, i) {
 		//console.log("------------------------------------------");
 		//console.log(input + " one " + element.elementName + " at position: " + i);
@@ -161,44 +157,8 @@ export default class Main extends Component {
 			multipliers: this.state.multipliers
 		})
 
-		console.log(this.state);
+		//console.log(this.state);
 	}
-
-	// calculateTotal () {
-
-	// 	//Loop for every set of parenthesis
-	// 	for (let i=0; i<this.state.parenMultiplier.length; i++){
-	// 		console.log(this.state);
-
-	// 		for (let j=this.state.parenMultiplier[i].startPosition; j<=this.state.parenMultiplier[i].endPosition; j++){
-				
-	// 			this.state.multipliers[j] *= this.state.parenMultiplier[i].multiplier;
-
-	// 			console.log(this.state);
-
-	// 		}
-
-	// 	}
-	// }
-
-	// getParen (parenData) {
-	// 	console.log(parenData);
-
-	// 	const startPosition = parenData.firstElementPosition;
-	// 	const endPosition = parenData.secondElementPosition;
-
-	//  	let newParenMultiplier = this.state.parenMultiplier;
-
-	//  	newParenMultiplier.push({
-	// 		endPosition,
-	// 		startPosition,
-	// 		multiplier: 2,
-	// 	});
-
-	// 	this.setState({
-	// 		parenMultiplier: newParenMultiplier,
-	// 	}, this.checkParen );
-	// }
 
 
 	render () {
@@ -208,7 +168,14 @@ export default class Main extends Component {
 		return (
 			<div className="row">
 
-				<CalcPanel userCompounds={this.props.userCompounds} mainState={this.state} newEdit={this.getEdit} newParen={this.getParen} />
+				<CalcPanel
+          user={this.props.user}
+          userLogged={this.props.userLogged}
+          userCompounds={this.props.userCompounds}
+          updateSavedCompounds={this.props.updateSavedCompounds}
+          mainState={this.state}
+          newEdit={this.getEdit}
+          newParen={this.getParen} />
 
 				<div className="col-sm-4 pull-right" id="elements-panel">
 
@@ -225,3 +192,44 @@ export default class Main extends Component {
 		)
 	}
 }
+
+
+
+  //Below are some functions related to trying to make parentheses
+
+
+  // calculateTotal () {
+
+  //  //Loop for every set of parenthesis
+  //  for (let i=0; i<this.state.parenMultiplier.length; i++){
+  //    console.log(this.state);
+
+  //    for (let j=this.state.parenMultiplier[i].startPosition; j<=this.state.parenMultiplier[i].endPosition; j++){
+        
+  //      this.state.multipliers[j] *= this.state.parenMultiplier[i].multiplier;
+
+  //      console.log(this.state);
+
+  //    }
+
+  //  }
+  // }
+
+  // getParen (parenData) {
+  //  console.log(parenData);
+
+  //  const startPosition = parenData.firstElementPosition;
+  //  const endPosition = parenData.secondElementPosition;
+
+  //    let newParenMultiplier = this.state.parenMultiplier;
+
+  //    newParenMultiplier.push({
+  //    endPosition,
+  //    startPosition,
+  //    multiplier: 2,
+  //  });
+
+  //  this.setState({
+  //    parenMultiplier: newParenMultiplier,
+  //  }, this.checkParen );
+  // }

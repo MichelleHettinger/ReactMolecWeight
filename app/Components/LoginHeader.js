@@ -12,6 +12,7 @@ const config = {
 
 //Only one instance of firebase can run at a time
 firebase.initializeApp(config);
+
 // Get a reference to the database service
 const database = firebase.database();
 
@@ -20,7 +21,6 @@ export default class LoginHeader extends Component {
 		super(props);
 
 		this.state = {
-
       user: {},
       userSavedCompounds: {},
 
@@ -29,14 +29,30 @@ export default class LoginHeader extends Component {
 			logged: false,
 		};
 
+		this.grabUserEmail = this.grabUserEmail.bind(this);
+		this.grabUserPassword = this.grabUserPassword.bind(this);
+
 		this.logIn = this.logIn.bind(this);
 		this.signUp = this.signUp.bind(this);
 		this.logOut = this.logOut.bind(this);
-		
-		//this.getSave = this.getSave.bind(this);
 
-		this.grabUserEmail = this.grabUserEmail.bind(this);
-		this.grabUserPassword = this.grabUserPassword.bind(this);
+		this.updateSavedCompounds = this.updateSavedCompounds.bind(this);
+
+	}
+
+	grabUserEmail(userEmail){
+		//console.log(userEmail)
+
+		this.setState({
+			email: userEmail,
+		});
+	}
+	grabUserPassword(userPassword){
+		//console.log(userPassword)
+
+		this.setState({
+			password: userPassword,
+		});
 	}
 
 	logIn () {
@@ -64,7 +80,6 @@ export default class LoginHeader extends Component {
     	});
 		});
 	}
-
 	signUp (){
 		console.log("good")
 	}
@@ -86,33 +101,24 @@ export default class LoginHeader extends Component {
 	}
 
 
-	// getSave(){
+	updateSavedCompounds () {
+		if (this.state.logged){
 
-	// 	var starCountRef = firebase.database().ref('posts/' + postId + '/starCount');
+			const user = this.state.user;
 
-	// 	starCountRef.on('value', function(snapshot) {
-	// 	  updateStarCount(postElement, snapshot.val());
-	// 	});
-	// }
+      firebase.database().ref('users/' + user.uid + '/compounds').once('value').then( snapshot => {
 
+        //Grab 'snapshot' of the users saved compounds.
+        const allCompounds = snapshot.val();
 
-	grabUserEmail(userEmail){
-		//console.log(userEmail)
+        this.setState({
+        	userSavedCompounds: allCompounds,
+        });
 
-		this.setState({
-			email: userEmail,
-		})
-
-		console.log(this.state)
+    	});
+		}
 	}
 
-	grabUserPassword(userPassword){
-		//console.log(userPassword)
-
-		this.setState({
-			password: userPassword,
-		})
-	}
 
 	render () {
 		//console.log(this.props)
@@ -175,11 +181,15 @@ export default class LoginHeader extends Component {
 					</div>
 				</div>
 
-				<Main userCompounds={this.state.userSavedCompounds} />
+				<Main
+					user={this.state.user}
+					userCompounds={this.state.userSavedCompounds}
+					userLogged={this.state.logged}
+					updateSavedCompounds={this.updateSavedCompounds}
+
+				/>
 
 			</div>
 		)
-
 	}
-
 }

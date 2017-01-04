@@ -1,11 +1,24 @@
 import React, {Component} from 'react';
 import Modal from 'react-bootstrap-modal';
 
+import * as firebase from "firebase";
+const config = {
+	apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
+	authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
+	databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
+	storageBucket: "mobile-molecular-weight-85984.appspot.com",
+	messagingSenderId: "837319764944"
+};
+
+// Get a reference to the database service
+//const database = firebase.database();
+
 export default class CalcPanel extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
+			chemicalName: '',
 
 			//parenCount: 0,
 			// parenAllowed: true,
@@ -13,19 +26,229 @@ export default class CalcPanel extends Component {
 			// firstElementPosition: null,
 			// secondElement: {},
 			// secondElementPosition: null,
-
-
-			chemicalName: 'rand',
 		};
 
-		this._handleClick = this._handleClick.bind(this);
+		this.getPlusMinus = this.getPlusMinus.bind(this);
+		this.getMoleculeName = this.getMoleculeName.bind(this);
+
 		this.displayElements = this.displayElements.bind(this);
+		this.displayModalBody = this.displayModalBody.bind(this);
+
+		this.saveMolecule = this.saveMolecule.bind(this);
 	}
 
 	//Clicking plus or minus
-	_handleClick (input, element, i) {
+	getPlusMinus (input, element, i) {
+		//console.log(input)
+
 		this.props.newEdit(input, element, i);
 	}
+	getMoleculeName (userInput) {
+		//console.log(userInput)
+		this.setState({
+			chemicalName: userInput,
+		});
+	}
+
+	displayElements (elements) {
+		//console.log(elements)
+
+		return elements.map( (element, i) => {
+			return (
+				<div key={i} className="calculatableElement">
+					<button key={i} className="plusButton btn btn-xs" onClick={() => this.getPlusMinus('+', element, i) }> + </button>
+
+					<div className="calculatableAcronym">
+						<p>
+							{element.elementAcronym} 
+							<sub> {this.props.mainState.multipliers[i]} </sub>
+						</p>
+					</div>
+
+					<button className="minusButton btn btn-xs" onClick={() => this.getPlusMinus("-", element, i)}> - </button>
+				</div>
+			)
+		})
+	}
+	displaySavedCompounds (userCompounds) {
+		if (userCompounds != null) {
+
+			//console.log(userCompounds);
+			const compoundElements = Object.keys(userCompounds).map( (compoundX, i) => {
+
+				const compoundName = userCompounds[compoundX].chemicalName;
+				const compoundTotal = userCompounds[compoundX].total;
+
+				//console.log("---------------");
+				//console.log(compoundX + " - " + compoundName + " - " + compoundTotal);
+
+				const thing = userCompounds[compoundX].elements.map( (elements, j) => {
+					//console.log(elements)
+					//console.log(j)
+
+					const elementAcronym = elements.elementAcronym;
+					const elementMultiplier = userCompounds[compoundX].multipliers[j];
+
+					//console.log(elementAcronym + ' ' + elementMultiplier);
+
+					return (
+						<p key={j}>{elementAcronym} {elementMultiplier}</p>
+					)
+
+				});
+
+				return (
+					<div key={i}>
+						<h4 key={i}>{compoundName} - {compoundTotal} g/mol</h4>
+
+						{thing}
+
+					</div>
+
+				)
+
+			});
+
+			return compoundElements
+		}
+		else {
+			return
+		}
+	}
+
+	displayModalBody (compounds, userCompounds) {
+
+		//console.log(compounds)
+
+		if (this.props.userLogged) {
+			return (
+				<div className="modal-body">
+
+					<div>
+						<input type="text" className="form-control input-md" id="chemicalName" placeholder="Name"
+							onChange={ text => this.getMoleculeName(text.target.value) }
+						/>
+
+	        	<input type="button" value="Save" id="saveMoleculeButton" className="btn btn-success btn-sm"
+	        		onClick={this.saveMolecule}
+	        	/>
+					</div>
+
+					{userCompounds}
+
+				</div>
+			)
+		}
+		else {
+			return (
+				<div className="modal-body">
+
+					<p>You must login</p>
+
+				</div>
+			)
+		}
+	}
+
+	saveMolecule () {
+			const compArray = Object.keys(this.props.userCompounds);
+			const userID = this.props.user.uid;
+
+			const compoundNumber = compArray.length + 1;
+
+			console.log(compArray)
+
+			//Create a new data entry named compound#, where # is 1 plus their number of saved compounds
+			firebase.database().ref('users/' + userID + '/compounds/compound' + compoundNumber).set({
+
+					chemicalName: this.state.chemicalName,
+					elements: this.props.mainState.elements,
+					multipliers: this.props.mainState.multipliers,
+					total: this.props.mainState.total.toFixed(3),
+
+					//parenMultiplier: this.props.mainState.parenMultiplier,
+
+			}, () => {
+					console.log('Wrote to database');
+					this.setState({chemicalName: ''});
+
+					this.props.updateSavedCompounds;
+
+
+			});
+		
+	}
+
+
+	render (){
+		//console.log(this.props)
+		//console.log(this.state)
+
+		const elementsToDisplay = this.displayElements(this.props.mainState.elements);
+		const userCompounds = this.displaySavedCompounds(this.props.userCompounds);
+
+		const modalBody = this.displayModalBody(this.props.userCompounds, userCompounds);
+
+
+		if (this.props.mainState.elements.length != 0){
+
+			return (
+				<div>
+					<div className="col-sm-8" id="calcPanelWith">
+						<div className="row">
+							<div className="col-sm-9">
+								<h3 id="molecular-weight">Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol</h3>
+							</div>
+							<div>
+								<button type="button" data-toggle="modal" data-target="#saveModal" className="btn btn-success btn-sm saveButton pull-right">Save</button>
+			        </div>
+						</div>
+
+						<div className="row">
+							<div className="elements-chosen">
+								{elementsToDisplay}
+							</div>
+						</div>
+					</div>
+
+					<div className="modal fade" id="saveModal">
+						<div className="modal-dialog" role="document">
+							<div className="modal-content">
+								<div className="modal-header">
+									<button type="button" className="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<h4 className="modal-title">Your Compounds</h4>
+								</div>
+
+								<div className="modal-body">
+									{modalBody}
+								</div>
+
+								<div className="modal-footer">
+									<button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			)
+		}
+
+		return (
+			<div className="col-sm-8" id="calcPanelWithOut">
+
+				<div className="row">
+					<div>
+						<h3>Start calculating!</h3>
+					</div>
+				</div>
+
+			</div>
+		)
+	}
+}
+
 
 
 	// passParenToParent (parenData) {
@@ -105,123 +328,3 @@ export default class CalcPanel extends Component {
 	// 		});
 	// 	}
 	// }
-
-	displayElements (elements) {
-		//console.log(elements)
-
-		return elements.map( (element, i) => {
-			return (
-				<div key={i} className="calculatableElement">
-					<button key={i} className="plusButton btn btn-xs" onClick={() => this._handleClick('+', element, i) }> + </button>
-
-					<div className="calculatableAcronym">
-						<p>
-							{element.elementAcronym} 
-							<sub> {this.props.mainState.multipliers[i]} </sub>
-						</p>
-					</div>
-
-					<button className="minusButton btn btn-xs" onClick={() => this._handleClick("-", element, i)}> - </button>
-				</div>
-			)
-		})
-	}
-
-	displaySavedCompounds (userCompounds) {
-		//console.log(userCompounds)
-
-		if (userCompounds != null) {
-	    //Grab list of compounds stored to be displayed
-	    return Object.keys(userCompounds).map( (compound) => {
-
-	      //console.log('---------------')
-
-	      return Object.keys(userCompounds[compound].elements).map( (properties, i) => {
-
-	        const compoundName = userCompounds[compound].chemicalName
-	        const elementAcronym = userCompounds[compound].elements[properties].elementAcronym;
-	        const elementMultiplier = userCompounds[compound].multipliers[properties];
-
-	        //console.log(elementAcronym + " " + elementMultiplier);
-
-	        return (
-	          <div key={i}>
-	            <h3 key={i}>{compoundName}</h3>
-	            <p>{elementAcronym} {elementMultiplier}</p>
-	          </div>
-	        )
-	      })
-	    });
-		}
-		else {
-			return
-		}
-
-
-	}
-
-	render (){
-		//console.log(this.props)
-		//console.log(this.state)
-
-		const elementsToDisplay = this.displayElements(this.props.mainState.elements);
-		const userCompounds = this.displaySavedCompounds(this.props.userCompounds);
-
-		if (this.props.mainState.elements.length != 0){
-
-			return (
-				<div>
-					<div className="col-sm-8" id="calcPanelWith">
-						<div className="row">
-							<div className="col-sm-9">
-								<h3 id="molecular-weight">Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol</h3>
-							</div>
-							<div>
-								<button type="button" data-toggle="modal" data-target="#saveModal" className="btn btn-success btn-sm saveButton pull-right">Save</button>
-			        </div>
-						</div>
-
-						<div className="row">
-							<div className="elements-chosen">
-								{elementsToDisplay}
-							</div>
-						</div>
-					</div>
-
-					<div className="modal fade" id="saveModal">
-						<div className="modal-dialog" role="document">
-							<div className="modal-content">
-								<div className="modal-header">
-									<button type="button" className="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-									<h4 className="modal-title">Your Compounds</h4>
-								</div>
-
-								<div className="modal-body">
-									{userCompounds}
-								</div>
-
-								<div className="modal-footer">
-									<button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			)
-		}
-
-		return (
-			<div className="col-sm-8" id="calcPanelWithOut">
-
-				<div className="row">
-					<div>
-						<h3>Start calculating!</h3>
-					</div>
-				</div>
-
-			</div>
-		)
-	}
-}
