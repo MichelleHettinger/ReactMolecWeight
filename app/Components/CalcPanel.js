@@ -18,7 +18,8 @@ export default class CalcPanel extends Component {
 			chemicalName: 'rand',
 		};
 
-		this._handleClick = this._handleClick.bind(this)
+		this._handleClick = this._handleClick.bind(this);
+		this.displayElements = this.displayElements.bind(this);
 	}
 
 	//Clicking plus or minus
@@ -105,15 +106,10 @@ export default class CalcPanel extends Component {
 	// 	}
 	// }
 
-	render (){
+	displayElements (elements) {
+		//console.log(elements)
 
-		console.log(this.props)
-
-
-
-
-		// Upon tapping a selected atom, loop all atoms
-		const elementsToDisplay = this.props.mainState.elements.map( (element, i) => {
+		return elements.map( (element, i) => {
 			return (
 				<div key={i} className="calculatableElement">
 					<button key={i} className="plusButton btn btn-xs" onClick={() => this._handleClick('+', element, i) }> + </button>
@@ -129,32 +125,49 @@ export default class CalcPanel extends Component {
 				</div>
 			)
 		})
+	}
 
-	    // //Grab list of compounds stored to be displayed
-	    // const usersCompounds = Object.keys(this.props.userCompounds).map( (compound) => {
+	displaySavedCompounds (userCompounds) {
+		//console.log(userCompounds)
 
-	    //   //console.log('---------------')
+		if (userCompounds != null) {
+	    //Grab list of compounds stored to be displayed
+	    return Object.keys(userCompounds).map( (compound) => {
 
-	    //   return Object.keys(this.state.allCompounds[compound].elements).map( (properties, i) => {
+	      //console.log('---------------')
 
-	    //     const compoundName = this.state.allCompounds[compound].chemicalName
-	    //     const elementAcronym = this.state.allCompounds[compound].elements[properties].elementAcronym;
-	    //     const elementMultiplier = this.state.allCompounds[compound].multipliers[properties];
+	      return Object.keys(userCompounds[compound].elements).map( (properties, i) => {
 
-	    //     //console.log(elementAcronym + " " + elementMultiplier);
+	        const compoundName = userCompounds[compound].chemicalName
+	        const elementAcronym = userCompounds[compound].elements[properties].elementAcronym;
+	        const elementMultiplier = userCompounds[compound].multipliers[properties];
 
-	    //     return (
-	    //       <div key={i}>
-	    //         <h3 key={i}>{compoundName}</h3>
-	    //         <p>{elementAcronym} {elementMultiplier}</p>
-	    //       </div>
-	    //     )
-	    //   })
+	        //console.log(elementAcronym + " " + elementMultiplier);
 
-	    // });
-		
+	        return (
+	          <div key={i}>
+	            <h3 key={i}>{compoundName}</h3>
+	            <p>{elementAcronym} {elementMultiplier}</p>
+	          </div>
+	        )
+	      })
+	    });
+		}
+		else {
+			return
+		}
 
-		if (elementsToDisplay.length != 0){
+
+	}
+
+	render (){
+		//console.log(this.props)
+		//console.log(this.state)
+
+		const elementsToDisplay = this.displayElements(this.props.mainState.elements);
+		const userCompounds = this.displaySavedCompounds(this.props.userCompounds);
+
+		if (this.props.mainState.elements.length != 0){
 
 			return (
 				<div>
@@ -186,7 +199,7 @@ export default class CalcPanel extends Component {
 								</div>
 
 								<div className="modal-body">
-									<p>stf</p>
+									{userCompounds}
 								</div>
 
 								<div className="modal-footer">

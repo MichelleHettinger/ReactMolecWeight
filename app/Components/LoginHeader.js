@@ -49,7 +49,6 @@ export default class LoginHeader extends Component {
 			alert("Error " + errorCode + ". " + errorMessage)
 
 		}).then( user => {
-
 			//console.log(user);
 
       firebase.database().ref('users/' + user.uid + '/compounds').once('value').then( snapshot => {
@@ -57,10 +56,13 @@ export default class LoginHeader extends Component {
         //Grab 'snapshot' of the users saved compounds.
         const allCompounds = snapshot.val();
 
-        this.setState({user:user, userSavedCompounds: allCompounds, logged:true});
-      });
-			
-		})
+        this.setState({
+        	user:user,
+        	userSavedCompounds: allCompounds,
+        	logged:true
+        });
+    	});
+		});
 	}
 
 	signUp (){
@@ -75,7 +77,7 @@ export default class LoginHeader extends Component {
 
 			this.setState({
 				user: {},
-				userSavedCompounds: {},
+				userSavedCompounds: 0,
 				email: '',
 				password: '',
 				logged: false,
@@ -113,7 +115,7 @@ export default class LoginHeader extends Component {
 	}
 
 	render () {
-
+		//console.log(this.props)
 		//console.log(this.state)
 
 		if (this.state.logged == false){
