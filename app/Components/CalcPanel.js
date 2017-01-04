@@ -151,11 +151,18 @@ export default class CalcPanel extends Component {
 	}
 
 	saveMolecule () {
+		const userID = this.props.user.uid;
+
+		if (this.props.userCompounds){
+
 			const compArray = Object.keys(this.props.userCompounds);
-			const userID = this.props.user.uid;
 
-			const compoundNumber = compArray.length + 1;
+			let compoundNumber = compArray[compArray.length-1];
+			compoundNumber = compoundNumber.charAt(compoundNumber.length -1);
+			compoundNumber ++;
+			compoundNumber = compoundNumber.toString();
 
+			console.log(compoundNumber)
 			console.log(compArray)
 
 			//Create a new data entry named compound#, where # is 1 plus their number of saved compounds
@@ -169,14 +176,35 @@ export default class CalcPanel extends Component {
 					//parenMultiplier: this.props.mainState.parenMultiplier,
 
 			}, () => {
+
 					console.log('Wrote to database');
 					this.setState({chemicalName: ''});
 
 					this.props.updateSavedCompounds;
 
+			});
+		}
+
+		else {
+			//Create a new data entry named compound#, where # is 1 plus their number of saved compounds
+			firebase.database().ref('users/' + userID + '/compounds/compound' + 1).set({
+
+					chemicalName: this.state.chemicalName,
+					elements: this.props.mainState.elements,
+					multipliers: this.props.mainState.multipliers,
+					total: this.props.mainState.total.toFixed(3),
+
+					//parenMultiplier: this.props.mainState.parenMultiplier,
+
+			}, () => {
+
+					console.log('Wrote to database');
+					this.setState({chemicalName: ''});
+
+					this.props.updateSavedCompounds;
 
 			});
-		
+		}
 	}
 
 

@@ -20545,27 +20545,52 @@
 			value: function saveMolecule() {
 				var _this4 = this;
 
-				var compArray = Object.keys(this.props.userCompounds);
 				var userID = this.props.user.uid;
 
-				var compoundNumber = compArray.length + 1;
+				if (this.props.userCompounds) {
 
-				console.log(compArray);
+					var compArray = Object.keys(this.props.userCompounds);
 
-				//Create a new data entry named compound#, where # is 1 plus their number of saved compounds
-				firebase.database().ref('users/' + userID + '/compounds/compound' + compoundNumber).set({
+					var compoundNumber = compArray[compArray.length - 1];
+					compoundNumber = compoundNumber.charAt(compoundNumber.length - 1);
+					compoundNumber++;
+					compoundNumber = compoundNumber.toString();
 
-					chemicalName: this.state.chemicalName,
-					elements: this.props.mainState.elements,
-					multipliers: this.props.mainState.multipliers,
-					total: this.props.mainState.total.toFixed(3)
+					console.log(compoundNumber);
+					console.log(compArray);
 
-				}, function () {
-					console.log('Wrote to database');
-					_this4.setState({ chemicalName: '' });
+					//Create a new data entry named compound#, where # is 1 plus their number of saved compounds
+					firebase.database().ref('users/' + userID + '/compounds/compound' + compoundNumber).set({
 
-					_this4.props.updateSavedCompounds;
-				});
+						chemicalName: this.state.chemicalName,
+						elements: this.props.mainState.elements,
+						multipliers: this.props.mainState.multipliers,
+						total: this.props.mainState.total.toFixed(3)
+
+					}, function () {
+
+						console.log('Wrote to database');
+						_this4.setState({ chemicalName: '' });
+
+						_this4.props.updateSavedCompounds;
+					});
+				} else {
+					//Create a new data entry named compound#, where # is 1 plus their number of saved compounds
+					firebase.database().ref('users/' + userID + '/compounds/compound' + 1).set({
+
+						chemicalName: this.state.chemicalName,
+						elements: this.props.mainState.elements,
+						multipliers: this.props.mainState.multipliers,
+						total: this.props.mainState.total.toFixed(3)
+
+					}, function () {
+
+						console.log('Wrote to database');
+						_this4.setState({ chemicalName: '' });
+
+						_this4.props.updateSavedCompounds;
+					});
+				}
 			}
 		}, {
 			key: 'render',
