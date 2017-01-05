@@ -20381,7 +20381,6 @@
 
 			_this.saveMolecule = _this.saveMolecule.bind(_this);
 			_this.loadMolecule = _this.loadMolecule.bind(_this);
-			_this.overwriteMolecule = _this.overwriteMolecule.bind(_this);
 			_this.deleteMolecule = _this.deleteMolecule.bind(_this);
 			return _this;
 		}
@@ -20493,7 +20492,7 @@
 							{ key: i, className: 'individualSavedDiv panel panel-default' },
 							_react2.default.createElement(
 								'div',
-								{ key: i, className: 'col-sm-8' },
+								{ key: i, className: 'col-sm-9' },
 								_react2.default.createElement(
 									'div',
 									{ key: i },
@@ -20517,9 +20516,6 @@
 								{ className: 'pull-right lodSavedCompounds' },
 								_react2.default.createElement('input', { type: 'button', value: 'Load', 'data-compound': compoundX, className: 'btn btn-sm btn-info',
 									onClick: _this3.loadMolecule
-								}),
-								_react2.default.createElement('input', { type: 'button', value: 'Overwrite', 'data-compound': compoundX, className: 'btn btn-sm btn-warning',
-									onClick: _this3.overwriteMolecule
 								}),
 								_react2.default.createElement('input', { type: 'button', value: 'Delete', 'data-compound': compoundX, className: 'btn btn-sm btn-danger',
 									onClick: _this3.deleteMolecule
@@ -20753,9 +20749,11 @@
 				console.log(dataCompound);
 			}
 		}, {
-			key: 'overwriteMolecule',
-			value: function overwriteMolecule(btnDiv) {
+			key: 'deleteMolecule',
+			value: function deleteMolecule(btnDiv) {
 				var _this6 = this;
+
+				console.log(btnDiv.target);
 
 				//dataCompound is the name of the compound in the firebase databse
 				var dataCompound = $(btnDiv.target).data('compound');
@@ -20764,46 +20762,20 @@
 				//Create a new data entry named compound#
 				var userID = this.props.user.uid;
 
-				if (this.state.chemicalName == '') {
-					var alertDismiss = $(".alert-dismissible");
+				firebase.database().ref('users/' + userID + '/compounds/' + dataCompound).set({ null: null }, function () {
+					//console.log('Wrote to database');
 
-					//console.log(alertDismiss.length);
+					firebase.database().ref('users/' + userID + '/compounds').once('value').then(function (snapshot) {
+						//Grab 'snapshot' of the users saved compounds.
+						var allCompounds = snapshot.val();
 
-					//If there's not already an alert, display one
-					if (alertDismiss.length == 0) {
-						//Display dismissible alert if name is taken
-						$("#saveFormRow").append('<div class="alert alert-warning alert-dismissible fade in row" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Invalid Name!</strong> Check your compounds below.</div>');
-					}
-				} else {
-					firebase.database().ref('users/' + userID + '/compounds/' + dataCompound).set({
+						//console.log(allCompounds);
 
-						chemicalName: this.state.chemicalName,
-						elements: this.props.mainState.elements,
-						multipliers: this.props.mainState.multipliers,
-						total: this.props.mainState.total.toFixed(3)
+						//this.setState({chemicalName: ''});
 
-					}, function () {
-						//console.log('Wrote to database');
-
-						firebase.database().ref('users/' + userID + '/compounds').once('value').then(function (snapshot) {
-							//Grab 'snapshot' of the users saved compounds.
-							var allCompounds = snapshot.val();
-
-							//console.log(allCompounds);
-
-							//this.setState({chemicalName: ''});
-
-							_this6.props.updateSaved(allCompounds);
-						});
+						_this6.props.updateSaved(allCompounds);
 					});
-				}
-			}
-		}, {
-			key: 'deleteMolecule',
-			value: function deleteMolecule(btnDiv) {
-				//dataCompound is the name of the compound in the firebase databse
-				var dataCompound = $(btnDiv.target).data('compound');
-				console.log(dataCompound);
+				});
 			}
 		}, {
 			key: 'render',
