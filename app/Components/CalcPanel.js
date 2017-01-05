@@ -125,74 +125,69 @@ export default class CalcPanel extends Component {
 
 		//console.log(userCompounds)
 
-      const elements = this.props.mainState.elements.map( (element, i) => {
-        const multipliers = this.props.mainState.multipliers;
+    const elements = this.props.mainState.elements.map( (element, i) => {
+      const multipliers = this.props.mainState.multipliers;
 
-        return (
+      return (
+        <p key={i}>{element.elementAcronym}<sub>{multipliers[i]}</sub></p>
+      )
+    });
 
-          <p key={i}>{element.elementAcronym}<sub>{multipliers[i]}</sub></p>
-
-        )
-
-      });
-
-
-      const total = this.props.mainState.total.toFixed(3);
-
+    const total = this.props.mainState.total.toFixed(3);
 
 		if (this.props.userLogged) {
 
 			return (
 				<div className="modal-body">
 
-        <div className="col-sm-offset-2">
-          <div className="form-inline">
-            <div className="form-group">
-              <div id="weightToSave">
-                <label>Weight</label>
-                {total} g/mol
+        <div className="row" id="saveFormRow">
+          <div className="col-sm-offset-2">
+            <div className="form-inline">
+              <div className="form-group">
+                <div id="weightToSave">
+                  <label>Weight</label>
+                  {total} g/mol
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="form-inline">
-            <div className="form-group">
-              <div id="formulaToSave">
-                <label>Formula</label>
-                {elements}
+            <div className="form-inline">
+              <div className="form-group">
+                <div id="formulaToSave">
+                  <label>Formula</label>
+                  {elements}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="form-inline">
-            <div className="form-group">
-              <label>Name</label>
-  						<input type="text" className="form-control input-md" id="chemicalName" placeholder="Name"
-  							onChange={ text => this.getMoleculeName(text.target.value) }
-  						/>
+            <div className="form-inline">
+              <div className="form-group">
+                <label>Name</label>
+    						<input type="text" className="form-control input-md" id="chemicalName" placeholder="Name"
+    							onChange={ text => this.getMoleculeName(text.target.value) }
+    						/>
+              </div>
+
+              <input type="button" value="Save" id="saveMoleculeButton" className="btn btn-success btn-sm"
+                onClick={this.saveMolecule}
+              />
+
             </div>
-
-
-            <input type="button" value="Save" id="saveMoleculeButton" className="btn btn-success btn-sm"
-              onClick={this.saveMolecule}
-            />
-
           </div>
         </div>
 
-          <hr/>
+        <hr/>
 
-					{userCompounds}
+				{userCompounds}
 
 				</div>
 			)
 		}
+
 		else {
 			return (
 				<div className="modal-body">
-
 					<p>You must login</p>
-
 				</div>
 			)
 		}
@@ -229,10 +224,10 @@ export default class CalcPanel extends Component {
       });
       //console.log(compoundNameExists)
 
-      let has = $.inArray(true, compoundNameExists);
+      //let has = $.inArray(true, compoundNameExists);
+      //console.log(has);
 
-      console.log(has);
-
+      //-1 means that true was not found, meaning that the chosen name has not been used before.
       if ( $.inArray(true, compoundNameExists) == -1 ) {
 
   			//Create a new data entry named compound#
@@ -246,13 +241,13 @@ export default class CalcPanel extends Component {
   					//parenMultiplier: this.props.mainState.parenMultiplier,
 
   			}, () => {
-  					console.log('Wrote to database');
+  					//console.log('Wrote to database');
 
             firebase.database().ref('users/' + userID + '/compounds').once('value').then( snapshot => {
               //Grab 'snapshot' of the users saved compounds.
               const allCompounds = snapshot.val();
 
-              console.log(allCompounds);
+              //console.log(allCompounds);
 
               //this.setState({chemicalName: ''});
 
@@ -261,11 +256,11 @@ export default class CalcPanel extends Component {
   			});
       }
       else {
-        console.log("compound still exists")
+        //console.log("compound still exists")
+
+        //Display dismissible alert if name is taken
+        $("#saveFormRow").append('<div class="alert alert-warning alert-dismissible fade in row" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Name taken!</strong> Check your compounds below.</div>')
       }
-
-
-
 		}
 
 		else {

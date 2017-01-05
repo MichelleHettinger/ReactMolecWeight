@@ -20545,64 +20545,68 @@
 						{ className: 'modal-body' },
 						_react2.default.createElement(
 							'div',
-							{ className: 'col-sm-offset-2' },
+							{ className: 'row', id: 'saveFormRow' },
 							_react2.default.createElement(
 								'div',
-								{ className: 'form-inline' },
+								{ className: 'col-sm-offset-2' },
 								_react2.default.createElement(
 									'div',
-									{ className: 'form-group' },
+									{ className: 'form-inline' },
 									_react2.default.createElement(
 										'div',
-										{ id: 'weightToSave' },
+										{ className: 'form-group' },
 										_react2.default.createElement(
-											'label',
-											null,
-											'Weight'
-										),
-										total,
-										' g/mol'
+											'div',
+											{ id: 'weightToSave' },
+											_react2.default.createElement(
+												'label',
+												null,
+												'Weight'
+											),
+											total,
+											' g/mol'
+										)
 									)
-								)
-							),
-							_react2.default.createElement(
-								'div',
-								{ className: 'form-inline' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'form-group' },
-									_react2.default.createElement(
-										'div',
-										{ id: 'formulaToSave' },
-										_react2.default.createElement(
-											'label',
-											null,
-											'Formula'
-										),
-										elements
-									)
-								)
-							),
-							_react2.default.createElement(
-								'div',
-								{ className: 'form-inline' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'form-group' },
-									_react2.default.createElement(
-										'label',
-										null,
-										'Name'
-									),
-									_react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'chemicalName', placeholder: 'Name',
-										onChange: function onChange(text) {
-											return _this3.getMoleculeName(text.target.value);
-										}
-									})
 								),
-								_react2.default.createElement('input', { type: 'button', value: 'Save', id: 'saveMoleculeButton', className: 'btn btn-success btn-sm',
-									onClick: this.saveMolecule
-								})
+								_react2.default.createElement(
+									'div',
+									{ className: 'form-inline' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'form-group' },
+										_react2.default.createElement(
+											'div',
+											{ id: 'formulaToSave' },
+											_react2.default.createElement(
+												'label',
+												null,
+												'Formula'
+											),
+											elements
+										)
+									)
+								),
+								_react2.default.createElement(
+									'div',
+									{ className: 'form-inline' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'form-group' },
+										_react2.default.createElement(
+											'label',
+											null,
+											'Name'
+										),
+										_react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'chemicalName', placeholder: 'Name',
+											onChange: function onChange(text) {
+												return _this3.getMoleculeName(text.target.value);
+											}
+										})
+									),
+									_react2.default.createElement('input', { type: 'button', value: 'Save', id: 'saveMoleculeButton', className: 'btn btn-success btn-sm',
+										onClick: this.saveMolecule
+									})
+								)
 							)
 						),
 						_react2.default.createElement('hr', null),
@@ -20654,10 +20658,10 @@
 					});
 					//console.log(compoundNameExists)
 
-					var has = $.inArray(true, compoundNameExists);
+					//let has = $.inArray(true, compoundNameExists);
+					//console.log(has);
 
-					console.log(has);
-
+					//-1 means that true was not found, meaning that the chosen name has not been used before.
 					if ($.inArray(true, compoundNameExists) == -1) {
 
 						//Create a new data entry named compound#
@@ -20669,13 +20673,13 @@
 							total: this.props.mainState.total.toFixed(3)
 
 						}, function () {
-							console.log('Wrote to database');
+							//console.log('Wrote to database');
 
 							firebase.database().ref('users/' + userID + '/compounds').once('value').then(function (snapshot) {
 								//Grab 'snapshot' of the users saved compounds.
 								var allCompounds = snapshot.val();
 
-								console.log(allCompounds);
+								//console.log(allCompounds);
 
 								//this.setState({chemicalName: ''});
 
@@ -20683,7 +20687,10 @@
 							});
 						});
 					} else {
-						console.log("compound still exists");
+						//console.log("compound still exists")
+
+						//Display dismissible alert if name is taken
+						$("#saveFormRow").append('<div class="alert alert-warning alert-dismissible fade in row" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Name taken!</strong> Check your compounds below.</div>');
 					}
 				} else {
 					//Create a new data entry named compound1

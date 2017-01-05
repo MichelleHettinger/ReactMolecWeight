@@ -127,6 +127,11 @@ img{
 #saveModal h3{
 	text-align: center;
 }
+.alert-dismissible{
+	margin-bottom: 0px;
+	margin-top: 10px;
+	text-align: center;
+}
 #savedFormula{
 	display: flex;
 }
