@@ -41,17 +41,17 @@ export default class LoginHeader extends Component {
 	}
 
 	grabUserEmail(userEmail){
-		//console.log(userEmail)
+		//console.log(userEmail.target.value)
 
 		this.setState({
-			email: userEmail,
+			email: userEmail.target.value,
 		});
 	}
 	grabUserPassword(userPassword){
 		//console.log(userPassword)
 
 		this.setState({
-			password: userPassword,
+			password: userPassword.target.value,
 		});
 	}
 
@@ -130,7 +130,7 @@ export default class LoginHeader extends Component {
 		        	<div className="form-group">
 		        		<div className="col-sm-9">
 									<input type="text" className="form-control input-md" id="email" placeholder="Email Address"
-										onChange={ text => this.grabUserEmail(text.target.value) }
+										onChange={this.grabUserEmail}
 									/>
 								</div>
 								<div className="col-sm-3">
@@ -142,7 +142,7 @@ export default class LoginHeader extends Component {
 		        	<div className="form-group">
 		        		<div className="col-sm-9">
 									<input type="password" className="form-control input-md" id="password" placeholder="Password"
-										onChange={ text => this.grabUserPassword(text.target.value) }
+										onChange={this.grabUserPassword}
 									/>
 								</div>
 								<div className="col-sm-3">

@@ -109,22 +109,22 @@ export default class CalcPanel extends Component {
               <div key={i}>
   						  <h4 key={i}>{compoundName} - {compoundTotal} g/mol</h4>
               </div>
-              <div id="savedFormula">
+              <div className="savedFormula">
   						  {molecFormula}
               </div>
             </div>
 
             <div className="pull-right lodSavedCompounds">
 
-              <input type="button" value="Load" className="btn btn-sm btn-info" 
+              <input type="button" value="Load" data-compound={compoundX} className="btn btn-sm btn-info" 
                 onClick={this.loadMolecule}
               />
 
-              <input type="button" value="Overwrite" className="btn btn-sm btn-warning" 
+              <input type="button" value="Overwrite" data-compound={compoundX} className="btn btn-sm btn-warning" 
                 onClick={this.overwriteMolecule}
               />
 
-              <input type="button" value="Delete" className="btn btn-sm btn-danger" 
+              <input type="button" value="Delete" data-compound={compoundX} className="btn btn-sm btn-danger" 
                 onClick={this.deleteMolecule}
               />
 
@@ -323,14 +323,17 @@ export default class CalcPanel extends Component {
 		}
 	}
 
-  loadMolecule () {
-    console.log("load")
+  loadMolecule (btnDiv) {
+    const dataCompound = $(btnDiv.target).data('compound');
+    console.log(dataCompound);
   }
-  overwriteMolecule () {
-    console.log("overwrite")
+  overwriteMolecule (btnDiv) {
+    const dataCompound = $(btnDiv.target).data('compound');
+    console.log(dataCompound);
   }
-  deleteMolecule () {
-    console.log("delete")
+  deleteMolecule (btnDiv) {
+    const dataCompound = $(btnDiv.target).data('compound');
+    console.log(dataCompound);
   }  
 
 

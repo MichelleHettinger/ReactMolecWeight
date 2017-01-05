@@ -132,7 +132,7 @@ img{
 	margin-top: 10px;
 	text-align: center;
 }
-#savedFormula{
+.savedFormula{
 	display: flex;
 }
 #formulaToSave{
