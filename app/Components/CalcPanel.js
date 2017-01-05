@@ -35,6 +35,7 @@ export default class CalcPanel extends Component {
 		this.displayModalBody = this.displayModalBody.bind(this);
 
 		this.saveMolecule = this.saveMolecule.bind(this);
+    this.loadSavedMolecule = this.loadSavedMolecule.bind(this)
 	}
 
 	//Clicking plus or minus
@@ -114,7 +115,7 @@ export default class CalcPanel extends Component {
             <div className="pull-right lodSavedCompounds">
 
               <input key={i} type="button" value="Load" data-compound={compoundX} className="btn btn-sm btn-info" 
-                onClick={()=>{this.props.updateMainState(compoundX)}}
+                onClick={()=>{this.loadSavedMolecule(compoundX)}}
               />
 
               <input type="button" value="Delete" data-compound={compoundX} className="btn btn-sm btn-danger" 
@@ -316,6 +317,12 @@ export default class CalcPanel extends Component {
 			});
 		}
 	}
+  loadSavedMolecule (compoundX) {
+
+    $('#saveModal').modal('hide')
+
+    this.props.updateMainState(compoundX)
+  }
 
 	render (){
 		//console.log(this.props)

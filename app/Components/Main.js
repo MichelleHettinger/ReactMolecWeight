@@ -163,16 +163,12 @@ export default class Main extends Component {
 
 
 	updateMainState (compoundX) {
-		console.log(compoundX);
-		console.log(this.props.userCompounds);
+		//console.log(compoundX);
+		//console.log(this.props.userCompounds);
 
 		const newElements = this.props.userCompounds[compoundX].elements;
 		const newMultipliers = this.props.userCompounds[compoundX].multipliers;
 		const newTotal = parseFloat(this.props.userCompounds[compoundX].total);
-
-		console.log(newElements);
-		console.log(newMultipliers);
-		console.log(newTotal);
 
 		this.setState({
 			elements: newElements,
