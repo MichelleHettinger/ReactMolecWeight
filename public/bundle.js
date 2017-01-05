@@ -20662,7 +20662,7 @@
 					//console.log(has);
 
 					//-1 means that true was not found, meaning that the chosen name has not been used before.
-					if ($.inArray(true, compoundNameExists) == -1) {
+					if ($.inArray(true, compoundNameExists) == -1 && this.state.chemicalName != '') {
 
 						//Create a new data entry named compound#
 						firebase.database().ref('users/' + userID + '/compounds/compound' + compoundNumber).set({
@@ -20686,12 +20686,19 @@
 								_this4.props.updateSaved(allCompounds);
 							});
 						});
-					} else {
-						//console.log("compound still exists")
-
-						//Display dismissible alert if name is taken
-						$("#saveFormRow").append('<div class="alert alert-warning alert-dismissible fade in row" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Name taken!</strong> Check your compounds below.</div>');
 					}
+					//Invalid input
+					else {
+							var alertDismiss = $(".alert-dismissible");
+
+							//console.log(alertDismiss.length);
+
+							//If there's not already an alert, display one
+							if (alertDismiss.length == 0) {
+								//Display dismissible alert if name is taken
+								$("#saveFormRow").append('<div class="alert alert-warning alert-dismissible fade in row" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Invalid Name!</strong> Check your compounds below.</div>');
+							}
+						}
 				} else {
 					//Create a new data entry named compound1
 					firebase.database().ref('users/' + userID + '/compounds/compound1').set({
