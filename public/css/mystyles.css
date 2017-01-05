@@ -122,3 +122,27 @@ img{
 			.mass-p{
 				text-align: center;
 			}
+
+
+#saveModal h3{
+	text-align: center;
+}
+#savedFormula{
+	display: flex;
+}
+#formulaToSave{
+	display: flex;
+}
+	#formulaToSave label {
+		margin-right: 16px;
+	}
+#saveInputs{
+	display: flex;
+}
+#chemicalName{
+	margin-left: 30px;
+	margin-right: 10px;
+}
+#weightToSave label{
+	margin-right: 22px;
+}

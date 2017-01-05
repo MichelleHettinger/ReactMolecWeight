@@ -28,6 +28,7 @@ export default class Main extends Component {
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
 
+		this.updateSaved = this.updateSaved.bind(this);
 		//this.getParen = this.getParen.bind(this);
 	}
 
@@ -160,6 +161,10 @@ export default class Main extends Component {
 		//console.log(this.state);
 	}
 
+	updateSaved (allCompounds) {
+
+		this.props.updateSavedCompounds(allCompounds);
+	}
 
 	render () {
     //console.log(this.props)
@@ -172,10 +177,11 @@ export default class Main extends Component {
           user={this.props.user}
           userLogged={this.props.userLogged}
           userCompounds={this.props.userCompounds}
-          updateSavedCompounds={this.props.updateSavedCompounds}
+          updateSaved={this.updateSaved}
           mainState={this.state}
           newEdit={this.getEdit}
-          newParen={this.getParen} />
+          //newParen={this.getParen}
+         />
 
 				<div className="col-sm-4 pull-right" id="elements-panel">
 

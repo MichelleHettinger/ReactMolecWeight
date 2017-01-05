@@ -101,22 +101,17 @@ export default class LoginHeader extends Component {
 	}
 
 
-	updateSavedCompounds () {
-		if (this.state.logged){
+	updateSavedCompounds (allCompounds) {
 
-			const user = this.state.user;
+    this.setState({
+      userSavedCompounds: allCompounds,
+    }, ()=> {
 
-      firebase.database().ref('users/' + user.uid + '/compounds').once('value').then( snapshot => {
+      console.log(this.state.userSavedCompounds)
 
-        //Grab 'snapshot' of the users saved compounds.
-        const allCompounds = snapshot.val();
+    });
 
-        this.setState({
-        	userSavedCompounds: allCompounds,
-        });
 
-    	});
-		}
 	}
 
 
