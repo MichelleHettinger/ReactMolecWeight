@@ -141,12 +141,24 @@ img{
 	#formulaToSave label {
 		margin-right: 16px;
 	}
+.lodSavedCompounds{
+	display: flex;
+	height: 30px;
+	margin-top: 20px;
+}
+	.lodSavedCompounds input{
+		margin-right: 5px;
+	}
+.individualSavedDiv{
+	display: flex;
+}
 #saveInputs{
 	display: flex;
 }
 #chemicalName{
 	margin-left: 30px;
 	margin-right: 10px;
+	width: 210px;
 }
 #weightToSave label{
 	margin-right: 22px;

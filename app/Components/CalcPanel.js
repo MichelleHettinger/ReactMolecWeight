@@ -35,6 +35,9 @@ export default class CalcPanel extends Component {
 		this.displayModalBody = this.displayModalBody.bind(this);
 
 		this.saveMolecule = this.saveMolecule.bind(this);
+    this.loadMolecule = this.loadMolecule.bind(this);
+    this.overwriteMolecule = this.overwriteMolecule.bind(this);
+    this.deleteMolecule = this.deleteMolecule.bind(this);
 	}
 
 	//Clicking plus or minus
@@ -70,6 +73,8 @@ export default class CalcPanel extends Component {
 			)
 		})
 	}
+
+  //This is where all the logic and divs for the saved compounds lives
 	displaySavedCompounds (userCompounds) {
 		if (userCompounds != null) {
 
@@ -82,7 +87,7 @@ export default class CalcPanel extends Component {
 				//console.log("---------------");
 				//console.log(compoundX + " - " + compoundName + " - " + compoundTotal);
 
-				const thing = userCompounds[compoundX].elements.map( (elements, j) => {
+				const molecFormula = userCompounds[compoundX].elements.map( (elements, j) => {
 					//console.log(elements)
 					//console.log(j)
 
@@ -98,14 +103,31 @@ export default class CalcPanel extends Component {
 				});
 
 				return (
-					<div key={i}>
+					<div key={i} className="individualSavedDiv panel panel-default">
 
-            <div key={i}>
-						  <h4 key={i}>{compoundName} - {compoundTotal} g/mol</h4>
+            <div key={i} className="col-sm-8">
+              <div key={i}>
+  						  <h4 key={i}>{compoundName} - {compoundTotal} g/mol</h4>
+              </div>
+              <div id="savedFormula">
+  						  {molecFormula}
+              </div>
             </div>
 
-            <div id="savedFormula">
-						  {thing}
+            <div className="pull-right lodSavedCompounds">
+
+              <input type="button" value="Load" className="btn btn-sm btn-info" 
+                onClick={this.loadMolecule}
+              />
+
+              <input type="button" value="Overwrite" className="btn btn-sm btn-warning" 
+                onClick={this.overwriteMolecule}
+              />
+
+              <input type="button" value="Delete" className="btn btn-sm btn-danger" 
+                onClick={this.deleteMolecule}
+              />
+
             </div>
 
 					</div>
@@ -300,6 +322,16 @@ export default class CalcPanel extends Component {
 			});
 		}
 	}
+
+  loadMolecule () {
+    console.log("load")
+  }
+  overwriteMolecule () {
+    console.log("overwrite")
+  }
+  deleteMolecule () {
+    console.log("delete")
+  }  
 
 
 	render (){
