@@ -37,7 +37,7 @@ export default class LoginHeader extends Component {
 		this.logOut = this.logOut.bind(this);
 
 		this.updateSavedCompounds = this.updateSavedCompounds.bind(this);
-
+    this.updateDeletedCompounds = this.updateDeletedCompounds.bind(this);
 	}
 
 	grabUserEmail(userEmail){
@@ -100,16 +100,33 @@ export default class LoginHeader extends Component {
 		});
 	}
 
-
-	updateSavedCompounds (allCompounds) {
-
+  updateSavedCompounds (allCompounds) {
     this.setState({
-      userSavedCompounds: allCompounds,
-    }, ()=> {
-
-      console.log(this.state.userSavedCompounds)
-
+      userSavedCompounds: allCompounds
     });
+  }
+
+	updateDeletedCompounds (compoundX) {
+    //Create a new data entry named compound#
+    const userID = this.state.user.uid;
+
+    firebase.database().ref('users/' + userID + '/compounds/' + compoundX).set({null}, () => {
+      //console.log('Wrote to database');
+      //$("#outerSavedDiv").empty();
+
+      firebase.database().ref('users/' + userID + '/compounds').once('value').then( snapshot => {
+        //Grab 'snapshot' of the users saved compounds.
+        const allCompounds = snapshot.val();
+
+        //console.log(allCompounds);
+
+        this.setState({
+          userSavedCompounds: allCompounds,
+        });
+
+      });
+    });
+
 
 
 	}
@@ -180,7 +197,8 @@ export default class LoginHeader extends Component {
 					user={this.state.user}
 					userCompounds={this.state.userSavedCompounds}
 					userLogged={this.state.logged}
-					updateSavedCompounds={this.updateSavedCompounds}
+					updateSaved={this.updateSavedCompounds}
+          updateDeleted={this.updateDeletedCompounds}
 
 				/>
 

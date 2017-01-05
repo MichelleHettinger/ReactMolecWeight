@@ -28,7 +28,7 @@ export default class Main extends Component {
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
 
-		this.updateSaved = this.updateSaved.bind(this);
+		this.updateMainState = this.updateMainState.bind(this);
 		//this.getParen = this.getParen.bind(this);
 	}
 
@@ -161,10 +161,27 @@ export default class Main extends Component {
 		//console.log(this.state);
 	}
 
-	updateSaved (allCompounds) {
 
-		this.props.updateSavedCompounds(allCompounds);
+	updateMainState (compoundX) {
+		console.log(compoundX);
+		console.log(this.props.userCompounds);
+
+		const newElements = this.props.userCompounds[compoundX].elements;
+		const newMultipliers = this.props.userCompounds[compoundX].multipliers;
+		const newTotal = parseFloat(this.props.userCompounds[compoundX].total);
+
+		console.log(newElements);
+		console.log(newMultipliers);
+		console.log(newTotal);
+
+		this.setState({
+			elements: newElements,
+			multipliers: newMultipliers,
+			total: newTotal,
+		})
+
 	}
+
 
 	render () {
     //console.log(this.props)
@@ -177,7 +194,9 @@ export default class Main extends Component {
           user={this.props.user}
           userLogged={this.props.userLogged}
           userCompounds={this.props.userCompounds}
-          updateSaved={this.updateSaved}
+          updateSaved={this.props.updateSaved}
+          updateDeleted={this.props.updateDeleted}
+          updateMainState={this.updateMainState}
           mainState={this.state}
           newEdit={this.getEdit}
           //newParen={this.getParen}

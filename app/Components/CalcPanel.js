@@ -35,8 +35,6 @@ export default class CalcPanel extends Component {
 		this.displayModalBody = this.displayModalBody.bind(this);
 
 		this.saveMolecule = this.saveMolecule.bind(this);
-    this.loadMolecule = this.loadMolecule.bind(this);
-    this.deleteMolecule = this.deleteMolecule.bind(this);
 	}
 
 	//Clicking plus or minus
@@ -115,12 +113,12 @@ export default class CalcPanel extends Component {
 
             <div className="pull-right lodSavedCompounds">
 
-              <input type="button" value="Load" data-compound={compoundX} className="btn btn-sm btn-info" 
-                onClick={this.loadMolecule}
+              <input key={i} type="button" value="Load" data-compound={compoundX} className="btn btn-sm btn-info" 
+                onClick={()=>{this.props.updateMainState(compoundX)}}
               />
 
               <input type="button" value="Delete" data-compound={compoundX} className="btn btn-sm btn-danger" 
-                onClick={this.deleteMolecule}
+                onClick={()=>{this.props.updateDeleted(compoundX)}}
               />
 
             </div>
@@ -157,8 +155,8 @@ export default class CalcPanel extends Component {
 			return (
 				<div className="modal-body">
 
-        <div className="row" id="saveFormRow">
-          <div className="col-sm-offset-2">
+        <div className="row" >
+          <div className="col-sm-offset-2" id="saveFormRow">
             <div className="form-inline">
               <div className="form-group">
                 <div id="weightToSave">
@@ -195,8 +193,9 @@ export default class CalcPanel extends Component {
 
         <hr/>
 
-				{userCompounds}
-
+          <div className="row" id="outerSavedDiv">
+				    {userCompounds}
+          </div>
 				</div>
 			)
 		}
@@ -281,7 +280,7 @@ export default class CalcPanel extends Component {
         //If there's not already an alert, display one
         if (alertDismiss.length == 0){
           //Display dismissible alert if name is taken
-          $("#saveFormRow").append('<div class="alert alert-warning alert-dismissible fade in row" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Invalid Name!</strong> Check your compounds below.</div>');
+          $("#saveFormRow").append('<div class="alert alert-warning alert-dismissible fade in col-sm-9" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Invalid Name!</strong> Check your compounds below.</div>');
         }
       }
 		}
@@ -317,39 +316,6 @@ export default class CalcPanel extends Component {
 			});
 		}
 	}
-
-  loadMolecule (btnDiv) {
-    //dataCompound is the name of the compound in the firebase databse
-    const dataCompound = $(btnDiv.target).data('compound');
-    console.log(dataCompound);
-  }
-  deleteMolecule (btnDiv) {
-
-    console.log(btnDiv.target)
-
-    //dataCompound is the name of the compound in the firebase databse
-    const dataCompound = $(btnDiv.target).data('compound');
-    console.log(dataCompound);
-
-    //Create a new data entry named compound#
-    const userID = this.props.user.uid;
-
-    firebase.database().ref('users/' + userID + '/compounds/' + dataCompound).set({null}, () => {
-        //console.log('Wrote to database');
-
-        firebase.database().ref('users/' + userID + '/compounds').once('value').then( snapshot => {
-          //Grab 'snapshot' of the users saved compounds.
-          const allCompounds = snapshot.val();
-
-          //console.log(allCompounds);
-
-          //this.setState({chemicalName: ''});
-
-          this.props.updateSaved(allCompounds);
-        });
-    });
-  }  
-
 
 	render (){
 		//console.log(this.props)
@@ -392,9 +358,7 @@ export default class CalcPanel extends Component {
 									<h3 className="modal-title">Save Your Compound!</h3>
 								</div>
 
-								<div className="modal-body">
 									{modalBody}
-								</div>
 
 								<div className="modal-footer">
 									<button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
