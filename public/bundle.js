@@ -20748,18 +20748,60 @@
 		}, {
 			key: 'loadMolecule',
 			value: function loadMolecule(btnDiv) {
+				//dataCompound is the name of the compound in the firebase databse
 				var dataCompound = $(btnDiv.target).data('compound');
 				console.log(dataCompound);
 			}
 		}, {
 			key: 'overwriteMolecule',
 			value: function overwriteMolecule(btnDiv) {
+				var _this6 = this;
+
+				//dataCompound is the name of the compound in the firebase databse
 				var dataCompound = $(btnDiv.target).data('compound');
 				console.log(dataCompound);
+
+				//Create a new data entry named compound#
+				var userID = this.props.user.uid;
+
+				if (this.state.chemicalName == '') {
+					var alertDismiss = $(".alert-dismissible");
+
+					//console.log(alertDismiss.length);
+
+					//If there's not already an alert, display one
+					if (alertDismiss.length == 0) {
+						//Display dismissible alert if name is taken
+						$("#saveFormRow").append('<div class="alert alert-warning alert-dismissible fade in row" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Invalid Name!</strong> Check your compounds below.</div>');
+					}
+				} else {
+					firebase.database().ref('users/' + userID + '/compounds/' + dataCompound).set({
+
+						chemicalName: this.state.chemicalName,
+						elements: this.props.mainState.elements,
+						multipliers: this.props.mainState.multipliers,
+						total: this.props.mainState.total.toFixed(3)
+
+					}, function () {
+						//console.log('Wrote to database');
+
+						firebase.database().ref('users/' + userID + '/compounds').once('value').then(function (snapshot) {
+							//Grab 'snapshot' of the users saved compounds.
+							var allCompounds = snapshot.val();
+
+							//console.log(allCompounds);
+
+							//this.setState({chemicalName: ''});
+
+							_this6.props.updateSaved(allCompounds);
+						});
+					});
+				}
 			}
 		}, {
 			key: 'deleteMolecule',
 			value: function deleteMolecule(btnDiv) {
+				//dataCompound is the name of the compound in the firebase databse
 				var dataCompound = $(btnDiv.target).data('compound');
 				console.log(dataCompound);
 			}
