@@ -1,172 +1,172 @@
 .box {
-	border: 1px black solid;
+  border: 1px black solid;
 }
 
 body{
-	position: relative;
-	overflow: scroll;
+  position: relative;
+  overflow: scroll;
 }
 
 img{
-	position: absolute;
-	top: 125px;
+  position: absolute;
+  top: 125px;
     left: 180px;
     opacity: 0.1;
     width: 70%;
 }
 #header{
-	height: 100px;
+  height: 100px;
 }
 #MWTitle{
-	text-align: center;
+  text-align: center;
 }
 #loginHeader{
-	padding: 0;
-	margin-top: 15px;
+  padding: 0;
+  margin-top: 15px;
 }
 #molecular-weight {
-	text-align: right;
+  text-align: right;
 }
 #search {
-	text-align: center;
-	margin-bottom: 10px;
+  text-align: center;
+  margin-bottom: 10px;
 }
 .saveButton{
-	margin-top: 5px;
-	margin-right: 5px;
+  margin-top: 5px;
+  margin-right: 5px;
 }
 #loginButton {
-	margin-left: 5px;
+  margin-left: 5px;
 }
 
 #loggedInButtons{
-	margin-top: 10px;
+  margin-top: 10px;
 }
-	#accountButton {
-		margin-right: 5px;
-	}
-	#logoutButton{
-		margin-left: 5px;
-	}
+  #accountButton {
+    margin-right: 5px;
+  }
+  #logoutButton{
+    margin-left: 5px;
+  }
 
 #calcPanelWith{
     background-color: rgba(29, 26, 26, 0.56);
     width: 60%;
     margin-left: 30px;
 }
-	#calcPanelWith h3 {
-		color: white;
-		margin-top: 10px;
-		margin-bottom: 20px;
-	}
+  #calcPanelWith h3 {
+    color: white;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
 
 #calPanelWithOut{
-	width: 60%;
+  width: 60%;
 }
-	#calcPanelWithOut h3{
-		margin-top: 0px;
-		margin-bottom: 20px;
+  #calcPanelWithOut h3{
+    margin-top: 0px;
+    margin-bottom: 20px;
 
-		text-align: center;
-	}
+    text-align: center;
+  }
 
 
-	.calculatableElement{
-		float:left;
-		width: 85px;
-		margin-right: 10px;
-		margin-bottom: 10px;
-	}
-		.plusButton{
-			align-content: center;
-			margin-left: 22px;
-			width: 20px;
-		}
-		.calculatableAcronym{
-			text-align: center;
-			margin-top: 10px;
-			margin-bottom: 10px;
-			font-size: 35px;
-		}
-		.minusButton{
-			margin-left: 23px;
-			width: 20px;
-		}
+  .calculatableElement{
+    float:left;
+    width: 85px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+    .plusButton{
+      align-content: center;
+      margin-left: 22px;
+      width: 20px;
+    }
+    .calculatableAcronym{
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 35px;
+    }
+    .minusButton{
+      margin-left: 23px;
+      width: 20px;
+    }
 
 
 #current-letters{
-	text-align:center;
+  text-align:center;
 }
-	#elements-found{
-		height: 428px;
-	}
+  #elements-found{
+    height: 428px;
+  }
 
-		.clickableElement{
-		    background-color: rgb(224, 212, 218);
-		}	
-			.clickableElement:hover{
-				cursor: pointer;
-				background-color: rgb(210, 122, 166);
-			}
-			.atomic-number-p{
-				margin-bottom:0;
-			}
-			.acronym-h2{
-				margin:0;
-				text-align: center;
-			}
-			.name-p{
-				text-align: center;	
-				margin:0;
-			}
-			.mass-p{
-				text-align: center;
-			}
+    .clickableElement{
+        background-color: rgb(224, 212, 218);
+    } 
+      .clickableElement:hover{
+        cursor: pointer;
+        background-color: rgb(210, 122, 166);
+      }
+      .atomic-number-p{
+        margin-bottom:0;
+      }
+      .acronym-h2{
+        margin:0;
+        text-align: center;
+      }
+      .name-p{
+        text-align: center; 
+        margin:0;
+      }
+      .mass-p{
+        text-align: center;
+      }
 
 
 #saveModal h3{
-	text-align: center;
+  text-align: center;
 }
 .alert-dismissible{
-	padding-top: 5px;
-	padding-bottom: 5px;
-	margin-bottom: 0px;
-	margin-top: 10px;
-	text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 0px;
+  margin-top: 10px;
+  text-align: center;
 }
 .savedFormula{
-	display: flex;
+  display: flex;
 }
 #formulaToSave{
-	display: flex;
+  display: flex;
 }
-	#formulaToSave label {
-		margin-right: 16px;
-	}
+  #formulaToSave label {
+    margin-right: 16px;
+  }
 .lodSavedCompounds{
-	display: flex;
-	height: 30px;
-	margin-top: 20px;
+  display: flex;
+  height: 30px;
+  margin-top: 20px;
 }
-	.lodSavedCompounds input{
-		margin-right: 5px;
-	}
+  .lodSavedCompounds input{
+    margin-right: 5px;
+  }
 .individualSavedDiv{
-	display: flex;
-	margin-left: 15px;
-	margin-right: 15px;
+  display: flex;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 .modal-body{
-	padding-bottom: 0px;
+  padding-bottom: 0px;
 }
 #saveInputs{
-	display: flex;
+  display: flex;
 }
 #chemicalName{
-	margin-left: 30px;
-	margin-right: 10px;
-	width: 210px;
+  margin-left: 30px;
+  margin-right: 10px;
+  width: 210px;
 }
 #weightToSave label{
-	margin-right: 22px;
+  margin-right: 22px;
 }
