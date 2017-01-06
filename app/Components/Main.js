@@ -205,7 +205,10 @@ export default class Main extends Component {
             />
           </div>
 
-          <ElementSelector elementsFound={this.state.elementsFound} newElement={this.getElement} />
+          <ElementSelector
+            elementsFound={this.state.elementsFound}
+            getElement={this.getElement}
+          />
 
         </div>
       </div>

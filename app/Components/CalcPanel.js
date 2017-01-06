@@ -334,8 +334,8 @@ export default class CalcPanel extends Component {
     const modalBody = this.displayModalBody(userCompounds);
 
 
+    //If there are elements in the panel
     if (this.props.mainState.elements.length != 0){
-
       return (
         <div>
           <div className="col-sm-8" id="calcPanelWith">
@@ -347,14 +347,12 @@ export default class CalcPanel extends Component {
                 <button type="button" data-toggle="modal" data-target="#saveModal" className="btn btn-success btn-sm saveButton pull-right">Save</button>
               </div>
             </div>
-
             <div className="row">
               <div className="elements-chosen">
                 {elementsToDisplay}
               </div>
             </div>
           </div>
-
           <div className="modal fade" id="saveModal">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
@@ -364,9 +362,7 @@ export default class CalcPanel extends Component {
                   </button>
                   <h3 className="modal-title">Save Your Compound!</h3>
                 </div>
-
                   {modalBody}
-
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
@@ -376,16 +372,13 @@ export default class CalcPanel extends Component {
         </div>
       )
     }
-
     return (
       <div className="col-sm-8" id="calcPanelWithOut">
-
         <div className="row">
           <div>
             <h3>Start calculating!</h3>
           </div>
         </div>
-
       </div>
     )
   }
