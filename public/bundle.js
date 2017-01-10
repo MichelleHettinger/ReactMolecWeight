@@ -19776,11 +19776,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Main = __webpack_require__(160);
+	var _CalcPanel = __webpack_require__(160);
 
-	var _Main2 = _interopRequireDefault(_Main);
+	var _CalcPanel2 = _interopRequireDefault(_CalcPanel);
 
-	var _firebase = __webpack_require__(205);
+	var _firebase = __webpack_require__(204);
 
 	var firebase = _interopRequireWildcard(_firebase);
 
@@ -19824,6 +19824,8 @@
 	      password: '',
 	      logged: false
 	    };
+
+	    _this.renderHeader = _this.renderHeader.bind(_this);
 
 	    _this.grabUserEmail = _this.grabUserEmail.bind(_this);
 	    _this.grabUserPassword = _this.grabUserPassword.bind(_this);
@@ -19938,71 +19940,70 @@
 	      });
 	    }
 	  }, {
+	    key: 'renderHeader',
+	    value: function renderHeader(logged) {
+
+	      if (this.state.logged) {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'col-sm-4', id: 'loggedInButtons' },
+	          _react2.default.createElement('input', { type: 'button', value: 'Log Out', id: 'logoutButton', className: 'btn btn-warning btn-sm pull-right',
+	            onClick: this.logOut
+	          }),
+	          _react2.default.createElement('input', { type: 'button', value: 'My Account', id: 'accountButton', className: 'btn btn-primary btn-sm pull-right',
+	            onClick: this.getSave
+	          })
+	        );
+	      } else {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'col-sm-4', id: 'loginHeader' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-sm-9' },
+	              _react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'email', placeholder: 'Email Address',
+	                onChange: this.grabUserEmail
+	              })
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-sm-3' },
+	              _react2.default.createElement('input', { type: 'button', value: 'Log In', id: 'loginButton', className: 'btn btn-success btn-sm',
+	                onClick: this.logIn
+	              })
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'form-group' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-sm-9' },
+	              _react2.default.createElement('input', { type: 'password', className: 'form-control input-md', id: 'password', placeholder: 'Password',
+	                onChange: this.grabUserPassword
+	              })
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-sm-3' },
+	              _react2.default.createElement('input', { type: 'button', value: 'Register', className: 'btn btn-primary btn-sm',
+	                onClick: this.signUp
+	              })
+	            )
+	          )
+	        );
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      //console.log(this.props)
 	      //console.log(this.state)
 
-	      if (this.state.logged == false) {
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'container' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'row', id: 'header' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'col-sm-8' },
-	              _react2.default.createElement(
-	                'h1',
-	                { id: 'MWTitle' },
-	                'Molecular Weight Calculator'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'col-sm-4', id: 'loginHeader' },
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'col-sm-9' },
-	                  _react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'email', placeholder: 'Email Address',
-	                    onChange: this.grabUserEmail
-	                  })
-	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'col-sm-3' },
-	                  _react2.default.createElement('input', { type: 'button', value: 'Log In', id: 'loginButton', className: 'btn btn-success btn-sm',
-	                    onClick: this.logIn
-	                  })
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'col-sm-9' },
-	                  _react2.default.createElement('input', { type: 'password', className: 'form-control input-md', id: 'password', placeholder: 'Password',
-	                    onChange: this.grabUserPassword
-	                  })
-	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'col-sm-3' },
-	                  _react2.default.createElement('input', { type: 'button', value: 'Register', className: 'btn btn-primary btn-sm',
-	                    onClick: this.signUp
-	                  })
-	                )
-	              )
-	            )
-	          ),
-	          _react2.default.createElement(_Main2.default, null)
-	        );
-	      }
+	      var header = this.renderHeader(this.state.logged);
 
 	      return _react2.default.createElement(
 	        'div',
@@ -20019,24 +20020,15 @@
 	              'Molecular Weight Calculator'
 	            )
 	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-sm-4', id: 'loggedInButtons' },
-	            _react2.default.createElement('input', { type: 'button', value: 'Log Out', id: 'logoutButton', className: 'btn btn-warning btn-sm pull-right',
-	              onClick: this.logOut
-	            }),
-	            _react2.default.createElement('input', { type: 'button', value: 'My Account', id: 'accountButton', className: 'btn btn-primary btn-sm pull-right',
-	              onClick: this.getSave
-	            })
-	          )
+	          header
 	        ),
-	        _react2.default.createElement(_Main2.default, {
+	        _react2.default.createElement(_CalcPanel2.default, {
 	          user: this.state.user,
-	          userCompounds: this.state.userSavedCompounds,
 	          userLogged: this.state.logged,
+	          userCompounds: this.state.userSavedCompounds,
 	          updateSaved: this.updateSavedCompounds,
 	          updateDeleted: this.updateDeletedCompounds
-
+	          //newParen={this.getParen}
 	        })
 	      );
 	    }
@@ -20063,313 +20055,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _CalcPanel = __webpack_require__(161);
-
-	var _CalcPanel2 = _interopRequireDefault(_CalcPanel);
-
-	var _ElementSelector = __webpack_require__(211);
-
-	var _ElementSelector2 = _interopRequireDefault(_ElementSelector);
-
-	var _ElementsArray = __webpack_require__(212);
-
-	var _ElementsArray2 = _interopRequireDefault(_ElementsArray);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // Include React
-
-
-	// Here we include all of the sub-components
-
-
-	var Main = function (_Component) {
-	  _inherits(Main, _Component);
-
-	  function Main(props) {
-	    _classCallCheck(this, Main);
-
-	    var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
-
-	    _this.state = {
-	      text: '',
-	      elementsFound: [],
-
-	      elements: [], multipliers: [],
-	      total: 0
-
-	    };
-
-	    _this.getUserInput = _this.getUserInput.bind(_this);
-	    _this.findElements = _this.findElements.bind(_this);
-
-	    _this.getElement = _this.getElement.bind(_this);
-	    _this.getEdit = _this.getEdit.bind(_this);
-
-	    _this.updateMainState = _this.updateMainState.bind(_this);
-	    //this.getParen = this.getParen.bind(this);
-	    return _this;
-	  }
-
-	  _createClass(Main, [{
-	    key: 'getUserInput',
-	    value: function getUserInput(userInput) {
-	      var _this2 = this;
-
-	      //Set user input, then find elements.
-	      this.setState({
-	        text: userInput
-	      }, function () {
-	        _this2.findElements(userInput);
-	      });
-	    }
-	  }, {
-	    key: 'findElements',
-	    value: function findElements(userInput) {
-	      //Find the right elements, then setState for found elements.
-
-	      var listElements = [];
-	      var listElements2 = [];
-	      var listElements3 = [];
-
-	      // Loop through every typed letter
-	      for (var i = 0; i < userInput.length; i++) {
-
-	        if (i == 0) {
-	          //Loop through all elements
-	          for (var j = 0; j < _ElementsArray2.default.length; j++) {
-	            //If the letters at position i match, push that element to the array
-	            if (userInput.charAt(i) == _ElementsArray2.default[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == _ElementsArray2.default[j].elementAcronym.charAt(i).toLowerCase()) {
-	              listElements.push(_ElementsArray2.default[j]);
-	            }
-	          }
-	        } else if (i == 1) {
-	          //Loop through the first list of elements
-	          for (var _j = 0; _j < listElements.length; _j++) {
-	            //If the letters at position i match, push that element to a new array
-	            if (userInput.charAt(i) == listElements[_j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements[_j].elementAcronym.charAt(i).toLowerCase()) {
-	              listElements2.push(listElements[_j]);
-	            }
-	          }
-	        } else if (i == 2) {
-	          //Loop through the second list of elements
-	          for (var _j2 = 0; _j2 < listElements2.length; _j2++) {
-	            //If the letters at position i match, push that element to a new array
-	            if (userInput.charAt(i) == listElements2[_j2].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements2[_j2].elementAcronym.charAt(i).toLowerCase()) {
-	              listElements3.push(listElements2[_j2]);
-	            }
-	          }
-	        }
-	      }
-
-	      //Depending on how many letters were typed in, display the appropriate array
-	      if (userInput.length == 0) {
-	        this.setState({
-	          elementsFound: listElements
-	        });
-	      } else if (userInput.length == 1) {
-	        //console.log(listElements);
-	        this.setState({
-	          elementsFound: listElements
-	        });
-	      } else if (userInput.length == 2) {
-	        //console.log(listElements2);
-	        this.setState({
-	          elementsFound: listElements2
-	        });
-	      } else if (userInput.length == 3) {
-	        //console.log(listElements3);
-	        this.setState({
-	          elementsFound: listElements3
-	        });
-	      } else if (userInput.length >= 4) {
-	        this.setState({
-	          elementsFound: listElements3
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'getElement',
-	    value: function getElement(newElement) {
-	      //Add an element to the calculation panel and increase the total
-
-	      var currentElements = this.state.elements;
-	      var currentMultipliers = this.state.multipliers;
-	      var currentTotal = this.state.total;
-
-	      currentElements.push(newElement);
-	      currentMultipliers.push(1);
-	      currentTotal += newElement.mass;
-
-	      this.setState({
-	        total: currentTotal,
-	        elements: currentElements,
-	        multipliers: currentMultipliers
-	      });
-
-	      //console.log(this.state)
-	      //console.log(newElement); 
-	    }
-	  }, {
-	    key: 'getEdit',
-	    value: function getEdit(input, element, i) {
-	      //console.log("------------------------------------------");
-	      //console.log(input + " one " + element.elementName + " at position: " + i);
-
-	      //console.log(i)
-
-	      if (input == '+') {
-	        this.state.multipliers[i] += 1;
-	        this.state.total += element.mass;
-	      } else if (input == '-') {
-	        this.state.multipliers[i] -= 1;
-	        this.state.total -= element.mass;
-	      }
-
-	      for (var j = 0; j < this.state.multipliers.length; j++) {
-	        if (this.state.multipliers[j] == 0) {
-	          this.state.multipliers.splice(j, 1);
-	          this.state.elements.splice(j, 1);
-	        }
-	      }
-
-	      this.setState({
-	        total: this.state.total,
-	        elements: this.state.elements,
-	        multipliers: this.state.multipliers
-	      });
-
-	      //console.log(this.state);
-	    }
-	  }, {
-	    key: 'updateMainState',
-	    value: function updateMainState(compoundX) {
-	      //console.log(compoundX);
-	      //console.log(this.props.userCompounds);
-
-	      var newElements = this.props.userCompounds[compoundX].elements;
-	      var newMultipliers = this.props.userCompounds[compoundX].multipliers;
-	      var newTotal = parseFloat(this.props.userCompounds[compoundX].total);
-
-	      this.setState({
-	        elements: newElements,
-	        multipliers: newMultipliers,
-	        total: newTotal
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this3 = this;
-
-	      //console.log(this.props)
-	      //console.log(this.state)
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'row' },
-	        _react2.default.createElement(_CalcPanel2.default, {
-	          user: this.props.user,
-	          userLogged: this.props.userLogged,
-	          userCompounds: this.props.userCompounds,
-	          updateSaved: this.props.updateSaved,
-	          updateDeleted: this.props.updateDeleted,
-	          updateMainState: this.updateMainState,
-	          mainState: this.state,
-	          newEdit: this.getEdit
-	          //newParen={this.getParen}
-	        }),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-sm-4 pull-right', id: 'elements-panel' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'row' },
-	            _react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'search', placeholder: 'Search for an element. Ex. \'car\' for carbon.',
-	              onChange: function onChange(text) {
-	                return _this3.getUserInput(text.target.value);
-	              }
-	            })
-	          ),
-	          _react2.default.createElement(_ElementSelector2.default, {
-	            elementsFound: this.state.elementsFound,
-	            getElement: this.getElement
-	          })
-	        )
-	      );
-	    }
-	  }]);
-
-	  return Main;
-	}(_react.Component);
-
-	//Below are some functions related to trying to make parentheses
-
-
-	// calculateTotal () {
-
-	//  //Loop for every set of parenthesis
-	//  for (let i=0; i<this.state.parenMultiplier.length; i++){
-	//    console.log(this.state);
-
-	//    for (let j=this.state.parenMultiplier[i].startPosition; j<=this.state.parenMultiplier[i].endPosition; j++){
-
-	//      this.state.multipliers[j] *= this.state.parenMultiplier[i].multiplier;
-
-	//      console.log(this.state);
-
-	//    }
-
-	//  }
-	// }
-
-	// getParen (parenData) {
-	//  console.log(parenData);
-
-	//  const startPosition = parenData.firstElementPosition;
-	//  const endPosition = parenData.secondElementPosition;
-
-	//    let newParenMultiplier = this.state.parenMultiplier;
-
-	//    newParenMultiplier.push({
-	//    endPosition,
-	//    startPosition,
-	//    multiplier: 2,
-	//  });
-
-	//  this.setState({
-	//    parenMultiplier: newParenMultiplier,
-	//  }, this.checkParen );
-	// }
-
-
-	exports.default = Main;
-
-/***/ },
-/* 161 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactBootstrapModal = __webpack_require__(162);
+	var _reactBootstrapModal = __webpack_require__(161);
 
 	var _reactBootstrapModal2 = _interopRequireDefault(_reactBootstrapModal);
 
-	var _firebase = __webpack_require__(205);
+	var _ElementSelector = __webpack_require__(210);
+
+	var _ElementSelector2 = _interopRequireDefault(_ElementSelector);
+
+	var _firebase = __webpack_require__(204);
 
 	var firebase = _interopRequireWildcard(_firebase);
 
@@ -20391,9 +20085,6 @@
 	  messagingSenderId: "837319764944"
 	};
 
-	// Get a reference to the database service
-	//const database = firebase.database();
-
 	var CalcPanel = function (_Component) {
 	  _inherits(CalcPanel, _Component);
 
@@ -20403,30 +20094,100 @@
 	    var _this = _possibleConstructorReturn(this, (CalcPanel.__proto__ || Object.getPrototypeOf(CalcPanel)).call(this, props));
 
 	    _this.state = {
-	      chemicalName: ''
+	      chemicalName: '',
 
+	      elements: [], multipliers: [],
+	      total: 0
 	    };
+	    _this.updateState = _this.updateState.bind(_this);
 
-	    _this.getPlusMinus = _this.getPlusMinus.bind(_this);
+	    _this.pushElement = _this.pushElement.bind(_this);
+	    _this.getEdit = _this.getEdit.bind(_this);
+
 	    _this.getMoleculeName = _this.getMoleculeName.bind(_this);
-
 	    _this.displayElements = _this.displayElements.bind(_this);
 	    _this.displayModalBody = _this.displayModalBody.bind(_this);
-
 	    _this.saveMolecule = _this.saveMolecule.bind(_this);
 	    _this.loadSavedMolecule = _this.loadSavedMolecule.bind(_this);
 	    return _this;
 	  }
 
-	  //Clicking plus or minus
-
-
 	  _createClass(CalcPanel, [{
-	    key: 'getPlusMinus',
-	    value: function getPlusMinus(input, element, i) {
-	      //console.log(input)
+	    key: 'updateState',
+	    value: function updateState(elements, multipliers, total) {
+	      var _this2 = this;
 
-	      this.props.newEdit(input, element, i);
+	      //console.log(compoundX);
+	      //console.log(this.props.userCompounds);
+	      this.setState({
+	        elements: elements,
+	        multipliers: multipliers,
+	        total: total
+	      }, function () {
+	        if (_this2.props.user) {
+	          firebase.database().ref('users/' + _this2.props.user.uid + '/compounds').once('value').then(function (snapshot) {
+
+	            //Grab 'snapshot' of the users saved compounds.
+	            var allCompounds = snapshot.val();
+
+	            _this2.props.updateSaved(allCompounds);
+	          });
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'pushElement',
+	    value: function pushElement(newElement) {
+	      //Add an element to the calculation panel and increase the total
+	      if (newElement) {
+	        var currentElements = this.state.elements;
+	        var currentMultipliers = this.state.multipliers;
+	        var currentTotal = this.state.total;
+
+	        currentElements.push(newElement);
+	        currentMultipliers.push(1);
+	        currentTotal += newElement.mass;
+
+	        this.updateState(currentElements, currentMultipliers, currentTotal);
+	      }
+	    }
+	  }, {
+	    key: 'getEdit',
+	    value: function getEdit(input, element, i) {
+	      //console.log("------------------------------------------");
+	      //console.log(input + " one " + element.elementName + " at position: " + i);
+
+	      var elements = this.state.elements;
+	      var multipliers = this.state.multipliers;
+	      var total = this.state.total;
+
+	      if (input == '+') {
+	        multipliers[i] += 1;
+	        total += element.mass;
+
+	        for (var j = 0; j < multipliers.length; j++) {
+	          if (multipliers[j] == 0) {
+	            multipliers.splice(j, 1);
+	            elements.splice(j, 1);
+	          }
+	        }
+	      } else if (input == '-') {
+	        multipliers[i] -= 1;
+	        total -= element.mass;
+
+	        if (total < 0) {
+	          total = 0;
+	        }
+	        for (var _j = 0; _j < multipliers.length; _j++) {
+	          if (multipliers[_j] == 0) {
+	            multipliers.splice(_j, 1);
+	            elements.splice(_j, 1);
+	          }
+	        }
+	      }
+
+	      this.updateState(elements, multipliers, total);
+	      //console.log(this.state);
 	    }
 	  }, {
 	    key: 'getMoleculeName',
@@ -20439,7 +20200,7 @@
 	  }, {
 	    key: 'displayElements',
 	    value: function displayElements(elements) {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      //console.log(elements)
 
@@ -20450,7 +20211,7 @@
 	          _react2.default.createElement(
 	            'button',
 	            { key: i, className: 'plusButton btn btn-xs', onClick: function onClick() {
-	                return _this2.getPlusMinus('+', element, i);
+	                return _this3.getEdit('+', element, i);
 	              } },
 	            ' + '
 	          ),
@@ -20464,16 +20225,14 @@
 	              _react2.default.createElement(
 	                'sub',
 	                null,
-	                ' ',
-	                _this2.props.mainState.multipliers[i],
-	                ' '
+	                _this3.state.multipliers[i]
 	              )
 	            )
 	          ),
 	          _react2.default.createElement(
 	            'button',
 	            { className: 'minusButton btn btn-xs', onClick: function onClick() {
-	                return _this2.getPlusMinus("-", element, i);
+	                return _this3.getEdit("-", element, i);
 	              } },
 	            ' - '
 	          )
@@ -20486,28 +20245,21 @@
 	  }, {
 	    key: 'displaySavedCompounds',
 	    value: function displaySavedCompounds(userCompounds) {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      if (userCompounds != null) {
-
 	        //console.log(userCompounds);
 	        var compoundElements = Object.keys(userCompounds).map(function (compoundX, i) {
-
 	          var compoundName = userCompounds[compoundX].chemicalName;
 	          var compoundTotal = userCompounds[compoundX].total;
-
 	          //console.log("---------------");
 	          //console.log(compoundX + " - " + compoundName + " - " + compoundTotal);
-
 	          var molecFormula = userCompounds[compoundX].elements.map(function (elements, j) {
 	            //console.log(elements)
 	            //console.log(j)
-
 	            var elementAcronym = elements.elementAcronym;
 	            var elementMultiplier = userCompounds[compoundX].multipliers[j];
-
 	            //console.log(elementAcronym + ' ' + elementMultiplier);
-
 	            return _react2.default.createElement(
 	              'p',
 	              { key: j },
@@ -20547,14 +20299,14 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'pull-right lodSavedCompounds' },
-	              _react2.default.createElement('input', { key: i, type: 'button', value: 'Load', 'data-compound': compoundX, className: 'btn btn-sm btn-info',
+	              _react2.default.createElement('input', { key: i, type: 'button', value: 'Load', className: 'btn btn-sm btn-info',
 	                onClick: function onClick() {
-	                  _this3.loadSavedMolecule(compoundX);
+	                  _this4.loadSavedMolecule(compoundX);
 	                }
 	              }),
-	              _react2.default.createElement('input', { type: 'button', value: 'Delete', 'data-compound': compoundX, className: 'btn btn-sm btn-danger',
+	              _react2.default.createElement('input', { type: 'button', value: 'Delete', className: 'btn btn-sm btn-danger',
 	                onClick: function onClick() {
-	                  _this3.props.updateDeleted(compoundX);
+	                  _this4.props.updateDeleted(compoundX);
 	                }
 	              })
 	            )
@@ -20569,13 +20321,12 @@
 	  }, {
 	    key: 'displayModalBody',
 	    value: function displayModalBody(userCompounds) {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      //console.log(userCompounds)
-
-	      var elements = this.props.mainState.elements.map(function (element, i) {
-	        var multipliers = _this4.props.mainState.multipliers;
-
+	      //console.log(this.props.userLogged)
+	      var elements = this.state.elements.map(function (element, i) {
+	        var multipliers = _this5.state.multipliers;
 	        return _react2.default.createElement(
 	          'p',
 	          { key: i },
@@ -20587,11 +20338,10 @@
 	          )
 	        );
 	      });
-
-	      var total = this.props.mainState.total.toFixed(3);
+	      var compounds = this.displaySavedCompounds(userCompounds);
+	      var total = this.state.total.toFixed(3);
 
 	      if (this.props.userLogged) {
-
 	        return _react2.default.createElement(
 	          'div',
 	          { className: 'modal-body' },
@@ -20651,7 +20401,7 @@
 	                  ),
 	                  _react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'chemicalName', placeholder: 'Name',
 	                    onChange: function onChange(text) {
-	                      return _this4.getMoleculeName(text.target.value);
+	                      return _this5.getMoleculeName(text.target.value);
 	                    }
 	                  })
 	                ),
@@ -20665,7 +20415,7 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'row', id: 'outerSavedDiv' },
-	            userCompounds
+	            compounds
 	          )
 	        );
 	      } else {
@@ -20683,10 +20433,9 @@
 	  }, {
 	    key: 'saveMolecule',
 	    value: function saveMolecule() {
-	      var _this5 = this;
+	      var _this6 = this;
 
 	      var userID = this.props.user.uid;
-
 	      //If user has saved compounds, give it a name in database and write
 	      if (this.props.userCompounds) {
 
@@ -20696,59 +20445,44 @@
 	        compoundNumber = compoundNumber.charAt(compoundNumber.length - 1);
 	        compoundNumber++;
 	        compoundNumber = compoundNumber.toString();
-
 	        //console.log(compoundNumber)
 	        //console.log(compArray)
-
 	        //map through names. if it exists return true
 	        var compoundNameExists = Object.keys(this.props.userCompounds).map(function (compoundX, i) {
-	          var compoundName = _this5.props.userCompounds[compoundX].chemicalName;
-
+	          var compoundName = _this6.props.userCompounds[compoundX].chemicalName;
 	          //console.log(compoundName);
-
-	          if (compoundName == _this5.state.chemicalName) {
+	          if (compoundName == _this6.state.chemicalName) {
 	            return true;
 	          } else {
 	            return false;
 	          }
 	        });
 	        //console.log(compoundNameExists)
-
 	        //let has = $.inArray(true, compoundNameExists);
 	        //console.log(has);
-
 	        //-1 means that true was not found, meaning that the chosen name has not been used before.
 	        if ($.inArray(true, compoundNameExists) == -1 && this.state.chemicalName != '') {
-
 	          //Create a new data entry named compound#
 	          firebase.database().ref('users/' + userID + '/compounds/compound' + compoundNumber).set({
-
 	            chemicalName: this.state.chemicalName,
-	            elements: this.props.mainState.elements,
-	            multipliers: this.props.mainState.multipliers,
-	            total: this.props.mainState.total.toFixed(3)
-
+	            elements: this.state.elements,
+	            multipliers: this.state.multipliers,
+	            total: this.state.total.toFixed(3)
 	          }, function () {
 	            //console.log('Wrote to database');
-
 	            firebase.database().ref('users/' + userID + '/compounds').once('value').then(function (snapshot) {
 	              //Grab 'snapshot' of the users saved compounds.
 	              var allCompounds = snapshot.val();
-
 	              //console.log(allCompounds);
-
 	              //this.setState({chemicalName: ''});
-
-	              _this5.props.updateSaved(allCompounds);
+	              _this6.props.updateSaved(allCompounds);
 	            });
 	          });
 	        }
 	        //Invalid input
 	        else {
 	            var alertDismiss = $(".alert-dismissible");
-
 	            //console.log(alertDismiss.length);
-
 	            //If there's not already an alert, display one
 	            if (alertDismiss.length == 0) {
 	              //Display dismissible alert if name is taken
@@ -20758,26 +20492,19 @@
 	      } else {
 	        //Create a new data entry named compound1
 	        firebase.database().ref('users/' + userID + '/compounds/compound1').set({
-
 	          chemicalName: this.state.chemicalName,
-	          elements: this.props.mainState.elements,
-	          multipliers: this.props.mainState.multipliers,
-	          total: this.props.mainState.total.toFixed(3)
-
+	          elements: this.state.elements,
+	          multipliers: this.state.multipliers,
+	          total: this.state.total.toFixed(3)
 	        }, function () {
 
 	          console.log('Wrote to database');
-
 	          firebase.database().ref('users/' + userID + '/compounds').once('value').then(function (snapshot) {
-
 	            //Grab 'snapshot' of the users saved compounds.
 	            var allCompounds = snapshot.val();
-
-	            console.log(allCompounds);
-
-	            _this5.setState({ chemicalName: '' });
-
-	            _this5.props.updateSaved(allCompounds);
+	            //console.log(allCompounds);
+	            //this.setState({chemicalName: ''});
+	            _this6.props.updateSaved(allCompounds);
 	          });
 	        });
 	      }
@@ -20788,22 +20515,25 @@
 
 	      $('#saveModal').modal('hide');
 
-	      this.props.updateMainState(compoundX);
+	      var userCompounds = this.props.userCompounds;
+	      var newElements = userCompounds[compoundX].elements;
+	      var newMultipliers = userCompounds[compoundX].multipliers;
+	      var newTotal = parseFloat(userCompounds[compoundX].total);
+
+	      this.updateState(newElements, newMultipliers, newTotal);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      //console.log(this.props)
 	      //console.log(this.state)
+	      var elementsToDisplay = this.displayElements(this.state.elements);
+	      var modalBody = this.displayModalBody(this.props.userCompounds);
 
-	      var elementsToDisplay = this.displayElements(this.props.mainState.elements);
-
-	      var userCompounds = this.displaySavedCompounds(this.props.userCompounds);
-	      var modalBody = this.displayModalBody(userCompounds);
-
-	      //If there are elements in the panel
-	      if (this.props.mainState.elements.length != 0) {
-	        return _react2.default.createElement(
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
 	          'div',
 	          null,
 	          _react2.default.createElement(
@@ -20819,7 +20549,7 @@
 	                  'h3',
 	                  { id: 'molecular-weight' },
 	                  'Molecular Weight: ',
-	                  this.props.mainState.total.toFixed(3),
+	                  this.state.total.toFixed(3),
 	                  ' g/mol'
 	                )
 	              ),
@@ -20883,24 +20613,10 @@
 	              )
 	            )
 	          )
-	        );
-	      }
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'col-sm-8', id: 'calcPanelWithOut' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'row' },
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement(
-	              'h3',
-	              null,
-	              'Start calculating!'
-	            )
-	          )
-	        )
+	        ),
+	        _react2.default.createElement(_ElementSelector2.default, {
+	          getElement: this.pushElement
+	        })
 	      );
 	    }
 	  }]);
@@ -20949,7 +20665,7 @@
 	//  //If so, reset parenCount incase they had already clicked a viable element
 	//  //Otherwise the parenthesis can be 'placed' with the 
 
-	//  const parenMultiplier = this.props.mainState.parenMultiplier;
+	//  const parenMultiplier = this.state.parenMultiplier;
 
 	//  //If there are no parentheses present
 	//  if (parenMultiplier.length == 0){
@@ -20989,7 +20705,7 @@
 	exports.default = CalcPanel;
 
 /***/ },
-/* 162 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21004,59 +20720,59 @@
 
 	var _reactDom = __webpack_require__(158);
 
-	var _Modal = __webpack_require__(163);
+	var _Modal = __webpack_require__(162);
 
 	var _Modal2 = _interopRequireDefault(_Modal);
 
-	var _isOverflowing = __webpack_require__(187);
+	var _isOverflowing = __webpack_require__(186);
 
 	var _isOverflowing2 = _interopRequireDefault(_isOverflowing);
 
-	var _componentOrElement = __webpack_require__(165);
+	var _componentOrElement = __webpack_require__(164);
 
 	var _componentOrElement2 = _interopRequireDefault(_componentOrElement);
 
-	var _Fade = __webpack_require__(196);
+	var _Fade = __webpack_require__(195);
 
 	var _Fade2 = _interopRequireDefault(_Fade);
 
-	var _Body = __webpack_require__(200);
+	var _Body = __webpack_require__(199);
 
 	var _Body2 = _interopRequireDefault(_Body);
 
-	var _Header = __webpack_require__(201);
+	var _Header = __webpack_require__(200);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _Title = __webpack_require__(203);
+	var _Title = __webpack_require__(202);
 
 	var _Title2 = _interopRequireDefault(_Title);
 
-	var _Footer = __webpack_require__(204);
+	var _Footer = __webpack_require__(203);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
-	var _Dismiss = __webpack_require__(202);
+	var _Dismiss = __webpack_require__(201);
 
 	var _Dismiss2 = _interopRequireDefault(_Dismiss);
 
-	var _ownerDocument = __webpack_require__(170);
+	var _ownerDocument = __webpack_require__(169);
 
 	var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
 
-	var _inDOM = __webpack_require__(186);
+	var _inDOM = __webpack_require__(185);
 
 	var _inDOM2 = _interopRequireDefault(_inDOM);
 
-	var _scrollbarSize = __webpack_require__(185);
+	var _scrollbarSize = __webpack_require__(184);
 
 	var _scrollbarSize2 = _interopRequireDefault(_scrollbarSize);
 
-	var _style = __webpack_require__(173);
+	var _style = __webpack_require__(172);
 
 	var _style2 = _interopRequireDefault(_style);
 
-	var _classnames = __webpack_require__(199);
+	var _classnames = __webpack_require__(198);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -21362,7 +21078,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 163 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21378,51 +21094,51 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _warning = __webpack_require__(164);
+	var _warning = __webpack_require__(163);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _componentOrElement = __webpack_require__(165);
+	var _componentOrElement = __webpack_require__(164);
 
 	var _componentOrElement2 = _interopRequireDefault(_componentOrElement);
 
-	var _elementType = __webpack_require__(167);
+	var _elementType = __webpack_require__(166);
 
 	var _elementType2 = _interopRequireDefault(_elementType);
 
-	var _Portal = __webpack_require__(168);
+	var _Portal = __webpack_require__(167);
 
 	var _Portal2 = _interopRequireDefault(_Portal);
 
-	var _ModalManager = __webpack_require__(172);
+	var _ModalManager = __webpack_require__(171);
 
 	var _ModalManager2 = _interopRequireDefault(_ModalManager);
 
-	var _ownerDocument = __webpack_require__(169);
+	var _ownerDocument = __webpack_require__(168);
 
 	var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
 
-	var _addEventListener = __webpack_require__(190);
+	var _addEventListener = __webpack_require__(189);
 
 	var _addEventListener2 = _interopRequireDefault(_addEventListener);
 
-	var _addFocusListener = __webpack_require__(193);
+	var _addFocusListener = __webpack_require__(192);
 
 	var _addFocusListener2 = _interopRequireDefault(_addFocusListener);
 
-	var _inDOM = __webpack_require__(186);
+	var _inDOM = __webpack_require__(185);
 
 	var _inDOM2 = _interopRequireDefault(_inDOM);
 
-	var _activeElement = __webpack_require__(194);
+	var _activeElement = __webpack_require__(193);
 
 	var _activeElement2 = _interopRequireDefault(_activeElement);
 
-	var _contains = __webpack_require__(195);
+	var _contains = __webpack_require__(194);
 
 	var _contains2 = _interopRequireDefault(_contains);
 
-	var _getContainer = __webpack_require__(171);
+	var _getContainer = __webpack_require__(170);
 
 	var _getContainer2 = _interopRequireDefault(_getContainer);
 
@@ -21897,7 +21613,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 164 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -21964,7 +21680,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 165 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21977,7 +21693,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _createChainableTypeChecker = __webpack_require__(166);
+	var _createChainableTypeChecker = __webpack_require__(165);
 
 	var _createChainableTypeChecker2 = _interopRequireDefault(_createChainableTypeChecker);
 
@@ -22001,7 +21717,7 @@
 	exports.default = (0, _createChainableTypeChecker2.default)(validate);
 
 /***/ },
-/* 166 */
+/* 165 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22046,7 +21762,7 @@
 	}
 
 /***/ },
-/* 167 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22059,7 +21775,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _createChainableTypeChecker = __webpack_require__(166);
+	var _createChainableTypeChecker = __webpack_require__(165);
 
 	var _createChainableTypeChecker2 = _interopRequireDefault(_createChainableTypeChecker);
 
@@ -22083,7 +21799,7 @@
 	exports.default = (0, _createChainableTypeChecker2.default)(elementType);
 
 /***/ },
-/* 168 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22100,15 +21816,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _componentOrElement = __webpack_require__(165);
+	var _componentOrElement = __webpack_require__(164);
 
 	var _componentOrElement2 = _interopRequireDefault(_componentOrElement);
 
-	var _ownerDocument = __webpack_require__(169);
+	var _ownerDocument = __webpack_require__(168);
 
 	var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
 
-	var _getContainer = __webpack_require__(171);
+	var _getContainer = __webpack_require__(170);
 
 	var _getContainer2 = _interopRequireDefault(_getContainer);
 
@@ -22205,7 +21921,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 169 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22222,7 +21938,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _ownerDocument = __webpack_require__(170);
+	var _ownerDocument = __webpack_require__(169);
 
 	var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
 
@@ -22231,7 +21947,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 170 */
+/* 169 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -22246,7 +21962,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 171 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22269,7 +21985,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 172 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22280,23 +21996,23 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _style = __webpack_require__(173);
+	var _style = __webpack_require__(172);
 
 	var _style2 = _interopRequireDefault(_style);
 
-	var _class = __webpack_require__(181);
+	var _class = __webpack_require__(180);
 
 	var _class2 = _interopRequireDefault(_class);
 
-	var _scrollbarSize = __webpack_require__(185);
+	var _scrollbarSize = __webpack_require__(184);
 
 	var _scrollbarSize2 = _interopRequireDefault(_scrollbarSize);
 
-	var _isOverflowing = __webpack_require__(187);
+	var _isOverflowing = __webpack_require__(186);
 
 	var _isOverflowing2 = _interopRequireDefault(_isOverflowing);
 
-	var _manageAriaHidden = __webpack_require__(189);
+	var _manageAriaHidden = __webpack_require__(188);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22461,15 +22177,15 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 173 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var camelize = __webpack_require__(174),
-	    hyphenate = __webpack_require__(176),
-	    _getComputedStyle = __webpack_require__(178),
-	    removeStyle = __webpack_require__(180);
+	var camelize = __webpack_require__(173),
+	    hyphenate = __webpack_require__(175),
+	    _getComputedStyle = __webpack_require__(177),
+	    removeStyle = __webpack_require__(179);
 
 	var has = Object.prototype.hasOwnProperty;
 
@@ -22490,7 +22206,7 @@
 	};
 
 /***/ },
-/* 174 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -22500,7 +22216,7 @@
 	 */
 
 	'use strict';
-	var camelize = __webpack_require__(175);
+	var camelize = __webpack_require__(174);
 	var msPattern = /^-ms-/;
 
 	module.exports = function camelizeStyleName(string) {
@@ -22508,7 +22224,7 @@
 	};
 
 /***/ },
-/* 175 */
+/* 174 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -22522,7 +22238,7 @@
 	};
 
 /***/ },
-/* 176 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -22533,7 +22249,7 @@
 
 	"use strict";
 
-	var hyphenate = __webpack_require__(177);
+	var hyphenate = __webpack_require__(176);
 	var msPattern = /^ms-/;
 
 	module.exports = function hyphenateStyleName(string) {
@@ -22541,7 +22257,7 @@
 	};
 
 /***/ },
-/* 177 */
+/* 176 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22553,14 +22269,14 @@
 	};
 
 /***/ },
-/* 178 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var babelHelpers = __webpack_require__(179);
+	var babelHelpers = __webpack_require__(178);
 
-	var _utilCamelizeStyle = __webpack_require__(174);
+	var _utilCamelizeStyle = __webpack_require__(173);
 
 	var _utilCamelizeStyle2 = babelHelpers.interopRequireDefault(_utilCamelizeStyle);
 
@@ -22606,7 +22322,7 @@
 	};
 
 /***/ },
-/* 179 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
@@ -22642,7 +22358,7 @@
 	})
 
 /***/ },
-/* 180 */
+/* 179 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22652,30 +22368,30 @@
 	};
 
 /***/ },
-/* 181 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	module.exports = {
-	  addClass: __webpack_require__(182),
-	  removeClass: __webpack_require__(184),
-	  hasClass: __webpack_require__(183)
+	  addClass: __webpack_require__(181),
+	  removeClass: __webpack_require__(183),
+	  hasClass: __webpack_require__(182)
 	};
 
 /***/ },
-/* 182 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var hasClass = __webpack_require__(183);
+	var hasClass = __webpack_require__(182);
 
 	module.exports = function addClass(element, className) {
 	  if (element.classList) element.classList.add(className);else if (!hasClass(element)) element.className = element.className + ' ' + className;
 	};
 
 /***/ },
-/* 183 */
+/* 182 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22684,7 +22400,7 @@
 	};
 
 /***/ },
-/* 184 */
+/* 183 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22694,12 +22410,12 @@
 	};
 
 /***/ },
-/* 185 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var canUseDOM = __webpack_require__(186);
+	var canUseDOM = __webpack_require__(185);
 
 	var size;
 
@@ -22724,14 +22440,14 @@
 	};
 
 /***/ },
-/* 186 */
+/* 185 */
 /***/ function(module, exports) {
 
 	'use strict';
 	module.exports = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 
 /***/ },
-/* 187 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22741,11 +22457,11 @@
 	});
 	exports.default = isOverflowing;
 
-	var _isWindow = __webpack_require__(188);
+	var _isWindow = __webpack_require__(187);
 
 	var _isWindow2 = _interopRequireDefault(_isWindow);
 
-	var _ownerDocument = __webpack_require__(170);
+	var _ownerDocument = __webpack_require__(169);
 
 	var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
 
@@ -22777,7 +22493,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 188 */
+/* 187 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22787,7 +22503,7 @@
 	};
 
 /***/ },
-/* 189 */
+/* 188 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22841,7 +22557,7 @@
 	}
 
 /***/ },
-/* 190 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22860,11 +22576,11 @@
 	  };
 	};
 
-	var _on = __webpack_require__(191);
+	var _on = __webpack_require__(190);
 
 	var _on2 = _interopRequireDefault(_on);
 
-	var _off = __webpack_require__(192);
+	var _off = __webpack_require__(191);
 
 	var _off2 = _interopRequireDefault(_off);
 
@@ -22873,11 +22589,11 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 191 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var canUseDOM = __webpack_require__(186);
+	var canUseDOM = __webpack_require__(185);
 	var on = function on() {};
 
 	if (canUseDOM) {
@@ -22894,11 +22610,11 @@
 	module.exports = on;
 
 /***/ },
-/* 192 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var canUseDOM = __webpack_require__(186);
+	var canUseDOM = __webpack_require__(185);
 	var off = function off() {};
 
 	if (canUseDOM) {
@@ -22916,7 +22632,7 @@
 	module.exports = off;
 
 /***/ },
-/* 193 */
+/* 192 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22952,12 +22668,12 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 194 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var babelHelpers = __webpack_require__(179);
+	var babelHelpers = __webpack_require__(178);
 
 	exports.__esModule = true;
 
@@ -22966,7 +22682,7 @@
 	 */
 	exports['default'] = activeElement;
 
-	var _ownerDocument = __webpack_require__(170);
+	var _ownerDocument = __webpack_require__(169);
 
 	var _ownerDocument2 = babelHelpers.interopRequireDefault(_ownerDocument);
 
@@ -22981,11 +22697,11 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 195 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var canUseDOM = __webpack_require__(186);
+	var canUseDOM = __webpack_require__(185);
 
 	var contains = (function () {
 	  var root = canUseDOM && document.documentElement;
@@ -23006,7 +22722,7 @@
 	module.exports = contains;
 
 /***/ },
-/* 196 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23019,7 +22735,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Transition = __webpack_require__(197);
+	var _Transition = __webpack_require__(196);
 
 	var _Transition2 = _interopRequireDefault(_Transition);
 
@@ -23055,7 +22771,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 197 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23077,15 +22793,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _properties = __webpack_require__(198);
+	var _properties = __webpack_require__(197);
 
 	var _properties2 = _interopRequireDefault(_properties);
 
-	var _on = __webpack_require__(191);
+	var _on = __webpack_require__(190);
 
 	var _on2 = _interopRequireDefault(_on);
 
-	var _classnames = __webpack_require__(199);
+	var _classnames = __webpack_require__(198);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -23423,11 +23139,11 @@
 	exports.default = Transition;
 
 /***/ },
-/* 198 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var canUseDOM = __webpack_require__(186);
+	var canUseDOM = __webpack_require__(185);
 
 	var has = Object.prototype.hasOwnProperty,
 	    transform = 'transform',
@@ -23483,7 +23199,7 @@
 	}
 
 /***/ },
-/* 199 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -23537,7 +23253,7 @@
 
 
 /***/ },
-/* 200 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23550,7 +23266,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(199);
+	var _classnames = __webpack_require__(198);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -23608,7 +23324,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 201 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23621,11 +23337,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(199);
+	var _classnames = __webpack_require__(198);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _Dismiss = __webpack_require__(202);
+	var _Dismiss = __webpack_require__(201);
 
 	var _Dismiss2 = _interopRequireDefault(_Dismiss);
 
@@ -23709,7 +23425,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 202 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23780,7 +23496,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 203 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23793,7 +23509,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(199);
+	var _classnames = __webpack_require__(198);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -23847,7 +23563,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 204 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23860,7 +23576,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(199);
+	var _classnames = __webpack_require__(198);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -23918,7 +23634,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 205 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -23928,16 +23644,16 @@
 	 *
 	 *   firebase = require('firebase');
 	 */
-	var firebase = __webpack_require__(206);
+	var firebase = __webpack_require__(205);
+	__webpack_require__(206);
 	__webpack_require__(207);
 	__webpack_require__(208);
 	__webpack_require__(209);
-	__webpack_require__(210);
 	module.exports = firebase;
 
 
 /***/ },
-/* 206 */
+/* 205 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {var firebase = (function(){
@@ -23977,10 +23693,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 207 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(206);
+	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(205);
 	(function(){
 	/*! @license Firebase v3.6.4
 	    Build: 3.6.4-rc.2
@@ -24223,10 +23939,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 208 */
+/* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(206);
+	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(205);
 	(function(){
 	/*! @license Firebase v3.6.4
 	    Build: 3.6.4-rc.2
@@ -24494,10 +24210,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 209 */
+/* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(206);
+	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(205);
 	(function(){
 	/*! @license Firebase v3.6.4
 	    Build: 3.6.4-rc.2
@@ -24552,10 +24268,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 210 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(206);
+	/* WEBPACK VAR INJECTION */(function(global) {var firebase = __webpack_require__(205);
 	(function(){
 	/*! @license Firebase v3.6.4
 	    Build: 3.6.4-rc.2
@@ -24598,10 +24314,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 211 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -24612,6 +24328,10 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _ElementsArray = __webpack_require__(211);
+
+	var _ElementsArray2 = _interopRequireDefault(_ElementsArray);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24629,39 +24349,122 @@
 
 	    var _this = _possibleConstructorReturn(this, (ElementSelector.__proto__ || Object.getPrototypeOf(ElementSelector)).call(this, props));
 
+	    _this.state = {
+	      text: '',
+	      elementsFound: []
+	    };
+
+	    _this.getUserInput = _this.getUserInput.bind(_this);
+	    _this.findElements = _this.findElements.bind(_this);
 	    _this.mapElementsFound = _this.mapElementsFound.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(ElementSelector, [{
-	    key: "mapElementsFound",
-	    value: function mapElementsFound(elementsFound) {
+	    key: 'getUserInput',
+	    value: function getUserInput(userInput) {
 	      var _this2 = this;
+
+	      //Set user input, then find elements.
+	      this.setState({
+	        text: userInput
+	      }, function () {
+	        _this2.findElements(userInput);
+	      });
+	    }
+	  }, {
+	    key: 'findElements',
+	    value: function findElements(userInput) {
+	      //Find the right elements, then setState for found elements.
+
+	      var listElements = [];
+	      var listElements2 = [];
+	      var listElements3 = [];
+
+	      // Loop through every typed letter
+	      for (var i = 0; i < userInput.length; i++) {
+	        if (i == 0) {
+	          //Loop through all elements
+	          for (var j = 0; j < _ElementsArray2.default.length; j++) {
+	            //If the letters at position i match, push that element to the array
+	            if (userInput.charAt(i) == _ElementsArray2.default[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == _ElementsArray2.default[j].elementAcronym.charAt(i).toLowerCase()) {
+	              listElements.push(_ElementsArray2.default[j]);
+	            }
+	          }
+	        } else if (i == 1) {
+	          //Loop through the first list of elements
+	          for (var _j = 0; _j < listElements.length; _j++) {
+	            //If the letters at position i match, push that element to a new array
+	            if (userInput.charAt(i) == listElements[_j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements[_j].elementAcronym.charAt(i).toLowerCase()) {
+	              listElements2.push(listElements[_j]);
+	            }
+	          }
+	        } else if (i == 2) {
+	          //Loop through the second list of elements
+	          for (var _j2 = 0; _j2 < listElements2.length; _j2++) {
+	            //If the letters at position i match, push that element to a new array
+	            if (userInput.charAt(i) == listElements2[_j2].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements2[_j2].elementAcronym.charAt(i).toLowerCase()) {
+	              listElements3.push(listElements2[_j2]);
+	            }
+	          }
+	        }
+	      }
+
+	      //Depending on how many letters were typed in, display the appropriate array
+	      if (userInput.length == 0) {
+	        this.setState({
+	          elementsFound: listElements
+	        });
+	      } else if (userInput.length == 1) {
+	        //console.log(listElements);
+	        this.setState({
+	          elementsFound: listElements
+	        });
+	      } else if (userInput.length == 2) {
+	        //console.log(listElements2);
+	        this.setState({
+	          elementsFound: listElements2
+	        });
+	      } else if (userInput.length == 3) {
+	        //console.log(listElements3);
+	        this.setState({
+	          elementsFound: listElements3
+	        });
+	      } else if (userInput.length >= 4) {
+	        this.setState({
+	          elementsFound: listElements3
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'mapElementsFound',
+	    value: function mapElementsFound(elementsFound) {
+	      var _this3 = this;
 
 	      var elementsMapped = elementsFound.map(function (element, i) {
 	        return _react2.default.createElement(
-	          "div",
-	          { key: i, className: "col-sm-4 clickableElement box", onClick: function onClick() {
-	              return _this2.props.getElement(element);
+	          'div',
+	          { key: i, className: 'col-sm-4 clickableElement box', onClick: function onClick() {
+	              return _this3.props.getElement(element);
 	            } },
 	          _react2.default.createElement(
-	            "p",
-	            { key: i, className: "atomic-number-p" },
+	            'p',
+	            { key: i, className: 'atomic-number-p' },
 	            element.atomicNumber
 	          ),
 	          _react2.default.createElement(
-	            "h2",
-	            { className: "acronym-h2" },
+	            'h2',
+	            { className: 'acronym-h2' },
 	            element.elementAcronym
 	          ),
 	          _react2.default.createElement(
-	            "p",
-	            { className: "name-p" },
+	            'p',
+	            { className: 'name-p' },
 	            element.elementName
 	          ),
 	          _react2.default.createElement(
-	            "p",
-	            { className: "mass-p" },
+	            'p',
+	            { className: 'mass-p' },
 	            element.mass.toFixed(3)
 	          )
 	        );
@@ -24670,16 +24473,30 @@
 	      return elementsMapped;
 	    }
 	  }, {
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
-	      //Map through the array of elements found and display them
-	      var elementsRendered = this.mapElementsFound(this.props.elementsFound);
+	      var _this4 = this;
 
+	      //Map through the array of elements found and display them
+	      var elementsRendered = this.mapElementsFound(this.state.elementsFound);
 	      //Render the elements
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "row", id: "elements-found" },
-	        elementsRendered
+	        'div',
+	        { className: 'col-sm-4 pull-right', id: 'elements-panel' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement('input', { type: 'text', className: 'form-control input-md', id: 'search', placeholder: 'Search for an element. Ex. \'car\' for carbon.',
+	            onChange: function onChange(text) {
+	              return _this4.getUserInput(text.target.value);
+	            }
+	          })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row', id: 'elements-found' },
+	          elementsRendered
+	        )
 	      );
 	    }
 	  }]);
@@ -24690,7 +24507,7 @@
 	exports.default = ElementSelector;
 
 /***/ },
-/* 212 */
+/* 211 */
 /***/ function(module, exports) {
 
 	"use strict";

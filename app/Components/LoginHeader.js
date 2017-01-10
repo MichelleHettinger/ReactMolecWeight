@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Main from './Main.js';
+import CalcPanel from './CalcPanel.js';
 
 import * as firebase from "firebase";
 const config = {
@@ -29,6 +29,8 @@ export default class LoginHeader extends Component {
       logged: false,
     };
 
+    this.renderHeader = this.renderHeader.bind(this);
+
     this.grabUserEmail = this.grabUserEmail.bind(this);
     this.grabUserPassword = this.grabUserPassword.bind(this);
 
@@ -39,6 +41,7 @@ export default class LoginHeader extends Component {
     this.updateSavedCompounds = this.updateSavedCompounds.bind(this);
     this.updateDeletedCompounds = this.updateDeletedCompounds.bind(this);
   }
+
 
   grabUserEmail(userEmail){
     //console.log(userEmail.target.value)
@@ -57,7 +60,7 @@ export default class LoginHeader extends Component {
 
   logIn () {
     //Login and then get the users saved data.
-    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch( error=> {
+    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch( error => {
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -128,50 +131,58 @@ export default class LoginHeader extends Component {
   }
 
 
+  renderHeader (logged) {
+
+    if (this.state.logged){
+      return (
+        <div className="col-sm-4" id="loggedInButtons">
+          <input type="button" value="Log Out" id="logoutButton" className="btn btn-warning btn-sm pull-right"
+            onClick={this.logOut}
+          />
+          <input type="button" value="My Account" id="accountButton" className="btn btn-primary btn-sm pull-right"
+            onClick={this.getSave}
+          />
+        </div>
+      )
+    }
+    else {
+      return (
+        <div className="col-sm-4" id="loginHeader">
+          <div className="form-group">
+            <div className="col-sm-9">
+              <input type="text" className="form-control input-md" id="email" placeholder="Email Address"
+                onChange={this.grabUserEmail}
+              />
+            </div>
+            <div className="col-sm-3">
+              <input type="button" value="Log In" id="loginButton" className="btn btn-success btn-sm"
+                onClick={this.logIn}
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <div className="col-sm-9">
+              <input type="password" className="form-control input-md" id="password" placeholder="Password"
+                onChange={this.grabUserPassword}
+              />
+            </div>
+            <div className="col-sm-3">
+                  <input type="button" value="Register" className="btn btn-primary btn-sm"
+                    onClick={this.signUp}
+                  />
+            </div>
+          </div>
+        </div>
+      )
+    }
+  }
+
+
   render () {
     //console.log(this.props)
     //console.log(this.state)
 
-    if (this.state.logged == false){
-      return (
-        <div className="container">
-          <div className="row" id="header">
-            <div className="col-sm-8">
-              <h1 id="MWTitle">Molecular Weight Calculator</h1>
-            </div>
-            <div className="col-sm-4" id="loginHeader">
-              <div className="form-group">
-                <div className="col-sm-9">
-                  <input type="text" className="form-control input-md" id="email" placeholder="Email Address"
-                    onChange={this.grabUserEmail}
-                  />
-                </div>
-                <div className="col-sm-3">
-                  <input type="button" value="Log In" id="loginButton" className="btn btn-success btn-sm"
-                    onClick={this.logIn}
-                  />
-                </div>
-              </div>
-              <div className="form-group">
-                <div className="col-sm-9">
-                  <input type="password" className="form-control input-md" id="password" placeholder="Password"
-                    onChange={this.grabUserPassword}
-                  />
-                </div>
-                <div className="col-sm-3">
-                      <input type="button" value="Register" className="btn btn-primary btn-sm"
-                        onClick={this.signUp}
-                      />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <Main/>
-
-        </div>
-      )
-    }
+    const header = this.renderHeader(this.state.logged);
 
     return (
       <div className="container">
@@ -179,26 +190,20 @@ export default class LoginHeader extends Component {
           <div className="col-sm-8">
             <h1 id="MWTitle">Molecular Weight Calculator</h1>
           </div>
-          <div className="col-sm-4" id="loggedInButtons">
-            <input type="button" value="Log Out" id="logoutButton" className="btn btn-warning btn-sm pull-right"
-              onClick={this.logOut}
-            />
-            <input type="button" value="My Account" id="accountButton" className="btn btn-primary btn-sm pull-right"
-              onClick={this.getSave}
-            />
-          </div>
+          {header}
         </div>
 
-        <Main
+        <CalcPanel
           user={this.state.user}
-          userCompounds={this.state.userSavedCompounds}
           userLogged={this.state.logged}
+          userCompounds={this.state.userSavedCompounds}
           updateSaved={this.updateSavedCompounds}
           updateDeleted={this.updateDeletedCompounds}
-
-        />
+          //newParen={this.getParen}
+         />
 
       </div>
     )
   }
+  
 }

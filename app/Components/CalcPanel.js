@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Modal from 'react-bootstrap-modal';
 
+import ElementSelector from './ElementSelector.js';
+
 import * as firebase from "firebase";
 const config = {
   apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
@@ -10,9 +12,6 @@ const config = {
   messagingSenderId: "837319764944"
 };
 
-// Get a reference to the database service
-//const database = firebase.database();
-
 export default class CalcPanel extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +19,8 @@ export default class CalcPanel extends Component {
     this.state = {
       chemicalName: '',
 
+      elements: [], multipliers:[],
+      total: 0,
       //parenCount: 0,
       // parenAllowed: true,
       // firstElement: {},
@@ -27,23 +28,91 @@ export default class CalcPanel extends Component {
       // secondElement: {},
       // secondElementPosition: null,
     };
+    this.updateState = this.updateState.bind(this);
 
-    this.getPlusMinus = this.getPlusMinus.bind(this);
+    this.pushElement = this.pushElement.bind(this);
+    this.getEdit = this.getEdit.bind(this);
+
     this.getMoleculeName = this.getMoleculeName.bind(this);
-
     this.displayElements = this.displayElements.bind(this);
     this.displayModalBody = this.displayModalBody.bind(this);
-
     this.saveMolecule = this.saveMolecule.bind(this);
     this.loadSavedMolecule = this.loadSavedMolecule.bind(this)
   }
+  updateState (elements,multipliers,total) {
+    //console.log(compoundX);
+    //console.log(this.props.userCompounds);
+    this.setState({
+      elements: elements,
+      multipliers: multipliers,
+      total: total,
+    },()=>{
+      if (this.props.user) {
+        firebase.database().ref('users/' + this.props.user.uid + '/compounds').once('value').then( snapshot => {
 
-  //Clicking plus or minus
-  getPlusMinus (input, element, i) {
-    //console.log(input)
+          //Grab 'snapshot' of the users saved compounds.
+          const allCompounds = snapshot.val();
 
-    this.props.newEdit(input, element, i);
+          this.props.updateSaved(allCompounds);
+        });
+      }
+    })
   }
+  pushElement (newElement) {
+    //Add an element to the calculation panel and increase the total
+    if (newElement){
+      let currentElements = this.state.elements;
+      let currentMultipliers = this.state.multipliers;
+      let currentTotal = this.state.total;
+
+      currentElements.push(newElement);
+      currentMultipliers.push(1);
+      currentTotal += newElement.mass;
+
+      this.updateState(currentElements,currentMultipliers,currentTotal);
+    }
+  }
+  getEdit (input, element, i) {
+    //console.log("------------------------------------------");
+    //console.log(input + " one " + element.elementName + " at position: " + i);
+
+    let elements = this.state.elements;
+    let multipliers = this.state.multipliers;
+    let total = this.state.total;
+
+    if (input == '+'){
+      multipliers[i] += 1;
+      total += element.mass;
+
+      for (let j=0; j<multipliers.length; j++){
+        if (multipliers[j] == 0){
+          multipliers.splice(j, 1);
+          elements.splice(j, 1);
+        }
+      }
+    }
+    else if (input == '-'){
+      multipliers[i] -= 1;
+      total -= element.mass;
+
+      if (total < 0){
+        total = 0;
+      }
+      for (let j=0; j<multipliers.length; j++){
+        if (multipliers[j] == 0){
+          multipliers.splice(j, 1);
+          elements.splice(j, 1);
+        }
+      }
+    }
+
+
+    this.updateState(elements,multipliers,total);
+    //console.log(this.state);
+  }
+
+
+
   getMoleculeName (userInput) {
     //console.log(userInput)
     this.setState({
@@ -57,16 +126,14 @@ export default class CalcPanel extends Component {
     return elements.map( (element, i) => {
       return (
         <div key={i} className="calculatableElement">
-          <button key={i} className="plusButton btn btn-xs" onClick={() => this.getPlusMinus('+', element, i) }> + </button>
-
+          <button key={i} className="plusButton btn btn-xs" onClick={() => this.getEdit('+', element, i)}> + </button>
           <div className="calculatableAcronym">
             <p>
               {element.elementAcronym} 
-              <sub> {this.props.mainState.multipliers[i]} </sub>
+              <sub>{this.state.multipliers[i]}</sub>
             </p>
           </div>
-
-          <button className="minusButton btn btn-xs" onClick={() => this.getPlusMinus("-", element, i)}> - </button>
+          <button className="minusButton btn btn-xs" onClick={() => this.getEdit("-", element, i)}> - </button>
         </div>
       )
     })
@@ -75,34 +142,25 @@ export default class CalcPanel extends Component {
   //This is where all the logic and divs for the saved compounds lives
   displaySavedCompounds (userCompounds) {
     if (userCompounds != null) {
-
       //console.log(userCompounds);
       const compoundElements = Object.keys(userCompounds).map( (compoundX, i) => {
-
         const compoundName = userCompounds[compoundX].chemicalName;
         const compoundTotal = userCompounds[compoundX].total;
-
         //console.log("---------------");
         //console.log(compoundX + " - " + compoundName + " - " + compoundTotal);
-
         const molecFormula = userCompounds[compoundX].elements.map( (elements, j) => {
           //console.log(elements)
           //console.log(j)
-
           const elementAcronym = elements.elementAcronym;
           const elementMultiplier = userCompounds[compoundX].multipliers[j];
-
           //console.log(elementAcronym + ' ' + elementMultiplier);
-
           return (
             <p key={j}>{elementAcronym}<sub>{elementMultiplier}</sub></p>
           )
-
         });
 
         return (
           <div key={i} className="individualSavedDiv panel panel-default">
-
             <div key={i} className="col-sm-9">
               <div key={i}>
                 <h4 key={i}>{compoundName} - {compoundTotal} g/mol</h4>
@@ -111,23 +169,16 @@ export default class CalcPanel extends Component {
                 {molecFormula}
               </div>
             </div>
-
             <div className="pull-right lodSavedCompounds">
-
-              <input key={i} type="button" value="Load" data-compound={compoundX} className="btn btn-sm btn-info" 
+              <input key={i} type="button" value="Load" className="btn btn-sm btn-info" 
                 onClick={()=>{this.loadSavedMolecule(compoundX)}}
               />
-
-              <input type="button" value="Delete" data-compound={compoundX} className="btn btn-sm btn-danger" 
+              <input type="button" value="Delete" className="btn btn-sm btn-danger" 
                 onClick={()=>{this.props.updateDeleted(compoundX)}}
               />
-
             </div>
-
           </div>
-
         )
-
       });
 
       return compoundElements
@@ -136,71 +187,63 @@ export default class CalcPanel extends Component {
       return
     }
   }
-
   displayModalBody (userCompounds) {
-
     //console.log(userCompounds)
-
-    const elements = this.props.mainState.elements.map( (element, i) => {
-      const multipliers = this.props.mainState.multipliers;
-
+    //console.log(this.props.userLogged)
+    const elements = this.state.elements.map( (element, i) => {
+      const multipliers = this.state.multipliers;
       return (
         <p key={i}>{element.elementAcronym}<sub>{multipliers[i]}</sub></p>
       )
     });
-
-    const total = this.props.mainState.total.toFixed(3);
-
+    const compounds = this.displaySavedCompounds(userCompounds);
+    const total = this.state.total.toFixed(3);
+    
     if (this.props.userLogged) {
-
       return (
         <div className="modal-body">
-
-        <div className="row" >
-          <div className="col-sm-offset-2" id="saveFormRow">
-            <div className="form-inline">
-              <div className="form-group">
-                <div id="weightToSave">
-                  <label>Weight</label>
-                  {total} g/mol
+          <div className="row" >
+            <div className="col-sm-offset-2" id="saveFormRow">
+              <div className="form-inline">
+                <div className="form-group">
+                  <div id="weightToSave">
+                    <label>Weight</label>
+                    {total} g/mol
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="form-inline">
-              <div className="form-group">
-                <div id="formulaToSave">
-                  <label>Formula</label>
-                  {elements}
+              <div className="form-inline">
+                <div className="form-group">
+                  <div id="formulaToSave">
+                    <label>Formula</label>
+                    {elements}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="form-inline">
-              <div className="form-group">
-                <label>Name</label>
-                <input type="text" className="form-control input-md" id="chemicalName" placeholder="Name"
-                  onChange={ text => this.getMoleculeName(text.target.value) }
+              <div className="form-inline">
+                <div className="form-group">
+                  <label>Name</label>
+                  <input type="text" className="form-control input-md" id="chemicalName" placeholder="Name"
+                    onChange={ text => this.getMoleculeName(text.target.value) }
+                  />
+                </div>
+
+                <input type="button" value="Save" id="saveMoleculeButton" className="btn btn-success btn-sm"
+                  onClick={this.saveMolecule}
                 />
+
               </div>
-
-              <input type="button" value="Save" id="saveMoleculeButton" className="btn btn-success btn-sm"
-                onClick={this.saveMolecule}
-              />
-
             </div>
           </div>
-        </div>
-
-        <hr/>
-
+          <hr/>
           <div className="row" id="outerSavedDiv">
-            {userCompounds}
+            {compounds}
           </div>
         </div>
       )
     }
-
     else {
       return (
         <div className="modal-body">
@@ -212,7 +255,6 @@ export default class CalcPanel extends Component {
 
   saveMolecule () {
     const userID = this.props.user.uid;
-
     //If user has saved compounds, give it a name in database and write
     if (this.props.userCompounds){
 
@@ -222,16 +264,12 @@ export default class CalcPanel extends Component {
       compoundNumber = compoundNumber.charAt(compoundNumber.length -1);
       compoundNumber ++;
       compoundNumber = compoundNumber.toString();
-
       //console.log(compoundNumber)
       //console.log(compArray)
-
       //map through names. if it exists return true
       const compoundNameExists = Object.keys(this.props.userCompounds).map( (compoundX, i) => {
         const compoundName = this.props.userCompounds[compoundX].chemicalName;
-
         //console.log(compoundName);
-
         if (compoundName == this.state.chemicalName){
           return true
         }
@@ -240,34 +278,24 @@ export default class CalcPanel extends Component {
         }
       });
       //console.log(compoundNameExists)
-
       //let has = $.inArray(true, compoundNameExists);
       //console.log(has);
-
       //-1 means that true was not found, meaning that the chosen name has not been used before.
       if ( $.inArray(true, compoundNameExists) == -1 && this.state.chemicalName != '' ) {
-
         //Create a new data entry named compound#
         firebase.database().ref('users/' + userID + '/compounds/compound' + compoundNumber).set({
-
             chemicalName: this.state.chemicalName,
-            elements: this.props.mainState.elements,
-            multipliers: this.props.mainState.multipliers,
-            total: this.props.mainState.total.toFixed(3),
-
-            //parenMultiplier: this.props.mainState.parenMultiplier,
-
+            elements: this.state.elements,
+            multipliers: this.state.multipliers,
+            total: this.state.total.toFixed(3),
+            //parenMultiplier: this.state.parenMultiplier,
         }, () => {
             //console.log('Wrote to database');
-
             firebase.database().ref('users/' + userID + '/compounds').once('value').then( snapshot => {
               //Grab 'snapshot' of the users saved compounds.
               const allCompounds = snapshot.val();
-
               //console.log(allCompounds);
-
               //this.setState({chemicalName: ''});
-
               this.props.updateSaved(allCompounds);
             });
         });
@@ -275,9 +303,7 @@ export default class CalcPanel extends Component {
       //Invalid input
       else {
         const alertDismiss = $(".alert-dismissible");
-
         //console.log(alertDismiss.length);
-
         //If there's not already an alert, display one
         if (alertDismiss.length == 0){
           //Display dismissible alert if name is taken
@@ -289,59 +315,50 @@ export default class CalcPanel extends Component {
     else {
       //Create a new data entry named compound1
       firebase.database().ref('users/' + userID + '/compounds/compound1').set({
-
           chemicalName: this.state.chemicalName,
-          elements: this.props.mainState.elements,
-          multipliers: this.props.mainState.multipliers,
-          total: this.props.mainState.total.toFixed(3),
-
-          //parenMultiplier: this.props.mainState.parenMultiplier,
-
+          elements: this.state.elements,
+          multipliers: this.state.multipliers,
+          total: this.state.total.toFixed(3),
+          //parenMultiplier: this.state.parenMultiplier,
       }, () => {
 
           console.log('Wrote to database');
-
           firebase.database().ref('users/' + userID + '/compounds').once('value').then( snapshot => {
-
             //Grab 'snapshot' of the users saved compounds.
             const allCompounds = snapshot.val();
-
-            console.log(allCompounds);
-
-            this.setState({chemicalName: ''});
-
+            //console.log(allCompounds);
+            //this.setState({chemicalName: ''});
             this.props.updateSaved(allCompounds);
-
           });
-
       });
     }
   }
   loadSavedMolecule (compoundX) {
 
-    $('#saveModal').modal('hide')
+    $('#saveModal').modal('hide');
 
-    this.props.updateMainState(compoundX)
+    const userCompounds = this.props.userCompounds;
+    const newElements = userCompounds[compoundX].elements;
+    const newMultipliers = userCompounds[compoundX].multipliers;
+    const newTotal = parseFloat(userCompounds[compoundX].total);
+
+    this.updateState(newElements,newMultipliers,newTotal);
   }
 
   render (){
     //console.log(this.props)
     //console.log(this.state)
-
-    const elementsToDisplay = this.displayElements(this.props.mainState.elements);
-
-    const userCompounds = this.displaySavedCompounds(this.props.userCompounds);
-    const modalBody = this.displayModalBody(userCompounds);
+    const elementsToDisplay = this.displayElements(this.state.elements);
+    const modalBody = this.displayModalBody(this.props.userCompounds);
 
 
-    //If there are elements in the panel
-    if (this.props.mainState.elements.length != 0){
-      return (
+    return (
+      <div className="row">
         <div>
           <div className="col-sm-8" id="calcPanelWith">
             <div className="row">
               <div className="col-sm-9">
-                <h3 id="molecular-weight">Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol</h3>
+                <h3 id="molecular-weight">Molecular Weight: {this.state.total.toFixed(3)} g/mol</h3>
               </div>
               <div>
                 <button type="button" data-toggle="modal" data-target="#saveModal" className="btn btn-success btn-sm saveButton pull-right">Save</button>
@@ -370,15 +387,9 @@ export default class CalcPanel extends Component {
             </div>
           </div>
         </div>
-      )
-    }
-    return (
-      <div className="col-sm-8" id="calcPanelWithOut">
-        <div className="row">
-          <div>
-            <h3>Start calculating!</h3>
-          </div>
-        </div>
+        <ElementSelector
+          getElement={this.pushElement}
+        />
       </div>
     )
   }
@@ -428,7 +439,7 @@ export default class CalcPanel extends Component {
   //  //If so, reset parenCount incase they had already clicked a viable element
   //  //Otherwise the parenthesis can be 'placed' with the 
 
-  //  const parenMultiplier = this.props.mainState.parenMultiplier;
+  //  const parenMultiplier = this.state.parenMultiplier;
 
   //  //If there are no parentheses present
   //  if (parenMultiplier.length == 0){
