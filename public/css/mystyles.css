@@ -32,8 +32,13 @@ img{
   margin-bottom: 10px;
 }
 .saveButton{
-  margin-top: 5px;
+  margin-top: 10px;
   margin-right: 5px;
+}
+.clearButton{
+  margin-left: 5px;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 #loginButton {
   margin-left: 5px;

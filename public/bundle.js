@@ -20325,7 +20325,7 @@
 	      elements: [], multipliers: [],
 	      total: 0
 	    };
-
+	    _this.clearPanel = _this.clearPanel.bind(_this);
 	    _this.updateState = _this.updateState.bind(_this);
 	    _this.pushElement = _this.pushElement.bind(_this);
 	    _this.getEdit = _this.getEdit.bind(_this);
@@ -20338,6 +20338,16 @@
 	  }
 
 	  _createClass(CalcPanel, [{
+	    key: 'clearPanel',
+	    value: function clearPanel() {
+	      this.setState({
+	        chemicalName: '',
+	        elements: [],
+	        multipliers: [],
+	        total: 0
+	      });
+	    }
+	  }, {
 	    key: 'updateState',
 	    value: function updateState(elements, multipliers, total) {
 	      var _this2 = this;
@@ -20785,11 +20795,25 @@
 	              ),
 	              _react2.default.createElement(
 	                'div',
-	                null,
+	                { className: 'pull-right' },
 	                _react2.default.createElement(
 	                  'button',
-	                  { type: 'button', 'data-toggle': 'modal', 'data-target': '#saveModal', className: 'btn btn-success btn-sm saveButton pull-right' },
+	                  {
+	                    type: 'button',
+	                    'data-toggle': 'modal',
+	                    'data-target': '#saveModal',
+	                    className: 'btn btn-success btn-sm saveButton'
+	                  },
 	                  'Save'
+	                ),
+	                _react2.default.createElement(
+	                  'button',
+	                  {
+	                    type: 'button',
+	                    className: 'btn btn-sm btn-secondary clearButton',
+	                    onClick: this.clearPanel
+	                  },
+	                  'Clear'
 	                )
 	              )
 	            ),

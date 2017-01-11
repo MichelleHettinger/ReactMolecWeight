@@ -21,7 +21,7 @@ export default class CalcPanel extends Component {
       elements: [], multipliers:[],
       total: 0,
     };
-
+    this.clearPanel = this.clearPanel.bind(this);
     this.updateState = this.updateState.bind(this);
     this.pushElement = this.pushElement.bind(this);
     this.getEdit = this.getEdit.bind(this);
@@ -32,6 +32,15 @@ export default class CalcPanel extends Component {
     this.loadSavedMolecule = this.loadSavedMolecule.bind(this)
   }
   
+  clearPanel () {
+    this.setState({
+      chemicalName: '',
+      elements: [],
+      multipliers: [],
+      total: 0,
+    })
+  }
+
   updateState (elements,multipliers,total) {
     //console.log(compoundX);
     //console.log(this.props.userCompounds);
@@ -349,8 +358,22 @@ export default class CalcPanel extends Component {
               <div className="col-sm-9">
                 <h3 id="molecular-weight">Molecular Weight: {this.state.total.toFixed(3)} g/mol</h3>
               </div>
-              <div>
-                <button type="button" data-toggle="modal" data-target="#saveModal" className="btn btn-success btn-sm saveButton pull-right">Save</button>
+              <div className="pull-right">
+                <button
+                  type="button" 
+                  data-toggle="modal" 
+                  data-target="#saveModal" 
+                  className="btn btn-success btn-sm saveButton"
+                  >
+                    Save
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary clearButton"
+                  onClick={this.clearPanel}
+                >
+                  Clear
+                </button>
               </div>
             </div>
             <div className="row">
