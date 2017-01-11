@@ -218,7 +218,7 @@ export default class CalcPanel extends Component {
                     <div style={{width:65}}>
                       <p style={{textAlign:'right',fontWeight:'bold',marginRight:5}}>Weight:</p>
                     </div>
-                    {total} g/mol
+                    <p>{total} g/mol</p>
                   </div>
                 </div>
               </div>

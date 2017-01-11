@@ -20620,8 +20620,12 @@
 	                        'Weight:'
 	                      )
 	                    ),
-	                    total,
-	                    ' g/mol'
+	                    _react2.default.createElement(
+	                      'p',
+	                      null,
+	                      total,
+	                      ' g/mol'
+	                    )
 	                  )
 	                )
 	              ),
