@@ -163,10 +163,31 @@ img{
   display: flex;
 }
 #chemicalName{
-  margin-left: 30px;
   margin-right: 10px;
   width: 210px;
 }
 #weightToSave label{
   margin-right: 22px;
+}
+#accountModal h3{
+  text-align:center;
+}
+#myAccountForm{
+  margin-bottom: 20px;
+}
+#newName{
+  margin-left: 10px;
+  width:250px;
+}
+#newEmail{
+  margin-left: 10px;
+  width:250px;
+}
+#updateAccountButton{
+  margin-left: 50px;
+}
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }

@@ -18,27 +18,20 @@ export default class CalcPanel extends Component {
 
     this.state = {
       chemicalName: '',
-
       elements: [], multipliers:[],
       total: 0,
-      //parenCount: 0,
-      // parenAllowed: true,
-      // firstElement: {},
-      // firstElementPosition: null,
-      // secondElement: {},
-      // secondElementPosition: null,
     };
-    this.updateState = this.updateState.bind(this);
 
+    this.updateState = this.updateState.bind(this);
     this.pushElement = this.pushElement.bind(this);
     this.getEdit = this.getEdit.bind(this);
-
     this.getMoleculeName = this.getMoleculeName.bind(this);
     this.displayElements = this.displayElements.bind(this);
     this.displayModalBody = this.displayModalBody.bind(this);
     this.saveMolecule = this.saveMolecule.bind(this);
     this.loadSavedMolecule = this.loadSavedMolecule.bind(this)
   }
+  
   updateState (elements,multipliers,total) {
     //console.log(compoundX);
     //console.log(this.props.userCompounds);
@@ -47,17 +40,17 @@ export default class CalcPanel extends Component {
       multipliers: multipliers,
       total: total,
     },()=>{
+
       if (this.props.user) {
         firebase.database().ref('users/' + this.props.user.uid + '/compounds').once('value').then( snapshot => {
-
           //Grab 'snapshot' of the users saved compounds.
           const allCompounds = snapshot.val();
-
           this.props.updateSaved(allCompounds);
         });
       }
     })
   }
+
   pushElement (newElement) {
     //Add an element to the calculation panel and increase the total
     if (newElement){
@@ -72,10 +65,10 @@ export default class CalcPanel extends Component {
       this.updateState(currentElements,currentMultipliers,currentTotal);
     }
   }
+
   getEdit (input, element, i) {
     //console.log("------------------------------------------");
     //console.log(input + " one " + element.elementName + " at position: " + i);
-
     let elements = this.state.elements;
     let multipliers = this.state.multipliers;
     let total = this.state.total;
@@ -106,12 +99,9 @@ export default class CalcPanel extends Component {
       }
     }
 
-
     this.updateState(elements,multipliers,total);
     //console.log(this.state);
   }
-
-
 
   getMoleculeName (userInput) {
     //console.log(userInput)
@@ -122,7 +112,6 @@ export default class CalcPanel extends Component {
 
   displayElements (elements) {
     //console.log(elements)
-
     return elements.map( (element, i) => {
       return (
         <div key={i} className="calculatableElement">
@@ -139,7 +128,6 @@ export default class CalcPanel extends Component {
     })
   }
 
-  //This is where all the logic and divs for the saved compounds lives
   displaySavedCompounds (userCompounds) {
     if (userCompounds != null) {
       //console.log(userCompounds);
@@ -187,6 +175,7 @@ export default class CalcPanel extends Component {
       return
     }
   }
+
   displayModalBody (userCompounds) {
     //console.log(userCompounds)
     //console.log(this.props.userLogged)
@@ -206,34 +195,36 @@ export default class CalcPanel extends Component {
             <div className="col-sm-offset-2" id="saveFormRow">
               <div className="form-inline">
                 <div className="form-group">
-                  <div id="weightToSave">
-                    <label>Weight</label>
-                    {total} g/mol
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-inline">
-                <div className="form-group">
                   <div id="formulaToSave">
-                    <label>Formula</label>
+                    <div style={{width:65}}>
+                      <p style={{textAlign:'right',fontWeight:'bold',marginRight:5}}>Formula:</p>
+                    </div>
                     {elements}
                   </div>
                 </div>
               </div>
-
               <div className="form-inline">
                 <div className="form-group">
-                  <label>Name</label>
+                  <div id="weightToSave" style={{display:'flex'}}>
+                    <div style={{width:65}}>
+                      <p style={{textAlign:'right',fontWeight:'bold',marginRight:5}}>Weight:</p>
+                    </div>
+                    {total} g/mol
+                  </div>
+                </div>
+              </div>
+              <div className="form-inline">
+                <div className="form-group" style={{display:'flex'}}>
+                  <div style={{width:65}}>
+                    <p style={{textAlign:'right',fontWeight:'bold',marginRight:5,marginTop:5}}>Name:</p>
+                  </div>
                   <input type="text" className="form-control input-md" id="chemicalName" placeholder="Name"
-                    onChange={ text => this.getMoleculeName(text.target.value) }
+                    onChange={text => this.getMoleculeName(text.target.value)}
+                  />
+                  <input type="button" value="Save" id="saveMoleculeButton" className="btn btn-success btn-sm"
+                    onClick={this.saveMolecule}
                   />
                 </div>
-
-                <input type="button" value="Save" id="saveMoleculeButton" className="btn btn-success btn-sm"
-                  onClick={this.saveMolecule}
-                />
-
               </div>
             </div>
           </div>
@@ -247,7 +238,7 @@ export default class CalcPanel extends Component {
     else {
       return (
         <div className="modal-body">
-          <p>You must login</p>
+          <p style={{textAlign:'center'}}>You must first register an account to save your compounds.</p>
         </div>
       )
     }
@@ -311,7 +302,6 @@ export default class CalcPanel extends Component {
         }
       }
     }
-
     else {
       //Create a new data entry named compound1
       firebase.database().ref('users/' + userID + '/compounds/compound1').set({
@@ -321,8 +311,7 @@ export default class CalcPanel extends Component {
           total: this.state.total.toFixed(3),
           //parenMultiplier: this.state.parenMultiplier,
       }, () => {
-
-          console.log('Wrote to database');
+          //console.log('Wrote to database');
           firebase.database().ref('users/' + userID + '/compounds').once('value').then( snapshot => {
             //Grab 'snapshot' of the users saved compounds.
             const allCompounds = snapshot.val();
@@ -333,8 +322,9 @@ export default class CalcPanel extends Component {
       });
     }
   }
-  loadSavedMolecule (compoundX) {
 
+  loadSavedMolecule (compoundX) {
+    //Hide modal and display compoundX
     $('#saveModal').modal('hide');
 
     const userCompounds = this.props.userCompounds;
@@ -350,7 +340,6 @@ export default class CalcPanel extends Component {
     //console.log(this.state)
     const elementsToDisplay = this.displayElements(this.state.elements);
     const modalBody = this.displayModalBody(this.props.userCompounds);
-
 
     return (
       <div className="row">
@@ -394,83 +383,3 @@ export default class CalcPanel extends Component {
     )
   }
 }
-
-
-
-  // passParenToParent (parenData) {
-  //  this.props.newParen(parenData);
-  // }
-  // makeParenthesis (element, i) {
-  //  //console.log(element)
-  //  //console.log(i)
-
-  //  this.state.parenCount ++;
-
-  //  switch (this.state.parenCount) {
-  //    case 1:
-  //      this.setState({
-  //        firstElement: element,
-  //        firstElementPosition: i,
-  //      }, () => {
-
-
-
-  //      });
-
-  //      break;
-
-  //    case 2:
-  //      this.setState({
-  //        parenCount: 0,
-  //        secondElement: element,
-  //        secondElementPosition: i,
-  //      }
-  //      //Uncomment to bring parentheses functionality back
-  //      ,() => { this.passParenToParent(this.state) } );
-
-  //      break;
-  //    default:
-  //      console.log('Check parentCount');
-  //  }
-  // }
-  // checkParen (element, positionOfClickedElement) {
-  //  //This function is executed immidately after clicking an element in the calc panel
-  //  //It comes here to determine if the user is clicking on an element already in parenthesis.
-  //  //If so, reset parenCount incase they had already clicked a viable element
-  //  //Otherwise the parenthesis can be 'placed' with the 
-
-  //  const parenMultiplier = this.state.parenMultiplier;
-
-  //  //If there are no parentheses present
-  //  if (parenMultiplier.length == 0){
-  //    console.log('good to go');
-
-  //    //Uncomment these two lines to bring functionality back
-  //    //this.makeParenthesis(element, positionOfClickedElement);
-  //  }
-  //  else {
-  //    console.log('-----');
-
-  //    //Iterate over every set of parentheses
-  //    parenMultiplier.forEach( pm => {
-  //      console.log(pm)
-
-  //      //If the element selected is within the range of a parentheses already in place
-  //      //Reset the parenthesis process
-  //      if (positionOfClickedElement >= pm.startPosition && positionOfClickedElement <= pm.endPosition){
-  //        console.log('you cannot do that');
-
-  //        //Uncomment these two lines to bring functionality back
-  //        //this.setState({parenCount: 0});
-  //      }
-  //      //Otherwise allow the parenthesis process to continue
-  //      //by invoking the makeParenthesis function
-  //      else {
-  //        console.log('good to go');
-
-  //        //Uncomment these two lines to bring functionality back
-  //        //this.makeParenthesis(element, positionOfClickedElement);
-  //      }
-  //    });
-  //  }
-  // }
