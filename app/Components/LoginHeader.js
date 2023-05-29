@@ -4,11 +4,11 @@ import Modal from 'react-bootstrap-modal';
 
 import * as firebase from "firebase";
 const config = {
-  apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
-  authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
-  databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
-  storageBucket: "mobile-molecular-weight-85984.appspot.com",
-  messagingSenderId: "837319764944"
+  apiKey: "AIzaSyDKEULPnP5bJvgG5dJ9ugcsihDkmafz-UI",
+  authDomain: "molecular-weight-calculator.firebaseapp.com",
+  databaseURL: "https://molecular-weight-calculator-default-rtdb.firebaseio.com",
+  storageBucket: "molecular-weight-calculator.appspot.com",
+  messagingSenderId: "106291925157"
 };
 
 //Only one instance of firebase can run at a time
