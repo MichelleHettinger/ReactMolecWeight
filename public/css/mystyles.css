@@ -1,10 +1,24 @@
-.box {
-  border: 1px black solid;
+.foot {
+ width: 100%;
+}
+
+#app {
+  
+}
+
+.bod {
+  margin-bottom: 10px;
+  min-height: 70%;
 }
 
 body{
+  width: 100%;
   position: relative;
   overflow: scroll;
+}
+
+.box {
+  border: 1px black solid;
 }
 
 img{
@@ -14,12 +28,15 @@ img{
     opacity: 0.1;
     width: 70%;
 }
+
 #header{
   height: 100px;
 }
+
 #MWTitle{
   text-align: center;
 }
+
 #loginHeader{
   padding: 0;
   margin-top: 15px;
